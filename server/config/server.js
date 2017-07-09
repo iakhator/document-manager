@@ -1,6 +1,6 @@
 const http = require('http');
-const bodyParser = require('body-parser');
 const express = require('express');
+const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 // Set up the express app
