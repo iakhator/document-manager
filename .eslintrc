@@ -14,7 +14,7 @@
     "no-param-reassign": 0,
     "comma-dangle": 0,
     "curly": ["error", "multi-line"],
-    "import/no-unresolved": [2, { commonjs: true }],
+    "import/no-unresolved": [0, { commonjs: true, amd: true }],
     "max-len": [2, 80, 2],
     "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
     "valid-jsdoc": ["error", {
