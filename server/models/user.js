@@ -1,7 +1,6 @@
-'use strict';
 
-module.exports = function (sequelize, DataTypes) {
-  var User = sequelize.define('User', {
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
     fullName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -26,20 +25,17 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
       defaultvalue: 2
     }
-  }, {
-    classMethods: {
-      associate: function associate(models) {
-        // associations can be defined here
-        User.hasMany(models.Document, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
-          hooks: true
-        });
-        User.belongsTo(models.Role, {
-          foreignKey: 'roleId'
-        });
-      }
-    }
   });
+  User.associate = (models) => {
+    // associations can be defined here
+    User.hasMany(models.Document, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+      hooks: true
+    });
+    User.belongsTo(models.Role, {
+      foreignKey: 'roleId'
+    });
+  };
   return User;
 };
