@@ -35,3 +35,5 @@ _gulp2.default.task('nodemon', ['babel'], function () {
     tasks: ['babel']
   });
 });
+
+_gulp2.default.task('default', ['nodemon']);

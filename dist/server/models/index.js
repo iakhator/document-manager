@@ -34,3 +34,8 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;

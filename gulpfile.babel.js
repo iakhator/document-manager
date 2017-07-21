@@ -26,3 +26,5 @@ gulp.task('nodemon', ['babel'], () =>
     tasks: ['babel']
   })
 );
+
+gulp.task('default', ['nodemon']);

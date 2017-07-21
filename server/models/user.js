@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
-
     password: {
       type: DataTypes.STRING,
       allowNull: false
@@ -25,17 +24,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultvalue: 2
     }
+  }, {
+    classMethods: {
+      associate: (models) => {
+        // associations can be defined here
+        User.hasMany(models.Document, {
+          foreignKey: 'userId',
+          onDelete: 'CASCADE',
+          hooks: true
+        });
+        User.belongsTo(models.Role, {
+          foreignKey: 'roleId'
+        });
+      }
+    }
   });
-  User.associate = (models) => {
-    // associations can be defined here
-    User.hasMany(models.Document, {
-      foreignKey: 'userId',
-      onDelete: 'CASCADE',
-      hooks: true
-    });
-    User.belongsTo(models.Role, {
-      foreignKey: 'roleId'
-    });
-  };
   return User;
 };
