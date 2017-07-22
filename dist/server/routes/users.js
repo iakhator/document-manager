@@ -20,7 +20,11 @@ router.route('/')
 /** GET /api/users - Get list of users */
 .get(_users2.default.get)
 
-/** POST /api/users - Get list of users */
+/** POST /api/users - Create/Signup users */
 .post(_users2.default.create);
+
+router.route('/login')
+/** POST /api/users/login - Login users */
+.post(_users2.default.login);
 
 exports.default = router;
