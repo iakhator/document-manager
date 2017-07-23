@@ -22,7 +22,7 @@ var router = _express2.default.Router();
 
 router.route('/')
 /** GET /api/users - Get list of users */
-.get(_auth2.default.adminAccess, _users2.default.getUsers)
+.get(_auth2.default.verifyToken, _auth2.default.adminAccess, _users2.default.getUsers)
 
 /** POST /api/users - Create/Signup users */
 .post(_users2.default.createUser);
@@ -33,7 +33,7 @@ router.route('/login')
 
 router.route('/:id')
 /** GET /api/users/id - Find users */
-.get(_auth2.default.adminAccess, _users2.default.findUser)
+.get(_auth2.default.verifyToken, _users2.default.findUser)
 
 /** PUT /api/users/id - update users */
 .put(_auth2.default.verifyToken, _users2.default.updateUser)

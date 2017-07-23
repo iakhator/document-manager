@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route('/')
   /** GET /api/users - Get list of users */
-  .get(auth.adminAccess, userController.getUsers)
+  .get(auth.verifyToken, auth.adminAccess, userController.getUsers)
 
   /** POST /api/users - Create/Signup users */
   .post(userController.createUser);
@@ -17,7 +17,7 @@ router.route('/login')
 
 router.route('/:id')
   /** GET /api/users/id - Find users */
-  .get(auth.adminAccess, userController.findUser)
+  .get(auth.verifyToken, userController.findUser)
 
   /** PUT /api/users/id - update users */
   .put(auth.verifyToken, userController.updateUser)
