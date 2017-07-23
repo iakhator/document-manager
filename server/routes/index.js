@@ -7,5 +7,6 @@ const router = express.Router();
 
 /** GET /api-status - Check service status **/
 router.use('/users', userRoutes);
+router.use('/search', searchRoutes);
 
 export default router;

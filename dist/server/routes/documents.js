@@ -8,9 +8,9 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _search = require('../controllers/search');
+var _documents = require('../controllers/documents');
 
-var _search2 = _interopRequireDefault(_search);
+var _documents2 = _interopRequireDefault(_documents);
 
 var _auth = require('../middlewares/auth');
 
@@ -22,7 +22,7 @@ var router = _express2.default.Router();
 
 router.route('/users')
 /** GET /api/users - Get list of users */
-.get(_auth2.default.verifyToken, _auth2.default.adminAccess, _search2.default.searchUser);
+.get(_auth2.default.verifyToken, _auth2.default.adminAccess, _documents2.default.searchUser);
 
 /** POST /api/users - Create/Signup users */
 

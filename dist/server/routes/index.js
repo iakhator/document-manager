@@ -22,5 +22,6 @@ var router = _express2.default.Router();
 
 /** GET /api-status - Check service status **/
 router.use('/users', _users2.default);
+router.use('/search', _search2.default);
 
 exports.default = router;
