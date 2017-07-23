@@ -13,6 +13,12 @@ router.route('/')
 
 router.route('/:id')
   /** PUT /api/v1/documents/id - Create document */
-  .put(auth.verifyToken, documentController.updateDocument);
+  .put(auth.verifyToken, documentController.updateDocument)
+
+  /** GET /api/v1/documents/id - get document */
+  .get(auth.verifyToken, documentController.findDocument);
+
+  /** DELETE /api/v1/documents/id - delete document */
+  // .delete(auth.verifyToken, documentController.deleteDocument);
 
 export default router;

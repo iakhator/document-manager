@@ -123,4 +123,45 @@ function getAllDocument(req, res) {
   }
 }
 
-export default { createDocument, updateDocument, getAllDocument };
+function findDocument(req, res) {
+  return Document.findById(req.params.id)
+  .then((document) => {
+    if (!document) {
+      return res.status(404).json({
+        message: 'Document not found'
+      });
+    }
+    if (req.decoded.roleId === 1) {
+      return res.json(document);
+    }
+    if (document.access === 'public') {
+      res.status(200).send(document);
+    }
+    if (document.access === 'private') {
+      if (document.userId !== req.decoded.id) {
+        res.status(401).json({
+          message: 'You are not authorized to view this document'
+        });
+      }
+      return res.status(200).send(document);
+    }
+    if (document.access === 'role') {
+      return models.User
+        .findById(document.userId)
+        .then((documentAuthor) => {
+          if (
+            Number(documentAuthor.roleId) !== Number(req.decoded.roleId)
+          ) {
+            return res.status(401).json({
+              message: 'You are not authorized to view this document'
+            });
+          }
+          return res.status(200).send(document);
+        })
+        .catch(error => res.status(400).send(error));
+    }
+  })
+  .catch(error => res.status(400).send(error));
+}
+
+export default { createDocument, updateDocument, getAllDocument, findDocument };

@@ -143,4 +143,42 @@ function getAllDocument(req, res) {
   }
 }
 
-exports.default = { createDocument: createDocument, updateDocument: updateDocument, getAllDocument: getAllDocument };
+function findDocument(req, res) {
+  return Document.findById(req.params.id).then(function (document) {
+    if (!document) {
+      return res.status(404).json({
+        message: 'Document not found'
+      });
+    }
+    if (req.decoded.roleId === 1) {
+      return res.json(document);
+    }
+    if (document.access === 'public') {
+      res.status(200).send(document);
+    }
+    if (document.access === 'private') {
+      if (document.userId !== req.decoded.id) {
+        res.status(401).json({
+          message: 'You are not authorized to view this document'
+        });
+      }
+      return res.status(200).send(document);
+    }
+    if (document.access === 'role') {
+      return _models2.default.User.findById(document.userId).then(function (documentAuthor) {
+        if (Number(documentAuthor.roleId) !== Number(req.decoded.roleId)) {
+          return res.status(401).json({
+            message: 'You are not authorized to view this document'
+          });
+        }
+        return res.status(200).send(document);
+      }).catch(function (error) {
+        return res.status(400).send(error);
+      });
+    }
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
+exports.default = { createDocument: createDocument, updateDocument: updateDocument, getAllDocument: getAllDocument, findDocument: findDocument };
