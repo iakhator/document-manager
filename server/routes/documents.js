@@ -10,4 +10,9 @@ router.route('/')
 
   /** POST /api/v1/documents - Create document */
   .post(auth.verifyToken, documentController.createDocument);
+
+router.route('/:id')
+  /** PUT /api/v1/documents/id - Create document */
+  .put(auth.verifyToken, documentController.updateDocument);
+
 export default router;

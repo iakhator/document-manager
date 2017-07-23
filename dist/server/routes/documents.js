@@ -26,4 +26,9 @@ router.route('/')
 
 /** POST /api/v1/documents - Create document */
 .post(_auth2.default.verifyToken, _documents2.default.createDocument);
+
+router.route('/:id')
+/** PUT /api/v1/documents/id - Create document */
+.put(_auth2.default.verifyToken, _documents2.default.updateDocument);
+
 exports.default = router;

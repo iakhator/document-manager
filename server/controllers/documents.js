@@ -37,4 +37,34 @@ function createDocument(req, res) {
   }
 }
 
-export default { createDocument };
+function updateDocument(req, res) {
+  if (isNaN(req.params.id)) {
+    return res.status(400);
+  }
+  const docId = Number(req.params.id);
+  return Document.findById(docId)
+    .then((document) => {
+      if (!document) {
+        return res.status(404).send({
+          message: 'Document Not Found'
+        });
+      }
+      if (Number(document.userId) !== Number(req.decoded.id)) {
+        return res.status(401).json({
+          message: 'You are not authorized to edit this document'
+        });
+      }
+      return document
+        .update({
+          title: req.body.title || document.title,
+          content: req.body.content || document.content,
+          access: req.body.value || document.access,
+          userId: req.body.userId || document.userId
+        })
+        .then(() => res.status(200).send(document))
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error));
+}
+
+export default { createDocument, updateDocument };

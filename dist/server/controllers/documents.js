@@ -54,4 +54,35 @@ function createDocument(req, res) {
   }
 }
 
-exports.default = { createDocument: createDocument };
+function updateDocument(req, res) {
+  if (isNaN(req.params.id)) {
+    return res.status(400);
+  }
+  var docId = Number(req.params.id);
+  return Document.findById(docId).then(function (document) {
+    if (!document) {
+      return res.status(404).send({
+        message: 'Document Not Found'
+      });
+    }
+    if (Number(document.userId) !== Number(req.decoded.id)) {
+      return res.status(401).json({
+        message: 'You are not authorized to edit this document'
+      });
+    }
+    return document.update({
+      title: req.body.title || document.title,
+      content: req.body.content || document.content,
+      access: req.body.value || document.access,
+      userId: req.body.userId || document.userId
+    }).then(function () {
+      return res.status(200).send(document);
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
+exports.default = { createDocument: createDocument, updateDocument: updateDocument };
