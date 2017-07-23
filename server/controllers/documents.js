@@ -164,4 +164,36 @@ function findDocument(req, res) {
   .catch(error => res.status(400).send(error));
 }
 
-export default { createDocument, updateDocument, getAllDocument, findDocument };
+function deleteDocument(req, res) {
+  return Document.findById(req.params.id)
+    .then((document) => {
+      if (!document) {
+        return res.status(404).send({
+          message: 'Document Not Found'
+        });
+      }
+      if (
+        req.decoded.roleId !== 1 &&
+        Number(document.userId) !== Number(req.decoded.id)
+      ) {
+        return res.status(401).json({
+          message: 'You are not authorized to delete this document'
+        });
+      }
+      return document
+        .destroy()
+        .then(() => res.status(204).send({
+          message: 'Document successfully deleted'
+        }))
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error));
+}
+
+export default {
+  createDocument,
+  updateDocument,
+  getAllDocument,
+  findDocument,
+  deleteDocument
+};

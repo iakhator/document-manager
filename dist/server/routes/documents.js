@@ -32,9 +32,9 @@ router.route('/:id')
 .put(_auth2.default.verifyToken, _documents2.default.updateDocument)
 
 /** GET /api/v1/documents/id - get document */
-.get(_auth2.default.verifyToken, _documents2.default.findDocument);
+.get(_auth2.default.verifyToken, _documents2.default.findDocument)
 
 /** DELETE /api/v1/documents/id - delete document */
-// .delete(auth.verifyToken, documentController.deleteDocument);
+.delete(_auth2.default.verifyToken, _documents2.default.deleteDocument);
 
 exports.default = router;

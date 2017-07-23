@@ -181,4 +181,34 @@ function findDocument(req, res) {
   });
 }
 
-exports.default = { createDocument: createDocument, updateDocument: updateDocument, getAllDocument: getAllDocument, findDocument: findDocument };
+function deleteDocument(req, res) {
+  return Document.findById(req.params.id).then(function (document) {
+    if (!document) {
+      return res.status(404).send({
+        message: 'Document Not Found'
+      });
+    }
+    if (req.decoded.roleId !== 1 && Number(document.userId) !== Number(req.decoded.id)) {
+      return res.status(401).json({
+        message: 'You are not authorized to delete this document'
+      });
+    }
+    return document.destroy().then(function () {
+      return res.status(204).send({
+        message: 'Document successfully deleted'
+      });
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
+exports.default = {
+  createDocument: createDocument,
+  updateDocument: updateDocument,
+  getAllDocument: getAllDocument,
+  findDocument: findDocument,
+  deleteDocument: deleteDocument
+};

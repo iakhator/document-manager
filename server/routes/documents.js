@@ -16,9 +16,9 @@ router.route('/:id')
   .put(auth.verifyToken, documentController.updateDocument)
 
   /** GET /api/v1/documents/id - get document */
-  .get(auth.verifyToken, documentController.findDocument);
+  .get(auth.verifyToken, documentController.findDocument)
 
   /** DELETE /api/v1/documents/id - delete document */
-  // .delete(auth.verifyToken, documentController.deleteDocument);
+  .delete(auth.verifyToken, documentController.deleteDocument);
 
 export default router;
