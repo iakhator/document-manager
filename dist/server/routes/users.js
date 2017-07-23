@@ -31,4 +31,8 @@ router.route('/login')
 /** POST /api/users/login - Login users */
 .post(_users2.default.login);
 
+router.route('/:id')
+/** GET /api/users/id - Find users */
+.get(_auth2.default.verifyToken, _users2.default.findUser);
+
 exports.default = router;

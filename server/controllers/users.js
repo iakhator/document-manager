@@ -120,4 +120,27 @@ function login(req, res) {
   }
 }
 
-export default { getUsers, createUser, login };
+function findUser(req, res) {
+  const userQuery = Number(req.params.id);
+  if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
+    return res.status(401).json({
+      message: 'Unauthorized Access'
+    });
+  }
+  return User
+    .findAll({
+      where: {
+        id: req.params.id,
+      },
+      attributes: { exclude: ['password'] }
+    })
+    .then((user) => {
+      if (!user.length) {
+        res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).send(user);
+    })
+    .catch(error => res.status(400).send(error));
+}
+
+export default { getUsers, createUser, login, findUser };

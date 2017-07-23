@@ -15,4 +15,8 @@ router.route('/login')
   /** POST /api/users/login - Login users */
   .post(userController.login);
 
+router.route('/:id')
+  /** GET /api/users/id - Find users */
+  .get(auth.verifyToken, userController.findUser);
+
 export default router;
