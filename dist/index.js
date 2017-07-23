@@ -6,6 +6,8 @@ var _express2 = _interopRequireDefault(_express);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_express2.default.listen(3000, function () {
+var port = process.env.PORT || 3000;
+
+_express2.default.listen(port, function () {
   console.log('API Server started and listening on port 3000');
 });

@@ -8,6 +8,10 @@ var _bcrypt = require('bcrypt');
 
 var _bcrypt2 = _interopRequireDefault(_bcrypt);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 var _helper = require('../helpers/helper');
 
 var _helper2 = _interopRequireDefault(_helper);
@@ -18,16 +22,35 @@ var _models2 = _interopRequireDefault(_models);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var User = _models2.default.User;
+require('dotenv').config();
 
-function get(req, res) {
-  return res.json({ ok: 'none' });
+var jwtSecret = process.env.JWT_SECRET;
+var User = _models2.default.User;
+var metaData = _helper2.default.paginationMetaData;
+
+function getUsers(req, res) {
+  var limit = req.query.limit;
+  var offset = req.query.offset;
+  return User.findAndCountAll({ limit: limit,
+    offset: offset,
+    attributes: { exclude: ['password'] }
+  }).then(function (_ref) {
+    var user = _ref.rows,
+        count = _ref.count;
+
+    res.status(200).send({
+      user: user,
+      pagination: metaData(count, limit, offset)
+    });
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
 }
 
-function create(req, res) {
+function createUser(req, res) {
   req.check('fullName', 'FullName is required').notEmpty();
   req.check('userName', 'userName is required').notEmpty();
-  req.check('email', 'FullName is required').notEmpty();
+  req.check('email', 'Email is required').notEmpty();
   req.check('email', 'Please put a valid email').isEmail();
   req.check('password', 'Password is required').notEmpty();
   req.check('password', 'Password must be a mininum of 4 character').isLength(4, 50);
@@ -65,7 +88,74 @@ function create(req, res) {
 }
 
 function login(req, res) {
-  res.send('login page');
+  req.check('email', 'Email is required').notEmpty();
+  req.check('email', 'Please put a valid email').isEmail();
+  req.check('password', 'Password is required').notEmpty();
+
+  var errors = req.validationErrors();
+
+  if (errors) {
+    res.status(400).json({ errors: errors });
+  } else {
+    User.findAll({
+      where: { email: req.body.email }
+    }).then(function (user) {
+      var existingUser = user[0];
+      if (!existingUser) {
+        res.status(400).json({
+          success: false,
+          message: 'Authentication failed. User not found.' });
+      } else if (existingUser) {
+        _bcrypt2.default.compare(req.body.password, existingUser.password, function (err, result) {
+          if (err) throw err;
+          if (result) {
+            var payLoad = {
+              email: existingUser.email,
+              id: existingUser.id,
+              fullName: existingUser.fullName,
+              roleId: existingUser.roleId
+            };
+            var token = _jsonwebtoken2.default.sign(payLoad, jwtSecret, {
+              expiresIn: 60 * 60 * 24
+            });
+            res.status(201).json({
+              success: true,
+              token: token
+            });
+          } else {
+            res.status(401).json({
+              success: false,
+              message: 'Authentication failed. Wrong password.'
+            });
+          }
+        });
+      }
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }
 }
 
-exports.default = { get: get, create: create, login: login };
+function findUser(req, res) {
+  var userQuery = Number(req.params.id);
+  if (req.decoded.id !== userQuery && req.decoded.roleId !== 1) {
+    return res.status(401).json({
+      message: 'Unauthorized Access'
+    });
+  }
+  return User.findAll({
+    where: {
+      id: req.params.id
+    },
+    attributes: { exclude: ['password'] }
+  }).then(function (user) {
+    if (!user.length) {
+      res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).send(user);
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
+exports.default = { getUsers: getUsers, createUser: createUser, login: login, findUser: findUser };

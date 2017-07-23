@@ -4,7 +4,6 @@ import logger from 'morgan';
 import expressValidator from 'express-validator';
 import routes from '../routes';
 
-
 const app = express();
 
 app.use(logger('dev'));
