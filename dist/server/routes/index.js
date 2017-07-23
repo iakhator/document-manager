@@ -16,6 +16,10 @@ var _search = require('./search');
 
 var _search2 = _interopRequireDefault(_search);
 
+var _documents = require('./documents');
+
+var _documents2 = _interopRequireDefault(_documents);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -23,5 +27,6 @@ var router = _express2.default.Router();
 /** GET /api-status - Check service status **/
 router.use('/users', _users2.default);
 router.use('/search', _search2.default);
+router.use('/documents', _documents2.default);
 
 exports.default = router;

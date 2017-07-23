@@ -1,13 +1,13 @@
 import express from 'express';
-import searchController from '../controllers/documents';
+import documentController from '../controllers/documents';
 import auth from '../middlewares/auth';
 
 const router = express.Router();
 
-router.route('/users')
-  /** GET /api/users - Get list of users */
-  .get(auth.verifyToken, auth.adminAccess, searchController.searchUser);
+router.route('/')
+  /** GET /api/v1/documents - Get all documents */
+  // .get(documentController.getDocuments)
 
-  /** POST /api/users - Create/Signup users */
-
+  /** POST /api/v1/documents - Create document */
+  .post(auth.verifyToken, documentController.createDocument);
 export default router;

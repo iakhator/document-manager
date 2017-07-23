@@ -20,10 +20,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var router = _express2.default.Router();
 
-router.route('/users')
-/** GET /api/users - Get list of users */
-.get(_auth2.default.verifyToken, _auth2.default.adminAccess, _documents2.default.searchUser);
+router.route('/')
+/** GET /api/v1/documents - Get all documents */
+// .get(documentController.getDocuments)
 
-/** POST /api/users - Create/Signup users */
-
+/** POST /api/v1/documents - Create document */
+.post(_auth2.default.verifyToken, _documents2.default.createDocument);
 exports.default = router;
