@@ -85,4 +85,62 @@ function updateDocument(req, res) {
   });
 }
 
-exports.default = { createDocument: createDocument, updateDocument: updateDocument };
+function getAllDocument(req, res) {
+  var limit = req.query.limit;
+  var offset = req.query.offset;
+  if (req.decoded.roleId === 1) {
+    return Document.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      where: {
+        access: {
+          $ne: 'private'
+        }
+      },
+      include: [{
+        model: User,
+        attributes: ['userName', 'roleId']
+      }]
+    }).then(function (_ref) {
+      var document = _ref.rows,
+          count = _ref.count;
+
+      res.status(200).send({
+        document: document,
+        pagination: metaData(count, limit, offset)
+      });
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  } else if (req.decoded.roleId !== 1) {
+    return Document.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      include: [{
+        model: User,
+        attributes: ['userName', 'roleId'],
+        where: {
+          roleId: req.decoded.roleId
+        }
+      }],
+      where: {
+        access: {
+          $ne: 'private'
+        }
+      }
+
+    }).then(function (_ref2) {
+      var document = _ref2.rows,
+          count = _ref2.count;
+
+      res.status(200).send({
+        document: document,
+        pagination: metaData(count, limit, offset)
+      });
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }
+}
+
+exports.default = { createDocument: createDocument, updateDocument: updateDocument, getAllDocument: getAllDocument };

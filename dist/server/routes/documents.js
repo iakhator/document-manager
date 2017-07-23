@@ -22,7 +22,7 @@ var router = _express2.default.Router();
 
 router.route('/')
 /** GET /api/v1/documents - Get all documents */
-// .get(documentController.getDocuments)
+.get(_auth2.default.verifyToken, _documents2.default.getAllDocument)
 
 /** POST /api/v1/documents - Create document */
 .post(_auth2.default.verifyToken, _documents2.default.createDocument);

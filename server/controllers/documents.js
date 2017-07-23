@@ -67,4 +67,60 @@ function updateDocument(req, res) {
     .catch(error => res.status(400).send(error));
 }
 
-export default { createDocument, updateDocument };
+function getAllDocument(req, res) {
+  const limit = req.query.limit;
+  const offset = req.query.offset;
+  if (req.decoded.roleId === 1) {
+    return Document.findAndCountAll({
+      limit,
+      offset,
+      where: {
+        access: {
+          $ne: 'private'
+        }
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['userName', 'roleId']
+        }
+      ]
+    })
+    .then(({ rows: document, count }) => {
+      res.status(200).send({
+        document,
+        pagination: metaData(count, limit, offset),
+      });
+    })
+    .catch(error => res.status(400).send(error));
+  } else if (req.decoded.roleId !== 1) {
+    return Document.findAndCountAll({
+      limit,
+      offset,
+      include: [
+        {
+          model: User,
+          attributes: ['userName', 'roleId'],
+          where: {
+            roleId: req.decoded.roleId
+          },
+        },
+      ],
+      where: {
+        access: {
+          $ne: 'private'
+        }
+      },
+
+    })
+    .then(({ rows: document, count }) => {
+      res.status(200).send({
+        document,
+        pagination: metaData(count, limit, offset),
+      });
+    })
+    .catch(error => res.status(400).send(error));
+  }
+}
+
+export default { createDocument, updateDocument, getAllDocument };

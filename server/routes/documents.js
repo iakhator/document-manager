@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route('/')
   /** GET /api/v1/documents - Get all documents */
-  // .get(documentController.getDocuments)
+  .get(auth.verifyToken, documentController.getAllDocument)
 
   /** POST /api/v1/documents - Create document */
   .post(auth.verifyToken, documentController.createDocument);
