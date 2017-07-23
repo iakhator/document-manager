@@ -15,5 +15,4 @@ router.route('/login')
   /** POST /api/users/login - Login users */
   .post(userController.login);
 
-
 export default router;

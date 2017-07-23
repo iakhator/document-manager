@@ -10,7 +10,23 @@ const jwtSecret = process.env.JWT_SECRET;
 const User = models.User;
 const metaData = helper.paginationMetaData;
 
-
+function getUsers(req, res) {
+  const limit = req.query.limit;
+  const offset = req.query.offset;
+  return User
+  .findAndCountAll(
+    { limit,
+      offset,
+      attributes: { exclude: ['password'] }
+    })
+  .then(({ rows: user, count }) => {
+    res.status(200).send({
+      user,
+      pagination: metaData(count, limit, offset)
+    });
+  })
+  .catch(error => res.status(400).send(error));
+}
 
 function createUser(req, res) {
   req.check('fullName', 'FullName is required').notEmpty();
@@ -104,5 +120,4 @@ function login(req, res) {
   }
 }
 
-
-export default { , createUser, login, };
+export default { getUsers, createUser, login };
