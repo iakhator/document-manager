@@ -143,4 +143,43 @@ function findUser(req, res) {
     .catch(error => res.status(400).send(error));
 }
 
-export default { getUsers, createUser, login, findUser };
+function updateUser(req, res) {
+  if (Number(req.decoded.id) !== Number(req.params.id)) {
+    return res.status(401).json({
+      message: 'You are not authorized to access this user'
+    });
+  }
+  const userId = Number(req.params.id);
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(req.body.password, salt, (err, hash) => {
+      User
+      .findById(userId)
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        return user
+          .update({
+            fullName: req.body.fullName || user.fullName,
+            userName: req.body.userName || user.userName,
+            email: req.body.email || user.email,
+            password: hash || user.password,
+            roleId: req.body.roleId || user.roleId
+          })
+          .then((updatedUser) => {
+            res.status(200).send({
+              id: updatedUser.id,
+              fullName: updatedUser.fullName,
+              userName: updatedUser.userName,
+              email: updatedUser.email,
+              roleId: updatedUser.roleId
+            });
+          })
+          .catch(error => res.status(400).send(error));
+      })
+      .catch(error => res.status(400).send(error));
+    });
+  });
+}
+
+export default { getUsers, createUser, login, findUser, updateUser };

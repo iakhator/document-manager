@@ -158,4 +158,41 @@ function findUser(req, res) {
   });
 }
 
-exports.default = { getUsers: getUsers, createUser: createUser, login: login, findUser: findUser };
+function updateUser(req, res) {
+  if (Number(req.decoded.id) !== Number(req.params.id)) {
+    return res.status(401).json({
+      message: 'You are not authorized to access this user'
+    });
+  }
+  var userId = Number(req.params.id);
+  _bcrypt2.default.genSalt(10, function (err, salt) {
+    _bcrypt2.default.hash(req.body.password, salt, function (err, hash) {
+      User.findById(userId).then(function (user) {
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+        return user.update({
+          fullName: req.body.fullName || user.fullName,
+          userName: req.body.userName || user.userName,
+          email: req.body.email || user.email,
+          password: hash || user.password,
+          roleId: req.body.roleId || user.roleId
+        }).then(function (updatedUser) {
+          res.status(200).send({
+            id: updatedUser.id,
+            fullName: updatedUser.fullName,
+            userName: updatedUser.userName,
+            email: updatedUser.email,
+            roleId: updatedUser.roleId
+          });
+        }).catch(function (error) {
+          return res.status(400).send(error);
+        });
+      }).catch(function (error) {
+        return res.status(400).send(error);
+      });
+    });
+  });
+}
+
+exports.default = { getUsers: getUsers, createUser: createUser, login: login, findUser: findUser, updateUser: updateUser };

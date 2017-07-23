@@ -33,6 +33,9 @@ router.route('/login')
 
 router.route('/:id')
 /** GET /api/users/id - Find users */
-.get(_auth2.default.verifyToken, _users2.default.findUser);
+.get(_auth2.default.verifyToken, _users2.default.findUser)
+
+/** PUT /api/users/id - update users */
+.put(_auth2.default.verifyToken, _users2.default.updateUser);
 
 exports.default = router;

@@ -17,6 +17,9 @@ router.route('/login')
 
 router.route('/:id')
   /** GET /api/users/id - Find users */
-  .get(auth.verifyToken, userController.findUser);
+  .get(auth.verifyToken, userController.findUser)
+
+  /** PUT /api/users/id - update users */
+  .put(auth.verifyToken, userController.updateUser);
 
 export default router;
