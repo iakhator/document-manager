@@ -36,6 +36,9 @@ router.route('/:id')
 .get(_auth2.default.verifyToken, _users2.default.findUser)
 
 /** PUT /api/users/id - update users */
-.put(_auth2.default.verifyToken, _users2.default.updateUser);
+.put(_auth2.default.verifyToken, _users2.default.updateUser)
+
+/** DELETE /api/users/id - delete users */
+.delete(_auth2.default.verifyToken, _users2.default.deleteUser);
 
 exports.default = router;

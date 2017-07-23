@@ -172,7 +172,8 @@ function updateUser(req, res) {
               fullName: updatedUser.fullName,
               userName: updatedUser.userName,
               email: updatedUser.email,
-              roleId: updatedUser.roleId
+              roleId: updatedUser.roleId,
+              message: 'Details successfully updated.'
             });
           })
           .catch(error => res.status(400).send(error));
@@ -182,4 +183,32 @@ function updateUser(req, res) {
   });
 }
 
-export default { getUsers, createUser, login, findUser, updateUser };
+function deleteUser(req, res) {
+  if (req.decoded.roleId !== 1) {
+    return res.status(401).json({
+      message: 'You are not authorized to access this field'
+    });
+  }
+  return User
+  .findById(req.params.id)
+  .then((user) => {
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return user
+      .destroy()
+      .then(() => res.status(204).json({
+        message: 'User has been deleted successfully' }))
+      .catch(error => res.status(400).send(error));
+  })
+  .catch(error => res.status(400).send(error));
+}
+
+export default {
+  getUsers,
+  createUser,
+  login,
+  findUser,
+  updateUser,
+  deleteUser
+};

@@ -20,6 +20,9 @@ router.route('/:id')
   .get(auth.verifyToken, userController.findUser)
 
   /** PUT /api/users/id - update users */
-  .put(auth.verifyToken, userController.updateUser);
+  .put(auth.verifyToken, userController.updateUser)
+
+  /** DELETE /api/users/id - delete users */
+  .delete(auth.verifyToken, userController.deleteUser);
 
 export default router;

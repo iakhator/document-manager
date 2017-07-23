@@ -12,6 +12,10 @@ var _users = require('./users');
 
 var _users2 = _interopRequireDefault(_users);
 
+var _search = require('./search');
+
+var _search2 = _interopRequireDefault(_search);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();

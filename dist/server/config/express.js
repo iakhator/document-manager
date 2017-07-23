@@ -44,6 +44,7 @@ app.use(function (req, res, next) {
   };
   next();
 });
+
 // mount all routes on /api path
 app.use('/api/v1', _routes2.default);
 
