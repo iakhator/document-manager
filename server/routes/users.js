@@ -25,4 +25,8 @@ router.route('/:id')
   /** DELETE /api/users/id - delete users */
   .delete(auth.verifyToken, userController.deleteUser);
 
+router.route('/:id/documents')
+  /** GET /api/users/id/documents - Find documents of a specific user*/
+  .get(auth.verifyToken, userController.findUserDocument);
+
 export default router;

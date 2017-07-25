@@ -217,11 +217,14 @@ function deleteUser(req, res) {
   });
 }
 
+function findUserDocument(req, res) {}
+
 exports.default = {
   getUsers: getUsers,
   createUser: createUser,
   login: login,
   findUser: findUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
+  findUserDocument: findUserDocument
 };

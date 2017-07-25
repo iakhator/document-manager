@@ -204,11 +204,16 @@ function deleteUser(req, res) {
   .catch(error => res.status(400).send(error));
 }
 
+function findUserDocument(req, res) {
+
+}
+
 export default {
   getUsers,
   createUser,
   login,
   findUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  findUserDocument
 };
