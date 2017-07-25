@@ -43,6 +43,6 @@ router.route('/:id')
 
 router.route('/:id/documents')
 /** GET /api/users/id/documents - Find documents of a specific user*/
-.get(_auth2.default.verifyToken, _users2.default.findUserDocument);
+.get(_auth2.default.verifyToken, _users2.default.getUserDocuments);
 
 exports.default = router;

@@ -27,6 +27,6 @@ router.route('/:id')
 
 router.route('/:id/documents')
   /** GET /api/users/id/documents - Find documents of a specific user*/
-  .get(auth.verifyToken, userController.findUserDocument);
+  .get(auth.verifyToken, userController.getUserDocuments);
 
 export default router;

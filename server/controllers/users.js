@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const jwtSecret = process.env.JWT_SECRET;
 const User = models.User;
+const Document = models.Document;
 const metaData = helper.paginationMetaData;
 
 function getUsers(req, res) {
@@ -204,8 +205,32 @@ function deleteUser(req, res) {
   .catch(error => res.status(400).send(error));
 }
 
-function findUserDocument(req, res) {
-
+function getUserDocuments(req, res) {
+  const limit = req.query.limit;
+  const offset = req.query.offset;
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        });
+      }
+      return Document.findAndCountAll({
+        limit,
+        offset,
+        where: {
+          userId: user.id
+        }
+      })
+        .then(({ rows: document, count }) => {
+          res.status(200).send({
+            document,
+            pagination: metaData(count, limit, offset),
+          });
+        })
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error));
 }
 
 export default {
@@ -215,5 +240,5 @@ export default {
   findUser,
   updateUser,
   deleteUser,
-  findUserDocument
+  getUserDocuments
 };

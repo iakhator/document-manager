@@ -26,6 +26,7 @@ require('dotenv').config();
 
 var jwtSecret = process.env.JWT_SECRET;
 var User = _models2.default.User;
+var Document = _models2.default.Document;
 var metaData = _helper2.default.paginationMetaData;
 
 function getUsers(req, res) {
@@ -217,7 +218,36 @@ function deleteUser(req, res) {
   });
 }
 
-function findUserDocument(req, res) {}
+function getUserDocuments(req, res) {
+  var limit = req.query.limit;
+  var offset = req.query.offset;
+  User.findById(req.params.id).then(function (user) {
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+    return Document.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      where: {
+        userId: user.id
+      }
+    }).then(function (_ref2) {
+      var document = _ref2.rows,
+          count = _ref2.count;
+
+      res.status(200).send({
+        document: document,
+        pagination: metaData(count, limit, offset)
+      });
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
 
 exports.default = {
   getUsers: getUsers,
@@ -226,5 +256,5 @@ exports.default = {
   findUser: findUser,
   updateUser: updateUser,
   deleteUser: deleteUser,
-  findUserDocument: findUserDocument
+  getUserDocuments: getUserDocuments
 };
