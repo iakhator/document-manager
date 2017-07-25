@@ -21,9 +21,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 
 router.route('/users')
-/** GET /api/users - Get list of users */
+/** GET /api/v1/users - search list of users */
 .get(_auth2.default.verifyToken, _auth2.default.adminAccess, _search2.default.searchUser);
 
-/** POST /api/users - Create/Signup users */
+router.route('/documents')
+/** GET /api/v1/search - search list of documents */
+.get(_auth2.default.verifyToken, _search2.default.searchDocuments);
 
 exports.default = router;

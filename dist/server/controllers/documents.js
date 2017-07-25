@@ -14,8 +14,8 @@ var _models2 = _interopRequireDefault(_models);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Document = _models2.default.Document;
 var User = _models2.default.User;
+var Document = _models2.default.Document;
 var metaData = _helper2.default.paginationMetaData;
 
 function createDocument(req, res) {

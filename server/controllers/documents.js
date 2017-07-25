@@ -1,8 +1,8 @@
 import helper from '../helpers/helper';
 import models from '../models';
 
-const Document = models.Document;
 const User = models.User;
+const Document = models.Document;
 const metaData = helper.paginationMetaData;
 
 function createDocument(req, res) {

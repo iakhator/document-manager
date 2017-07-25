@@ -19,15 +19,11 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.ENUM,
       values: ['public', 'private', 'role']
     }
-  }, {
-    classMethods: {
-      associate: function associate(models) {
-        // associations can be defined here
-        Document.belongsTo(models.User, {
-          foreignKey: 'userId'
-        });
-      }
-    }
   });
+  Document.associate = function (models) {
+    Document.belongsTo(models.User, {
+      foreignKey: 'userId'
+    });
+  };
   return Document;
 };
