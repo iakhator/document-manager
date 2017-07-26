@@ -6,15 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     }
-  }, {
-    classMethods: {
-      associate: (models) => {
-        // associations can be defined here
-        Role.hasMany(models.User, {
-          foreignKey: 'roleId'
-        });
-      }
-    }
   });
+  Role.associate = (models) => {
+    Role.hasMany(models.User, {
+      foreignKey: 'roleId'
+    });
+  };
   return Role;
 };
