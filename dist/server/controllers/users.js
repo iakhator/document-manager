@@ -25,9 +25,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 require('dotenv').config();
 
 var jwtSecret = process.env.JWT_SECRET;
+var Document = _models2.default.Document;
 var User = _models2.default.User;
 var metaData = _helper2.default.paginationMetaData;
 
+/**
+ * Get all users
+ * @param {number} req - limit and offset for getting all user
+ * @param {array} res - array of users or error
+ * @returns {array} - an array of users
+ */
 function getUsers(req, res) {
   var limit = req.query.limit;
   var offset = req.query.offset;
@@ -47,6 +54,12 @@ function getUsers(req, res) {
   });
 }
 
+/**
+ * Create a user
+ * @param {object} req - request from user
+ * @param {object} res - newly created user or error
+ * @returns {object} - an object of a created user
+ */
 function createUser(req, res) {
   req.check('fullName', 'FullName is required').notEmpty();
   req.check('userName', 'userName is required').notEmpty();
@@ -87,6 +100,12 @@ function createUser(req, res) {
   }
 }
 
+/**
+ * Log In user with JWT
+ * @param {object} req - request from log in user
+ * @param {object} res - authenicated user details
+ * @returns {object} - an object of the logged in user and a token
+ */
 function login(req, res) {
   req.check('email', 'Email is required').notEmpty();
   req.check('email', 'Please put a valid email').isEmail();
@@ -136,6 +155,12 @@ function login(req, res) {
   }
 }
 
+/**
+ * Find a user by Id
+ * @param {number} req - request for user using the id of the user
+ * @param {object} res - an object of the user(s) found or error
+ * @returns {object} - an object of found user
+ */
 function findUser(req, res) {
   var userQuery = Number(req.params.id);
   if (req.decoded.id !== userQuery && req.decoded.roleId !== 1) {
@@ -158,6 +183,12 @@ function findUser(req, res) {
   });
 }
 
+/**
+ *Update a user by Id
+ * @param {object} req - updated user object
+ * @param {object} res - updated user object or error
+ * @returns {object} - return an object of the updated user
+ */
 function updateUser(req, res) {
   if (Number(req.decoded.id) !== Number(req.params.id)) {
     return res.status(401).json({
@@ -196,6 +227,12 @@ function updateUser(req, res) {
   });
 }
 
+/**
+ * Delete a user by Id
+ * @param {number} req - delete user with an id
+ * @param {object} res - message
+ * @returns {object} - null
+ */
 function deleteUser(req, res) {
   if (req.decoded.roleId !== 1) {
     return res.status(401).json({
@@ -217,11 +254,50 @@ function deleteUser(req, res) {
   });
 }
 
+/**
+ *
+ * Get documents for specific user
+ * @param {object} req - request object containing limit query and offset
+ * @param {array} res - array of documents for the requested user
+ * @return {array} - array of requested user's document
+ */
+function getUserDocuments(req, res) {
+  var limit = req.query.limit;
+  var offset = req.query.offset;
+  User.findById(req.params.id).then(function (user) {
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+    return Document.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      where: {
+        userId: user.id
+      }
+    }).then(function (_ref2) {
+      var document = _ref2.rows,
+          count = _ref2.count;
+
+      res.status(200).send({
+        document: document,
+        pagination: metaData(count, limit, offset)
+      });
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
 exports.default = {
   getUsers: getUsers,
   createUser: createUser,
   login: login,
   findUser: findUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
+  getUserDocuments: getUserDocuments
 };

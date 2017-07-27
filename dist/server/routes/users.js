@@ -41,4 +41,8 @@ router.route('/:id')
 /** DELETE /api/users/id - delete users */
 .delete(_auth2.default.verifyToken, _users2.default.deleteUser);
 
+router.route('/:id/documents')
+/** GET /api/users/id/documents - get user document */
+.get(_auth2.default.verifyToken, _users2.default.getUserDocuments);
+
 exports.default = router;

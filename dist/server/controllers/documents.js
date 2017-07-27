@@ -18,6 +18,12 @@ var Document = _models2.default.Document;
 var User = _models2.default.User;
 var metaData = _helper2.default.paginationMetaData;
 
+/**
+ * Create documents for users
+ * @param {object} req - document to be created
+ * @param {object} res - created document
+ * @returns {object} - created document
+ */
 function createDocument(req, res) {
   req.check('title', 'Title is required').notEmpty();
   req.check('content', 'Content is required').notEmpty();
@@ -54,6 +60,12 @@ function createDocument(req, res) {
   }
 }
 
+/**
+ * Update user document.
+ * @param {number} req - request id of the document to be updated
+ * @param {object} res - object of the updated document
+ * @returns {object} - updated document
+ */
 function updateDocument(req, res) {
   if (isNaN(req.params.id)) {
     return res.status(400);
@@ -85,6 +97,12 @@ function updateDocument(req, res) {
   });
 }
 
+/**
+ *  Get all documents
+ * @param {object} req - contains an object of the query, limits and offset
+ * @param {array} res - array of documents with pagination
+ * @returns {array} - array of documents
+ */
 function getAllDocument(req, res) {
   var limit = req.query.limit;
   var offset = req.query.offset;
@@ -143,4 +161,78 @@ function getAllDocument(req, res) {
   }
 }
 
-exports.default = { createDocument: createDocument, updateDocument: updateDocument, getAllDocument: getAllDocument };
+/**
+   * Find a document by Id
+   * @param {number} req - id of the requested document
+   * @param {object} res - object containg the requested document
+   * @returns {object} requested document
+   */
+function findDocument(req, res) {
+  return Document.findById(req.params.id).then(function (document) {
+    if (!document) {
+      res.status(404).json({ message: 'Document not found' });
+    }
+    if (req.decoded.roleId === 1) {
+      return document;
+    }
+    if (document.access === 'public') {
+      return res.status(200).send(document);
+    }
+    if (document.access === 'private') {
+      if (document.userId !== req.decoded.id) {
+        return res.status(401).json({
+          message: 'You are not authorized to view this document'
+        });
+      }
+      return res.status(200).send(document);
+    }
+    if (document.access === 'role') {
+      return _models2.default.User.findById(document.userId).then(function (documentOwner) {
+        if (Number(documentOwner.roleId) !== Number(req.decoded.roleId)) {
+          return res.status(401).json({
+            message: 'You are not authorized to view this document'
+          });
+        }
+        return res.status(200).send(document);
+      }).catch(function (error) {
+        return res.status(400).send(error);
+      });
+    }
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
+/**
+ *
+ * Delete a document by Id
+ * @param {number} req - id of the requested document
+ * @param {object} res - message
+ * @returns {object} - message
+ */
+function deleteDocument(req, res) {
+  return Document.findById(req.params.id).then(function (document) {
+    if (!document) {
+      res.status(404).json({ message: 'Document not found' });
+    }
+    if (req.decoded.roleId !== 1 && Number(document.userId) !== Number(req.decoded.id)) {
+      return res.status(401).json({
+        message: 'You are not authorized to delete this document'
+      });
+    }
+    return document.destroy().then(function () {
+      return res.status(204).send({ message: 'Document deleted successfully' });
+    }).catch(function (error) {
+      return res.status(400).send(error);
+    });
+  }).catch(function (error) {
+    return res.status(400).send(error);
+  });
+}
+
+exports.default = {
+  createDocument: createDocument,
+  updateDocument: updateDocument,
+  getAllDocument: getAllDocument,
+  findDocument: findDocument,
+  deleteDocument: deleteDocument };

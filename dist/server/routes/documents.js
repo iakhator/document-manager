@@ -29,6 +29,12 @@ router.route('/')
 
 router.route('/:id')
 /** PUT /api/v1/documents/id - Create document */
-.put(_auth2.default.verifyToken, _documents2.default.updateDocument);
+.put(_auth2.default.verifyToken, _documents2.default.updateDocument)
+
+/** GET /api/v1/documents/id - find document */
+.get(_auth2.default.verifyToken, _documents2.default.findDocument)
+
+/** GET /api/v1/documents/id - find document */
+.delete(_auth2.default.verifyToken, _documents2.default.deleteDocument);
 
 exports.default = router;

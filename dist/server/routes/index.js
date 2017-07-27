@@ -20,6 +20,10 @@ var _documents = require('./documents');
 
 var _documents2 = _interopRequireDefault(_documents);
 
+var _roles = require('./roles');
+
+var _roles2 = _interopRequireDefault(_roles);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -28,5 +32,6 @@ var router = _express2.default.Router();
 router.use('/users', _users2.default);
 router.use('/search', _search2.default);
 router.use('/documents', _documents2.default);
+router.use('/roles', _roles2.default);
 
 exports.default = router;

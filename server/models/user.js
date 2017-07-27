@@ -24,21 +24,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultvalue: 2
     }
-  }, {
-    classMethods: {
-      associate: (models) => {
-        // associations can be defined here
-        User.hasMany(models.Document, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
-          hooks: true
-        });
-        User.belongsTo(models.Role, {
-          foreignKey: 'roleId',
-          onDelete: 'CASCADE'
-        });
-      }
-    }
   });
+  User.associate = (models) => {
+    // associations can be defined here
+    User.hasMany(models.Document, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
+      hooks: true
+    });
+    User.belongsTo(models.Role, {
+      foreignKey: 'roleId',
+      onDelete: 'CASCADE'
+    });
+  };
   return User;
 };

@@ -24,6 +24,8 @@ router.route('/users')
 /** GET /api/users - Get list of users */
 .get(_auth2.default.verifyToken, _auth2.default.adminAccess, _search2.default.searchUser);
 
-/** POST /api/users - Create/Signup users */
+router.route('/documents')
+/** GET /api/documents - Get list of users */
+.get(_auth2.default.verifyToken, _auth2.default.adminAccess, _search2.default.searchDocuments);
 
 exports.default = router;
