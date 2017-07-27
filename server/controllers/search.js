@@ -1,9 +1,16 @@
 import helper from '../helpers/helper';
 import models from '../models';
 
+const Document = models.Document;
 const User = models.User;
 const metaData = helper.paginationMetaData;
 
+/**
+ * Search for user using a query string
+ * @param {string} req - search query of string
+ * @param {array} res - array of users
+ * @returns {array} - array users searched
+ */
 function searchUser(req, res) {
   const searchQuery = req.query.q,
     limit = req.query.limit,
@@ -34,4 +41,85 @@ function searchUser(req, res) {
   }).catch(error => res.status(400).send(error));
 }
 
-export default { searchUser };
+/**
+   *
+   * Search for documents by title
+   * @param {string} req - an object containing the query, offset and limit
+   * @param {array} res - an array containing searched document
+   * @returns {array} - searched document
+   */
+function searchDocuments(req, res) {
+  const limit = req.query.limit,
+    offset = req.query.offset,
+    queryString = req.query.q;
+  if (!queryString) {
+    return res.status(400).json({
+      message: 'Invalid search input'
+    });
+  }
+  if (req.decoded.roleId === 1) {
+    return Document.findAndCountAll({
+      limit,
+      offset,
+      where: {
+        access: {
+          $ne: 'private'
+        },
+        title: {
+          $like: `%${queryString}%`
+        }
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['userName', 'roleId']
+        }
+      ]
+    })
+    .then(({ rows: document, count }) => {
+      if (count === 0) {
+        res.status(404).json({ message: 'Document not found' });
+      }
+      res.status(200).send({
+        document,
+        pagination: metaData(count, limit, offset),
+      });
+    })
+    .catch(error => res.status(400).send(error));
+  } else if (req.decoded.roleId !== 1) {
+    return Document.findAndCountAll({
+      limit,
+      offset,
+      include: [
+        {
+          model: User,
+          attributes: ['userName', 'roleId'],
+          where: {
+            roleId: req.decoded.roleId
+          },
+        },
+      ],
+      where: {
+        access: {
+          $ne: 'private'
+        },
+        title: {
+          $like: `%${queryString}%`
+        }
+      },
+
+    })
+    .then(({ rows: document, count }) => {
+      if (count === 0) {
+        res.status(404).json({ message: 'Document not found' });
+      }
+      res.status(200).send({
+        document,
+        pagination: metaData(count, limit, offset),
+      });
+    })
+    .catch(error => res.status(400).send(error));
+  }
+}
+
+export default { searchUser, searchDocuments };

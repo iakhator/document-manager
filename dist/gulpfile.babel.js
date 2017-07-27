@@ -4,6 +4,10 @@ var _gulp = require('gulp');
 
 var _gulp2 = _interopRequireDefault(_gulp);
 
+var _gulpMocha = require('gulp-mocha');
+
+var _gulpMocha2 = _interopRequireDefault(_gulpMocha);
+
 var _gulpLoadPlugins = require('gulp-load-plugins');
 
 var _gulpLoadPlugins2 = _interopRequireDefault(_gulpLoadPlugins);
@@ -26,6 +30,12 @@ _gulp2.default.task('babel', function () {
   return _gulp2.default.src(paths.js, { base: '.' }).pipe(plugins.babel()).pipe(_gulp2.default.dest('dist'));
 });
 
+_gulp2.default.task('mochaTest', function () {
+  _gulp2.default.src(['dist/server/test/**/*.js']).pipe((0, _gulpMocha2.default)({
+    reporter: 'spec'
+  }));
+});
+
 // Start server with restart on file change events
 _gulp2.default.task('nodemon', ['babel'], function () {
   return plugins.nodemon({
@@ -36,4 +46,5 @@ _gulp2.default.task('nodemon', ['babel'], function () {
   });
 });
 
+_gulp2.default.task('test', ['mochaTest']);
 _gulp2.default.task('default', ['nodemon']);

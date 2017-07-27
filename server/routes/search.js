@@ -8,6 +8,8 @@ router.route('/users')
   /** GET /api/users - Get list of users */
   .get(auth.verifyToken, auth.adminAccess, searchController.searchUser);
 
-  /** POST /api/users - Create/Signup users */
+router.route('/documents')
+  /** GET /api/documents - Get list of users */
+  .get(auth.verifyToken, auth.adminAccess, searchController.searchDocuments);
 
 export default router;

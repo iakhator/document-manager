@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import mocha from 'gulp-mocha';
 
 import loadPlugins from 'gulp-load-plugins';
 import path from 'path';
@@ -17,6 +18,13 @@ gulp.task('babel', () =>
     .pipe(gulp.dest('dist'))
 );
 
+gulp.task('mochaTest', () => {
+  gulp.src(['dist/server/test/**/*.js'])
+    .pipe(mocha({
+      reporter: 'spec',
+    }));
+});
+
 // Start server with restart on file change events
 gulp.task('nodemon', ['babel'], () =>
   plugins.nodemon({
@@ -27,4 +35,5 @@ gulp.task('nodemon', ['babel'], () =>
   })
 );
 
+gulp.task('test', ['mochaTest']);
 gulp.task('default', ['nodemon']);

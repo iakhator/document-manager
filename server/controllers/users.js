@@ -7,9 +7,16 @@ import models from '../models';
 require('dotenv').config();
 
 const jwtSecret = process.env.JWT_SECRET;
+const Document = models.Document;
 const User = models.User;
 const metaData = helper.paginationMetaData;
 
+/**
+ * Get all users
+ * @param {number} req - limit and offset for getting all user
+ * @param {array} res - array of users or error
+ * @returns {array} - an array of users
+ */
 function getUsers(req, res) {
   const limit = req.query.limit;
   const offset = req.query.offset;
@@ -28,6 +35,12 @@ function getUsers(req, res) {
   .catch(error => res.status(400).send(error));
 }
 
+/**
+ * Create a user
+ * @param {object} req - request from user
+ * @param {object} res - newly created user or error
+ * @returns {object} - an object of a created user
+ */
 function createUser(req, res) {
   req.check('fullName', 'FullName is required').notEmpty();
   req.check('userName', 'userName is required').notEmpty();
@@ -69,6 +82,12 @@ function createUser(req, res) {
   }
 }
 
+/**
+ * Log In user with JWT
+ * @param {object} req - request from log in user
+ * @param {object} res - authenicated user details
+ * @returns {object} - an object of the logged in user and a token
+ */
 function login(req, res) {
   req.check('email', 'Email is required').notEmpty();
   req.check('email', 'Please put a valid email').isEmail();
@@ -120,6 +139,12 @@ function login(req, res) {
   }
 }
 
+/**
+ * Find a user by Id
+ * @param {number} req - request for user using the id of the user
+ * @param {object} res - an object of the user(s) found or error
+ * @returns {object} - an object of found user
+ */
 function findUser(req, res) {
   const userQuery = Number(req.params.id);
   if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
@@ -143,6 +168,12 @@ function findUser(req, res) {
     .catch(error => res.status(400).send(error));
 }
 
+/**
+ *Update a user by Id
+ * @param {object} req - updated user object
+ * @param {object} res - updated user object or error
+ * @returns {object} - return an object of the updated user
+ */
 function updateUser(req, res) {
   if (Number(req.decoded.id) !== Number(req.params.id)) {
     return res.status(401).json({
@@ -183,6 +214,12 @@ function updateUser(req, res) {
   });
 }
 
+/**
+ * Delete a user by Id
+ * @param {number} req - delete user with an id
+ * @param {object} res - message
+ * @returns {object} - null
+ */
 function deleteUser(req, res) {
   if (req.decoded.roleId !== 1) {
     return res.status(401).json({
@@ -204,11 +241,47 @@ function deleteUser(req, res) {
   .catch(error => res.status(400).send(error));
 }
 
+/**
+ *
+ * Get documents for specific user
+ * @param {object} req - request object containing limit query and offset
+ * @param {array} res - array of documents for the requested user
+ * @return {array} - array of requested user's document
+ */
+function getUserDocuments(req, res) {
+  const limit = req.query.limit;
+  const offset = req.query.offset;
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({
+          message: 'User not found'
+        });
+      }
+      return Document.findAndCountAll({
+        limit,
+        offset,
+        where: {
+          userId: user.id
+        }
+      })
+        .then(({ rows: document, count }) => {
+          res.status(200).send({
+            document,
+            pagination: metaData(count, limit, offset),
+          });
+        })
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error));
+}
+
 export default {
   getUsers,
   createUser,
   login,
   findUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUserDocuments
 };
