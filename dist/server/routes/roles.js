@@ -27,13 +27,14 @@ router.route('/')
 /** POST /api/roles - Create roles */
 .post(_auth2.default.verifyToken, _auth2.default.adminAccess, _roles2.default.createRole);
 
-// router.route('/:id')
-//   /** GET /api/users/roles - Find roles */
-//   .get(auth.verifyToken, roleController.findRole)
-//
-//   /** PUT /api/users/id - update roles */
-//   .put(auth.verifyToken, roleController.updateRole)
-//
-//   /** DELETE /api/users/id - delete roles */
-//   .delete(auth.verifyToken, roleController.deleteRole);
+router.route('/:id')
+/** GET /api/users/roles - Find roles */
+.get(_auth2.default.verifyToken, _auth2.default.adminAccess, _roles2.default.findRole)
+
+/** PUT /api/users/id - update roles */
+.put(_auth2.default.verifyToken, _auth2.default.adminAccess, _roles2.default.updateRole)
+
+/** DELETE /api/users/id - delete roles */
+.delete(_auth2.default.verifyToken, _auth2.default.adminAccess, _roles2.default.deleteRole);
+
 exports.default = router;

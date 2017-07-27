@@ -11,13 +11,14 @@ router.route('/')
   /** POST /api/roles - Create roles */
   .post(auth.verifyToken, auth.adminAccess, roleController.createRole);
 
-// router.route('/:id')
-//   /** GET /api/users/roles - Find roles */
-//   .get(auth.verifyToken, roleController.findRole)
-//
-//   /** PUT /api/users/id - update roles */
-//   .put(auth.verifyToken, roleController.updateRole)
-//
-//   /** DELETE /api/users/id - delete roles */
-//   .delete(auth.verifyToken, roleController.deleteRole);
+router.route('/:id')
+  /** GET /api/users/roles - Find roles */
+  .get(auth.verifyToken, auth.adminAccess, roleController.findRole)
+
+  /** PUT /api/users/id - update roles */
+  .put(auth.verifyToken, auth.adminAccess, roleController.updateRole)
+
+  /** DELETE /api/users/id - delete roles */
+  .delete(auth.verifyToken, auth.adminAccess, roleController.deleteRole);
+
 export default router;
