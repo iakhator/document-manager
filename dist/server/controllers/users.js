@@ -72,30 +72,26 @@ function createUser(req, res) {
   if (errors) {
     res.status(400).json({ errors: errors });
   } else {
-    _bcrypt2.default.genSalt(10, function (err, salt) {
-      _bcrypt2.default.hash(req.body.password, salt, function (err, hash) {
-        User.findAll({
-          where: { email: req.body.email }
-        }).then(function (err, user) {
-          if (!user) {
-            User.create({
-              fullName: req.body.fullName,
-              userName: req.body.userName,
-              email: req.body.email,
-              password: hash,
-              roleId: req.body.roleId || 2
-            }).then(function (userDetails) {
-              res.status(200).json({
-                userDetails: userDetails,
-                success: 'ok',
-                message: 'You have successfully registered.'
-              });
-            }).catch(function (error) {
-              res.status(400).json(error);
-            });
-          }
+    User.findAll({
+      where: { email: req.body.email }
+    }).then(function (err, user) {
+      if (!user) {
+        User.create({
+          fullName: req.body.fullName,
+          userName: req.body.userName,
+          email: req.body.email,
+          password: _bcrypt2.default.hashSync(req.body.password, _bcrypt2.default.genSaltSync(10)),
+          roleId: req.body.roleId || 2
+        }).then(function (userDetails) {
+          res.status(200).json({
+            userDetails: userDetails,
+            success: true,
+            message: 'You have successfully registered.'
+          });
+        }).catch(function (error) {
+          res.status(400).json(error);
         });
-      });
+      }
     });
   }
 }
@@ -125,29 +121,26 @@ function login(req, res) {
           success: false,
           message: 'Authentication failed. User not found.' });
       } else if (existingUser) {
-        _bcrypt2.default.compare(req.body.password, existingUser.password, function (err, result) {
-          if (err) throw err;
-          if (result) {
-            var payLoad = {
-              email: existingUser.email,
-              id: existingUser.id,
-              fullName: existingUser.fullName,
-              roleId: existingUser.roleId
-            };
-            var token = _jsonwebtoken2.default.sign(payLoad, jwtSecret, {
-              expiresIn: 60 * 60 * 24
-            });
-            res.status(201).json({
-              success: true,
-              token: token
-            });
-          } else {
-            res.status(401).json({
-              success: false,
-              message: 'Authentication failed. Wrong password.'
-            });
-          }
-        });
+        if (_bcrypt2.default.compareSync(req.body.password, existingUser.password)) {
+          var payLoad = {
+            email: existingUser.email,
+            id: existingUser.id,
+            fullName: existingUser.fullName,
+            roleId: existingUser.roleId
+          };
+          var token = _jsonwebtoken2.default.sign(payLoad, jwtSecret, {
+            expiresIn: 60 * 60 * 24
+          });
+          res.status(201).json({
+            success: true,
+            token: token
+          });
+        } else {
+          res.status(401).json({
+            success: false,
+            message: 'Authentication failed. Wrong password.'
+          });
+        }
       }
     }).catch(function (error) {
       return res.status(400).send(error);
@@ -166,6 +159,11 @@ function findUser(req, res) {
   if (req.decoded.id !== userQuery && req.decoded.roleId !== 1) {
     return res.status(401).json({
       message: 'Unauthorized Access'
+    });
+  }
+  if (isNaN(userQuery)) {
+    return res.status(401).json({
+      message: 'invalid input syntax for integer: "' + req.params.id + '"'
     });
   }
   return User.findAll({

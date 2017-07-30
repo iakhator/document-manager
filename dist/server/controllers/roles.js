@@ -62,16 +62,22 @@ function getRoles(req, res) {
  * @returns {object} - role found by id
  */
 function findRole(req, res) {
-  return Role.findById(req.params.id).then(function (role) {
-    if (!role) {
-      return res.status(404).json({
-        message: 'Role not found'
-      });
-    }
-    res.status(200).json(role);
-  }).catch(function (error) {
-    return res.status(400).json(error);
-  });
+  if (isNaN(req.params.id)) {
+    return res.status(401).json({
+      message: 'invalid input syntax for integer: "' + req.params.id + '"'
+    });
+  } else {
+    Role.findById(req.params.id).then(function (role) {
+      if (!role) {
+        return res.status(404).json({
+          message: 'Role not found'
+        });
+      }
+      res.status(200).json(role);
+    }).catch(function (error) {
+      return res.status(400).json(error);
+    });
+  }
 }
 
 /**
