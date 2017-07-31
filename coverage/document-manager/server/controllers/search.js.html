@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">14.29% </span>
+        <span class="strong">41.67% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>5/35</span>
+        <span class='fraction'>15/36</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">21.43% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/14</span>
+        <span class='fraction'>3/14</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">25% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>2/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">14.29% </span>
+        <span class="strong">41.67% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>5/35</span>
+        <span class='fraction'>15/36</span>
       </div>
     </div>
   </div>
@@ -168,7 +168,8 @@
 123
 124
 125
-126</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+126
+127</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -182,29 +183,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -306,16 +308,16 @@ const metaData = helper.paginationMetaData;
  * @param {array} res - array of users
  * @returns {array} - array users searched
  */
-f</span>unction <span class="fstat-no" title="function not covered" >searchUser(req, res) {
-  c</span>onst searchQuery = <span class="cstat-no" title="statement not covered" >req.query.q,
-    limit = <span class="cstat-no" title="statement not covered" >req.query.limit,</span>
-    offset = <span class="cstat-no" title="statement not covered" >req.query.offset;</span>
-<span class="cstat-no" title="statement not covered" >  if (!searchQuery) {</span>
-<span class="cstat-no" title="statement not covered" >    return res.status(400).json({</span>
+function searchUser(req, res) {
+  const searchQuery = req.query.q,
+    limit = req.query.limit,
+    offset = req.query.offset;
+  if (!searchQuery) {
+    return res.status(400).json({
       message: 'Invalid search input'
     });
   }
-<span class="cstat-no" title="statement not covered" >  return User</span>
+  return User
   .findAndCountAll({
     limit,
     offset,
@@ -325,11 +327,12 @@ f</span>unction <span class="fstat-no" title="function not covered" >searchUser(
         $like: `%${searchQuery}%`,
       }
     }
-  }).then(<span class="fstat-no" title="function not covered" >({ rows: user, count }) =&gt; <span class="cstat-no" title="statement not covered" ></span></span>{
-<span class="cstat-no" title="statement not covered" >    if (count === 0) {</span>
+  }).then(({ rows: user, count }) =&gt; {
+    console.log(count, 'User Count');
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (count === 0) {
 <span class="cstat-no" title="statement not covered" >      return res.status(404).json({ message: 'User not found' });</span>
     }
-<span class="cstat-no" title="statement not covered" >    res.status(200).send({</span>
+    res.status(200).send({
       user,
       pagination: metaData(count, limit, offset)
     });
@@ -424,7 +427,7 @@ export default { searchUser, searchDocuments };
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 06:42:30 GMT+0100 (WAT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 10:30:07 GMT+0100 (WAT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

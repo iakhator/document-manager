@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node node_modules/gulp/bin/gulp",
-    "test": "node node_modules/gulp/bin/gulp test",
-    "test:db:migrate": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate",
-    "test:db:seed": "NODE_ENV=test sequelize db:seed:all",
-    "start:test:db": "npm run test:db:migrate && npm run test:db:seed",
-    "server-test": "npm run start:test:db && NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register ./server/test/**/*.js --timeout 90000",
-    "postinstall": "node node_modules/gulp/bin/gulp production"
+    "start": "gulp production && node ./dist/index.js",
+    "dev": "node node_modules/gulp/bin/gulp",
+    "pretest": "npm run cleardb && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
+    "test": "NODE_ENV=test node node_modules/gulp/bin/gulp coverage && gulp coveralls",
+    "devtest": "NODE_ENV=test gulp test",
+    "eslint": "eslint server.js",
+    "cleardb": "NODE_ENV=test sequelize db:migrate:undo:all"
   },
   "repository": {
     "type": "git",
@@ -64,6 +64,12 @@
     "faker": "^4.1.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "gulp-coverage": "^0.3.38",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-exit": "0.0.2",
+    "gulp-inject-modules": "^1.0.0",
+    "gulp-istanbul": "^1.1.2",
+    "gulp-jasmine-node": "^1.0.7",
     "gulp-load-plugins": "^1.5.0",
     "gulp-mocha": "^4.3.1",
     "gulp-nodemon": "^2.2.1",
