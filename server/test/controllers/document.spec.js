@@ -1,8 +1,7 @@
 import chai from 'chai';
 import request from 'supertest';
 import http from 'chai-http';
-import server from '../../index';
-import models from '../models';
+import server from '../../../index';
 import data from './mockData';
 
 const expect = chai.expect;
@@ -37,10 +36,6 @@ describe('Documents', () => {
         sampleUserToken = res.body.token;
         done();
       });
-  });
-  after((done) => {
-    models.User.destroy({ where: { id: { $notIn: [1, 2, 3] } } });
-    done();
   });
 
   describe('/POST Document', () => {

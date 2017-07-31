@@ -8,6 +8,10 @@ var _gulpMocha = require('gulp-mocha');
 
 var _gulpMocha2 = _interopRequireDefault(_gulpMocha);
 
+var _babelRegister = require('babel-register');
+
+var _babelRegister2 = _interopRequireDefault(_babelRegister);
+
 var _gulpLoadPlugins = require('gulp-load-plugins');
 
 var _gulpLoadPlugins2 = _interopRequireDefault(_gulpLoadPlugins);
@@ -22,7 +26,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var plugins = (0, _gulpLoadPlugins2.default)();
 
 var paths = {
-  js: ['./**/*.js', '!dist/**', '!node_modules/**']
+  js: ['./**/*.js', '!dist/**', '!node_modules/**', '!server/test/**/*.js']
 };
 
 // Compile all Babel Javascript into ES5 and put it into the dist dir
@@ -30,8 +34,9 @@ _gulp2.default.task('babel', function () {
   return _gulp2.default.src(paths.js, { base: '.' }).pipe(plugins.babel()).pipe(_gulp2.default.dest('dist'));
 });
 
-_gulp2.default.task('mochaTest', function () {
-  _gulp2.default.src(['dist/server/test/**/*.js']).pipe((0, _gulpMocha2.default)({
+_gulp2.default.task('test', function () {
+  _gulp2.default.src('server/test/**/*.js', { read: false }).pipe((0, _gulpMocha2.default)({
+    compilers: _babelRegister2.default,
     reporter: 'spec'
   }));
 });
@@ -46,5 +51,4 @@ _gulp2.default.task('nodemon', ['babel'], function () {
   });
 });
 
-_gulp2.default.task('test', ['mochaTest']);
 _gulp2.default.task('default', ['nodemon']);

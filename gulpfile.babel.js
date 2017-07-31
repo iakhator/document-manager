@@ -1,5 +1,6 @@
 import gulp from 'gulp';
 import mocha from 'gulp-mocha';
+import babel from 'babel-register';
 
 import loadPlugins from 'gulp-load-plugins';
 import path from 'path';
@@ -8,7 +9,7 @@ import path from 'path';
 const plugins = loadPlugins();
 
 const paths = {
-  js: ['./**/*.js', '!dist/**', '!node_modules/**']
+  js: ['./**/*.js', '!dist/**', '!node_modules/**', '!server/test/**/*.js']
 };
 
 // Compile all Babel Javascript into ES5 and put it into the dist dir
@@ -18,9 +19,10 @@ gulp.task('babel', () =>
     .pipe(gulp.dest('dist'))
 );
 
-gulp.task('mochaTest', () => {
-  gulp.src(['dist/server/test/**/*.js'])
+gulp.task('test', () => {
+  gulp.src('server/test/**/*.js', { read: false })
     .pipe(mocha({
+      compilers: babel,
       reporter: 'spec',
     }));
 });
@@ -35,5 +37,4 @@ gulp.task('nodemon', ['babel'], () =>
   })
 );
 
-gulp.task('test', ['mochaTest']);
 gulp.task('default', ['nodemon']);

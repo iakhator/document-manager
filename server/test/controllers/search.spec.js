@@ -1,16 +1,18 @@
 import chai from 'chai';
 import request from 'supertest';
 import http from 'chai-http';
-import server from '../../index';
-import models from '../models';
+import server from '../../../index';
 import data from './mockData';
+
+
+process.env.NODE_ENV = 'test';
 
 const expect = chai.expect;
 chai.use(http);
-let userToken, adminToken, sampleUserToke;
+let userToken, adminToken, sampleUserToken;
 const { admin, fellow } = data;
 
-describe('Users', () => {
+describe('Search', () => {
   before((done) => {
     request(server)
       .post('/api/v1/users/login')
@@ -38,11 +40,6 @@ describe('Users', () => {
         done();
       });
   });
-  after((done) => {
-    models.User.destroy({ where: { id: { $notIn: [1, 2, 3] } } });
-    done();
-  });
-
 
   describe('/SEARCH/users/?q={name}', () => {
     it('Should return an error if no querystring is provided', () => {
@@ -52,7 +49,7 @@ describe('Users', () => {
         .set({ authorization: userToken })
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.message).to.eql('Inval search input');
+          expect(res.body.message).to.eql('Invalid search input');
         });
     });
     it('Should return a search list response of the required search input',
