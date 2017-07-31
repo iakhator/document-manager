@@ -9,6 +9,7 @@ require('dotenv').config();
 const jwtSecret = process.env.JWT_SECRET;
 const Document = models.Document;
 const User = models.User;
+const Document = models.Document;
 const metaData = helper.paginationMetaData;
 
 /**
@@ -238,6 +239,7 @@ function deleteUser(req, res) {
   .catch(error => res.status(400).send(error));
 }
 
+<<<<<<< HEAD
 /**
  *
  * Get documents for specific user
@@ -245,6 +247,8 @@ function deleteUser(req, res) {
  * @param {array} res - array of documents for the requested user
  * @return {array} - array of requested user's document
  */
+=======
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 function getUserDocuments(req, res) {
   const limit = req.query.limit;
   const offset = req.query.offset;

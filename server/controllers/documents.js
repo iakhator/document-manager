@@ -1,8 +1,8 @@
 import helper from '../helpers/helper';
 import models from '../models';
 
-const Document = models.Document;
 const User = models.User;
+const Document = models.Document;
 const metaData = helper.paginationMetaData;
 
 /**
@@ -33,11 +33,11 @@ function createDocument(req, res) {
           access: req.body.value,
           userId: req.body.userId
         })
-      .then(documentResponse => res.status(201).send(documentResponse))
+      .then(() => res.status(200).send(document))
       .catch(error => res.status(400).send(error));
       }
       return res.status(403).json({
-        title: 'Document already exists'
+        message: 'Document already exists'
       });
     }).catch(error => res.status(400).send(error));
   }
@@ -141,6 +141,7 @@ function getAllDocument(req, res) {
   }
 }
 
+<<<<<<< HEAD
 /**
    * Find a document by Id
    * @param {number} req - id of the requested document
@@ -193,11 +194,60 @@ function findDocument(req, res) {
  * @param {object} res - message
  * @returns {object} - message
  */
+=======
+function findDocument(req, res) {
+  return Document.findById(req.params.id)
+  .then((document) => {
+    if (!document) {
+      return res.status(404).json({
+        message: 'Document not found'
+      });
+    }
+    if (req.decoded.roleId === 1) {
+      return res.json(document);
+    }
+    if (document.access === 'public') {
+      res.status(200).send(document);
+    }
+    if (document.access === 'private') {
+      if (document.userId !== req.decoded.id) {
+        res.status(401).json({
+          message: 'You are not authorized to view this document'
+        });
+      }
+      return res.status(200).send(document);
+    }
+    if (document.access === 'role') {
+      return models.User
+        .findById(document.userId)
+        .then((documentAuthor) => {
+          if (
+            Number(documentAuthor.roleId) !== Number(req.decoded.roleId)
+          ) {
+            return res.status(401).json({
+              message: 'You are not authorized to view this document'
+            });
+          }
+          return res.status(200).send(document);
+        })
+        .catch(error => res.status(400).send(error));
+    }
+  })
+  .catch(error => res.status(400).send(error));
+}
+
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 function deleteDocument(req, res) {
   return Document.findById(req.params.id)
     .then((document) => {
       if (!document) {
+<<<<<<< HEAD
         res.status(404).json({ message: 'Document not found' });
+=======
+        return res.status(404).send({
+          message: 'Document Not Found'
+        });
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
       }
       if (
         req.decoded.roleId !== 1 &&
@@ -209,8 +259,14 @@ function deleteDocument(req, res) {
       }
       return document
         .destroy()
+<<<<<<< HEAD
         .then(() => res.status(204)
           .send({ message: 'Document deleted successfully' }))
+=======
+        .then(() => res.status(204).send({
+          message: 'Document successfully deleted'
+        }))
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
@@ -221,4 +277,9 @@ export default {
   updateDocument,
   getAllDocument,
   findDocument,
+<<<<<<< HEAD
   deleteDocument };
+=======
+  deleteDocument
+};
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6

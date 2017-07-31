@@ -3,6 +3,7 @@ import models from '../models';
 
 const Document = models.Document;
 const User = models.User;
+const Document = models.Document;
 const metaData = helper.paginationMetaData;
 
 /**
@@ -41,6 +42,7 @@ function searchUser(req, res) {
   }).catch(error => res.status(400).send(error));
 }
 
+<<<<<<< HEAD
 /**
    *
    * Search for documents by title
@@ -48,6 +50,8 @@ function searchUser(req, res) {
    * @param {array} res - an array containing searched document
    * @returns {array} - searched document
    */
+=======
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 function searchDocuments(req, res) {
   const limit = req.query.limit,
     offset = req.query.offset,
@@ -78,7 +82,13 @@ function searchDocuments(req, res) {
     })
     .then(({ rows: document, count }) => {
       if (count === 0) {
+<<<<<<< HEAD
         res.status(404).json({ message: 'Document not found' });
+=======
+        return res.status(404).json({
+          message: 'Document not found'
+        });
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
       }
       res.status(200).send({
         document,
@@ -111,7 +121,13 @@ function searchDocuments(req, res) {
     })
     .then(({ rows: document, count }) => {
       if (count === 0) {
+<<<<<<< HEAD
         res.status(404).json({ message: 'Document not found' });
+=======
+        return res.status(404).json({
+          message: 'Document not found'
+        });
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
       }
       res.status(200).send({
         document,

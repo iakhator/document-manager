@@ -42,7 +42,11 @@ router.route('/:id')
 .delete(_auth2.default.verifyToken, _users2.default.deleteUser);
 
 router.route('/:id/documents')
+<<<<<<< HEAD
 /** GET /api/users/id/documents - get user document */
+=======
+/** GET /api/users/id/documents - Find documents of a specific user*/
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 .get(_auth2.default.verifyToken, _users2.default.getUserDocuments);
 
 exports.default = router;

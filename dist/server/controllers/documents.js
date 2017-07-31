@@ -14,8 +14,8 @@ var _models2 = _interopRequireDefault(_models);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Document = _models2.default.Document;
 var User = _models2.default.User;
+var Document = _models2.default.Document;
 var metaData = _helper2.default.paginationMetaData;
 
 /**
@@ -45,14 +45,14 @@ function createDocument(req, res) {
           content: req.body.content,
           access: req.body.value,
           userId: req.body.userId
-        }).then(function (documentResponse) {
-          return res.status(201).send(documentResponse);
+        }).then(function () {
+          return res.status(200).send(document);
         }).catch(function (error) {
           return res.status(400).send(error);
         });
       }
       return res.status(403).json({
-        title: 'Document already exists'
+        message: 'Document already exists'
       });
     }).catch(function (error) {
       return res.status(400).send(error);
@@ -161,6 +161,7 @@ function getAllDocument(req, res) {
   }
 }
 
+<<<<<<< HEAD
 /**
    * Find a document by Id
    * @param {number} req - id of the requested document
@@ -181,14 +182,37 @@ function findDocument(req, res) {
     if (document.access === 'private') {
       if (document.userId !== req.decoded.id) {
         return res.status(401).json({
+=======
+function findDocument(req, res) {
+  return Document.findById(req.params.id).then(function (document) {
+    if (!document) {
+      return res.status(404).json({
+        message: 'Document not found'
+      });
+    }
+    if (req.decoded.roleId === 1) {
+      return res.json(document);
+    }
+    if (document.access === 'public') {
+      res.status(200).send(document);
+    }
+    if (document.access === 'private') {
+      if (document.userId !== req.decoded.id) {
+        res.status(401).json({
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
           message: 'You are not authorized to view this document'
         });
       }
       return res.status(200).send(document);
     }
     if (document.access === 'role') {
+<<<<<<< HEAD
       return _models2.default.User.findById(document.userId).then(function (documentOwner) {
         if (Number(documentOwner.roleId) !== Number(req.decoded.roleId)) {
+=======
+      return _models2.default.User.findById(document.userId).then(function (documentAuthor) {
+        if (Number(documentAuthor.roleId) !== Number(req.decoded.roleId)) {
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
           return res.status(401).json({
             message: 'You are not authorized to view this document'
           });
@@ -203,6 +227,7 @@ function findDocument(req, res) {
   });
 }
 
+<<<<<<< HEAD
 /**
  *
  * Delete a document by Id
@@ -214,6 +239,14 @@ function deleteDocument(req, res) {
   return Document.findById(req.params.id).then(function (document) {
     if (!document) {
       res.status(404).json({ message: 'Document not found' });
+=======
+function deleteDocument(req, res) {
+  return Document.findById(req.params.id).then(function (document) {
+    if (!document) {
+      return res.status(404).send({
+        message: 'Document Not Found'
+      });
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
     }
     if (req.decoded.roleId !== 1 && Number(document.userId) !== Number(req.decoded.id)) {
       return res.status(401).json({
@@ -221,7 +254,13 @@ function deleteDocument(req, res) {
       });
     }
     return document.destroy().then(function () {
+<<<<<<< HEAD
       return res.status(204).send({ message: 'Document deleted successfully' });
+=======
+      return res.status(204).send({
+        message: 'Document successfully deleted'
+      });
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
     }).catch(function (error) {
       return res.status(400).send(error);
     });
@@ -235,4 +274,9 @@ exports.default = {
   updateDocument: updateDocument,
   getAllDocument: getAllDocument,
   findDocument: findDocument,
+<<<<<<< HEAD
   deleteDocument: deleteDocument };
+=======
+  deleteDocument: deleteDocument
+};
+>>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
