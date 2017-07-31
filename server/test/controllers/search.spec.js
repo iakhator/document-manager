@@ -73,32 +73,32 @@ describe('Search', () => {
         .set({ authorization: userToken })
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body).to.have.property('message').to.equal('Invalid search input')
+          expect(res.body.message).to.eql('Invalid search input');
         });
-      });
-     it('Should return a search list of the required search input', () => {
-       const query = 'John';
-       request(server)
+    });
+    it('Should return a search list of the required search input', () => {
+      const query = 'John';
+      request(server)
         .get(`/api/v1/search/documents/?q=${query}`)
         .set({ authorization: userToken })
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.have.property('document');
-          expect(res.body.document[0]).to.have.property('title').to.equal('John Doe');
-          expect(res.body.document[0]).to.have.property('content').to.equal('eze goes to school');
+          expect(res.body.document[0].title).to.equal('John Doe');
+          expect(res.body.document[0].content).to.equal('eze goes to school');
           expect(res.body).to.have.property('pagination');
           expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);
         });
-     });
-     it('Should throw an error if the searched document is not found', () => {
-       const query = 'jk';
-       request(server)
+    });
+    it('Should throw an error if the searched document is not found', () => {
+      const query = 'jk';
+      request(server)
         .get(`/api/v1/search/documents/?q=${query}`)
         .set({ authorization: userToken })
         .end((err, res) => {
           expect(res.status).to.equal(404);
-          expect(res.body).to.have.property('message').to.equal('Document not found');
+          expect(res.body.message).to.equal('Document not found');
         });
-     });
-   });
+    });
+  });
 });

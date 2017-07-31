@@ -15,7 +15,9 @@ const paths = {
 // Compile all Babel Javascript into ES5 and put it into the dist dir
 gulp.task('babel', () =>
   gulp.src(paths.js, { base: '.' })
-    .pipe(plugins.babel())
+    .pipe(plugins.babel({
+      ignore: 'gulpfile.babel.js'
+    }))
     .pipe(gulp.dest('dist'))
 );
 
