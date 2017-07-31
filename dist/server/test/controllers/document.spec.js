@@ -54,17 +54,17 @@ describe('Documents', function () {
   describe('/POST Document', function () {
     it('should add a new document if the user is authenticated', function (done) {
       var document = {
-        title: 'boromir-team',
-        content: 'Andela is really awesome!!!',
+        title: 'hey yo!',
+        content: 'Andela is really fun!!',
         access: 'public',
         userId: 2
       };
       (0, _supertest2.default)(_index2.default).post('/api/v1/documents').send(document).set({ authorization: userToken }).end(function (err, res) {
-        expect(res.status).to.equal(201);
+        expect(res.status).to.equal(200);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('id');
-        expect(res.body.title).to.eql('boromir-team');
-        expect(res.body.content).to.eql('Andela is really awesome!!!');
+        expect(res.body.title).to.eql('hey yo!');
+        expect(res.body.content).to.eql('Andela is really fun!!');
         expect(res.body.access).to.equal('public');
         done();
       });
@@ -92,6 +92,20 @@ describe('Documents', function () {
         expect(res.status).to.equal(403);
         expect(res.body).to.be.a('object');
         expect(res.body.message).to.eql('No token provided.');
+        done();
+      });
+    });
+    it('should fail to add a new document if the value field is missing', function (done) {
+      var document = {
+        title: 'kiba-team',
+        content: 'Andela is really awesome!!!',
+        access: '',
+        userId: 1
+      };
+      _chai2.default.request(_index2.default).post('/api/v1/documents').send(document).set({ authorization: userToken }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.be.equal('accessType is required');
         done();
       });
     });
@@ -149,7 +163,7 @@ describe('Documents', function () {
         expect(res.status).to.equal(200);
         expect(res.body).to.be.a('object');
         expect(res.body.id).to.eql(4);
-        expect(res.body.title).to.equal('boromir-team');
+        expect(res.body.title).to.equal('hey yo!');
         expect(res.body.access).to.equal('public');
         done();
       });
@@ -275,7 +289,7 @@ describe('Documents', function () {
       _chai2.default.request(_index2.default).delete('/api/v1/documents/' + id).set({ authorization: userToken }).end(function (err, res) {
         expect(res.status).to.equal(404);
         expect(res.body).to.be.a('object');
-        expect(res.body.message).to.eql('Document not found');
+        expect(res.body.message).to.eql('Document Not Found');
         done();
       });
     });

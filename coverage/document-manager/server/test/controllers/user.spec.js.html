@@ -920,7 +920,7 @@ describe('Users', () =&gt; {
       it('Should get all users if the user is an admin ', (done) =&gt; {
         request(server)
           .get('/api/v1/users')
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(200);
             expect(res.body).to.be.a('object');
@@ -932,7 +932,7 @@ describe('Users', () =&gt; {
       (done) =&gt; {
         request(server)
           .get('/api/v1/users')
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(401);
             expect(res.body).to.be.a('object');
@@ -954,7 +954,7 @@ describe('Users', () =&gt; {
         const limit = 1;
         chai.request(server)
           .get(`/api/v1/users?limit=${limit}`)
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(200);
             expect(res.body).to.be.a('object');
@@ -969,7 +969,7 @@ describe('Users', () =&gt; {
         const id = 2;
         request(server)
           .get(`/api/v1/users/${id}`)
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(200);
             expect(res.body).be.a('array');
@@ -986,7 +986,7 @@ describe('Users', () =&gt; {
         const id = 2;
         request(server)
           .get(`/api/v1/users/${id}`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(200);
             expect(res.body).be.a('array');
@@ -1003,7 +1003,7 @@ describe('Users', () =&gt; {
         const id = 'fddjsdcdjn';
         request(server)
           .get(`/api/v1/users/${id}`)
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(401);
             expect(res.body).to.have.property('message')
@@ -1016,7 +1016,7 @@ describe('Users', () =&gt; {
         const id = 2;
         request(server)
           .get(`api/users/${id}`)
-          .set({ 'authorization': sampleUserToken })
+          .set({ authorization: sampleUserToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(401);
 <span class="cstat-no" title="statement not covered" >            expect(res.body).to.have.keys(['message']);</span>
@@ -1029,7 +1029,7 @@ describe('Users', () =&gt; {
         const id = 250;
         request(server)
           .get(`/api/v1/users/${id}`)
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(404);
             expect(res.body).to.have.property('message');
@@ -1057,7 +1057,7 @@ describe('Users', () =&gt; {
           const id = 2;
           request(server)
             .put(`/api/v1/users/${id}`)
-            .set({ 'authorization': userToken })
+            .set({ authorization: userToken })
             .send({ fullName: 'jake doe' })
             .end((err, res) =&gt; {
               expect(res.status).to.equal(200);
@@ -1071,7 +1071,7 @@ describe('Users', () =&gt; {
         const id = 2;
         request(server)
           .put(`/api/v1/users/${id}`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .send({ email: 'jakedoe@andela.com' })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(200);
@@ -1086,7 +1086,7 @@ describe('Users', () =&gt; {
           const id = 2;
           request(server)
             .put(`/api/v1/users/${id}`)
-            .set({ 'authorization': userToken })
+            .set({ authorization: userToken })
             .send({ userName: 'jakedoe12' })
             .end((err, res) =&gt; {
               expect(res.status).to.equal(200);
@@ -1102,7 +1102,7 @@ describe('Users', () =&gt; {
         const id = 3;
         request(server)
           .put(`/api/v1/users/${id}`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .send({ email: 'jakedoe@andela.com' })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(401);
@@ -1118,7 +1118,7 @@ describe('Users', () =&gt; {
         const id = 2302;
         request(server)
           .put(`/api/v1/users/${id}`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .send({ email: 'jakedoe@andela.com' })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(401);
@@ -1134,7 +1134,7 @@ describe('Users', () =&gt; {
         const id = 3;
         request(server)
           .delete(`/api/v1/users/${id}`)
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(204);
             done();
@@ -1145,7 +1145,7 @@ describe('Users', () =&gt; {
         const id = 3;
         request(server)
           .delete(`/api/v1/users/${id}`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(401);
             expect(res.body.message)
@@ -1157,7 +1157,7 @@ describe('Users', () =&gt; {
         const id = 23;
         request(server)
           .delete(`/api/v1/users/${id}`)
-          .set({ 'authorization': adminToken })
+          .set({ authorization: adminToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(404);
             expect(res.body).to.be.a('object');
@@ -1171,7 +1171,7 @@ describe('Users', () =&gt; {
         const userId = 9;
         request(server)
           .get(`/api/v1/users/${userId}/documents`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(404);
             expect(res.body).be.a('object');
@@ -1196,14 +1196,14 @@ describe('Users', () =&gt; {
         const userId = 2;
         request(server)
           .get(`/api/v1/users/${userId}/documents`)
-          .set({ 'authorization': userToken })
+          .set({ authorization: userToken })
           .end((err, res) =&gt; {
             expect(res.status).to.equal(200);
             expect(res.body).be.a('object');
             expect(res.body.document[1].userId).to.eql(2);
-            expect(res.body.document[1].title).to.eql('boromir-team');
+            expect(res.body.document[1].title).to.eql('hey yo!');
             expect(res.body.document[1].content)
-            .to.eql('Andela is really awesome!!!');
+            .to.eql('Andela is really fun!!');
             done();
           });
       });
@@ -1216,7 +1216,7 @@ describe('Users', () =&gt; {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 10:30:07 GMT+0100 (WAT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 17:18:56 GMT+0100 (WAT)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

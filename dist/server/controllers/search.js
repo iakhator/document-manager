@@ -16,7 +16,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Document = _models2.default.Document;
 var User = _models2.default.User;
-var Document = _models2.default.Document;
 var metaData = _helper2.default.paginationMetaData;
 
 /**
@@ -59,7 +58,6 @@ function searchUser(req, res) {
   });
 }
 
-<<<<<<< HEAD
 /**
    *
    * Search for documents by title
@@ -67,8 +65,6 @@ function searchUser(req, res) {
    * @param {array} res - an array containing searched document
    * @returns {array} - searched document
    */
-=======
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 function searchDocuments(req, res) {
   var limit = req.query.limit,
       offset = req.query.offset,
@@ -99,13 +95,9 @@ function searchDocuments(req, res) {
           count = _ref2.count;
 
       if (count === 0) {
-<<<<<<< HEAD
-        res.status(404).json({ message: 'Document not found' });
-=======
         return res.status(404).json({
           message: 'Document not found'
         });
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
       }
       res.status(200).send({
         document: document,
@@ -139,13 +131,9 @@ function searchDocuments(req, res) {
           count = _ref3.count;
 
       if (count === 0) {
-<<<<<<< HEAD
-        res.status(404).json({ message: 'Document not found' });
-=======
         return res.status(404).json({
           message: 'Document not found'
         });
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
       }
       res.status(200).send({
         document: document,

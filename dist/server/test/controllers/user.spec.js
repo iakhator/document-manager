@@ -185,19 +185,14 @@ describe('Users', function () {
           done();
         });
       });
-      // it('Should fail to get a user if the id is out of range',
-      // (done) => {
-      //   const id = 500000000000000000;
-      //   request(server)
-      //     .get(`/api/v1/users/${id}`)
-      //     .set({ authorization: adminToken })
-      //     .end((err, res) => {
-      //       expect(res.status).to.equal(400);
-      //       expect(res.body).to.have.property('message')
-      //       .to.equal(`value "${id}" is out of range for type integer`);
-      //       done();
-      //     });
-      // });
+      it('Should fail to get a user if the id is out of range', function (done) {
+        var id = 500000000000000000;
+        (0, _supertest2.default)(_index2.default).get('/api/v1/users/' + id).set({ authorization: adminToken }).end(function (err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body).to.have.property('message').to.equal('value "' + id + '" is out of range for type integer');
+          done();
+        });
+      });
     });
     describe('#PUT Update user by Id', function () {
       it('Should update a user`s full name if the user has the same id', function (done) {
@@ -301,8 +296,8 @@ describe('Users', function () {
           expect(res.status).to.equal(200);
           expect(res.body).be.a('object');
           expect(res.body.document[1].userId).to.eql(2);
-          expect(res.body.document[1].title).to.eql('boromir-team');
-          expect(res.body.document[1].content).to.eql('Andela is really awesome!!!');
+          expect(res.body.document[1].title).to.eql('hey yo!');
+          expect(res.body.document[1].content).to.eql('Andela is really fun!!');
           done();
         });
       });

@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">83.87% </span>
+        <span class="strong">98.33% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>52/62</span>
+        <span class='fraction'>59/60</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>19/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">83.33% </span>
+        <span class="strong">98.28% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>50/60</span>
+        <span class='fraction'>57/58</span>
       </div>
     </div>
   </div>
@@ -151,8 +151,7 @@
 106
 107
 108
-109
-110</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+109</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -209,15 +208,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,8 +219,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -240,23 +237,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -317,12 +315,10 @@ describe('Search', () =&gt; {
     it('Should return a search list response of the required search input',
     (done) =&gt; {
       const query = Baas.userName;
-      console.log(adminToken);
       request(server)
       .get(`/api/v1/search/users/?q=${query}`)
       .set({ authorization: adminToken })
       .end((err, res) =&gt; {
-        console.log(res.body, 'Baas Bank Details *************');
         expect(res.status).to.equal(200);
         expect(res.body.user[0].fullName).to.eql(Baas.fullName);
         expect(res.body.user[0].userName).to.equal(Baas.userName);
@@ -338,36 +334,37 @@ describe('Search', () =&gt; {
         .set({ authorization: userToken })
         .end((err, res) =&gt; {
           expect(res.status).to.equal(400);
-<span class="cstat-no" title="statement not covered" >          expect(res.body.message).to.eql('Invalid search input');</span>
-<span class="cstat-no" title="statement not covered" >          done();</span>
+          expect(res.body.message).to.eql('Invalid search input');
+          done();
         });
     });
     it('Should return a search list of the required search input', (done) =&gt; {
       const query = 'John';
       request(server)
         .get(`/api/v1/search/documents/?q=${query}`)
-        .set({ authorization: userToken })
+        .set({ authorization: adminToken })
         .end((err, res) =&gt; {
           expect(res.status).to.equal(200);
-<span class="cstat-no" title="statement not covered" >          expect(res.body).to.have.property('document');</span>
-<span class="cstat-no" title="statement not covered" >          expect(res.body.document[0].title).to.equal('John Doe');</span>
-<span class="cstat-no" title="statement not covered" >          expect(res.body.document[0].content).to.equal('eze goes to school');</span>
-<span class="cstat-no" title="statement not covered" >          expect(res.body).to.have.property('pagination');</span>
-<span class="cstat-no" title="statement not covered" >          expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);</span>
+          expect(res.body).to.have.property('document');
+          expect(res.body.document[0].title).to.equal('John Doe');
+          expect(res.body.document[0].content).to.equal('eze goes to school');
+          expect(res.body).to.have.property('pagination');
+          expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);
 <span class="cstat-no" title="statement not covered" >          done();</span>
         });
     });
-    it('Should throw an error if the searched document is not found', (done) =&gt; {
-      const query = 'jk';
-      request(server)
-        .get(`/api/v1/search/documents/?q=${query}`)
-        .set({ authorization: userToken })
-        .end((err, res) =&gt; {
-          expect(res.status).to.equal(404);
-<span class="cstat-no" title="statement not covered" >          expect(res.body.message).to.equal('Document not found');</span>
-<span class="cstat-no" title="statement not covered" >          done();</span>
-        });
-    });
+    it('Should throw an error if the searched document is not found',
+      (done) =&gt; {
+        const query = 'jk';
+        request(server)
+          .get(`/api/v1/search/documents/?q=${query}`)
+          .set({ authorization: userToken })
+          .end((err, res) =&gt; {
+            expect(res.status).to.equal(404);
+            expect(res.body.message).to.equal('Document not found');
+            done();
+          });
+      });
   });
 });
 &nbsp;</pre></td></tr>
@@ -376,7 +373,7 @@ describe('Search', () =&gt; {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 10:30:07 GMT+0100 (WAT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 17:18:56 GMT+0100 (WAT)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

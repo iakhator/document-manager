@@ -82,18 +82,14 @@ describe('Roles', function () {
         done();
       });
     });
-    // it('Should return an error if the title is not a string', (done) => {
-    //   chai.request(server)
-    //     .post('/api/v1/roles')
-    //     .set({ authorization: adminToken })
-    //     .send({ title: 358583 })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(400);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.message).to.eql('Invalid input credentials');
-    //       done();
-    //     });
-    // });
+    it('Should return an error if the title is not a string', function (done) {
+      _chai2.default.request(_index2.default).post('/api/v1/roles').set({ authorization: adminToken }).send({ title: 358583 }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.eql('Invalid input credentials');
+        done();
+      });
+    });
   });
 
   describe('/GET Role', function () {

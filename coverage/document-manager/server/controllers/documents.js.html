@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">81.16% </span>
+        <span class="strong">79.71% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>56/69</span>
+        <span class='fraction'>55/69</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">85.71% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>36/42</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">64% </span>
+        <span class="strong">60% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>16/25</span>
+        <span class='fraction'>15/25</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">81.16% </span>
+        <span class="strong">79.71% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>56/69</span>
+        <span class='fraction'>55/69</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -267,7 +267,9 @@
 222
 223
 224
-225</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+225
+226
+227</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -281,14 +283,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,13 +464,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -479,10 +482,11 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -494,8 +498,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import helper from '../helpers/helper';
 import models from '../models';
 &nbsp;
-const Document = models.Document;
 const User = models.User;
+const Document = models.Document;
 const metaData = helper.paginationMetaData;
 &nbsp;
 /**
@@ -526,11 +530,11 @@ function createDocument(req, res) {
           access: req.body.value,
           userId: req.body.userId
         })
-      .then(documentResponse =&gt; res.status(201).send(documentResponse))
+      .then(documentResponse =&gt; res.status(200).send(documentResponse))
       .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
       }
 <span class="cstat-no" title="statement not covered" >      return res.status(403).json({</span>
-        title: 'Document already exists'
+        message: 'Document already exists'
       });
     }).catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
   }
@@ -680,7 +684,6 @@ function findDocument(req, res) {
 }
 &nbsp;
 /**
- *
  * Delete a document by Id
  * @param {number} req - id of the requested document
  * @param {object} res - message
@@ -690,7 +693,9 @@ function deleteDocument(req, res) {
   return Document.findById(req.params.id)
     .then((document) =&gt; {
       if (!document) {
-        res.status(404).json({ message: 'Document not found' });
+        return res.status(404).send({
+          message: 'Document Not Found'
+        });
       }
       if (
         req.decoded.roleId !== 1 &amp;&amp;
@@ -702,11 +707,12 @@ function deleteDocument(req, res) {
       }
       return document
         .destroy()
-        .then(() =&gt; res.status(204)
-          .send({ message: 'Document deleted successfully' }))
+        .then(() =&gt; res.status(204).send({
+          message: 'Document successfully deleted'
+        }))
         .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
     })
-    .catch(error =&gt; res.status(400).send(error));
+    .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
 }
 &nbsp;
 export default {
@@ -721,7 +727,7 @@ export default {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 10:30:07 GMT+0100 (WAT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 17:18:56 GMT+0100 (WAT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

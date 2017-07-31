@@ -2,8 +2,6 @@ import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import path from 'path';
 import mocha from 'gulp-mocha';
-import istanbul from 'gulp-istanbul';
-import injectModules from 'gulp-inject-modules';
 import exit from 'gulp-exit';
 import coveralls from 'gulp-coveralls';
 import cover from 'gulp-coverage';
@@ -32,7 +30,7 @@ gulp.task('babel', () =>
 );
 
 gulp.task('coverage', () => {
-  gulp.src('dist/server/test/**/*.js', { read: false })
+  gulp.src('server/test/**/*.js', { read: false })
     .pipe(cover.instrument({
       pattern: ['server/controllers/**/*.js'],
       debugDirectory: 'debug'

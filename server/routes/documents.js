@@ -15,17 +15,10 @@ router.route('/:id')
   /** PUT /api/v1/documents/id - Create document */
   .put(auth.verifyToken, documentController.updateDocument)
 
-<<<<<<< HEAD
-  /** GET /api/v1/documents/id - find document */
-  .get(auth.verifyToken, documentController.findDocument)
-
-  /** GET /api/v1/documents/id - find document */
-=======
   /** GET /api/v1/documents/id - get document */
   .get(auth.verifyToken, documentController.findDocument)
 
   /** DELETE /api/v1/documents/id - delete document */
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
   .delete(auth.verifyToken, documentController.deleteDocument);
 
 export default router;

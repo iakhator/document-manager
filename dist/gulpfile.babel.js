@@ -16,14 +16,6 @@ var _gulpMocha = require('gulp-mocha');
 
 var _gulpMocha2 = _interopRequireDefault(_gulpMocha);
 
-var _gulpIstanbul = require('gulp-istanbul');
-
-var _gulpIstanbul2 = _interopRequireDefault(_gulpIstanbul);
-
-var _gulpInjectModules = require('gulp-inject-modules');
-
-var _gulpInjectModules2 = _interopRequireDefault(_gulpInjectModules);
-
 var _gulpExit = require('gulp-exit');
 
 var _gulpExit2 = _interopRequireDefault(_gulpExit);
@@ -56,7 +48,7 @@ _gulp2.default.task('babel', function () {
 });
 
 _gulp2.default.task('coverage', function () {
-  _gulp2.default.src('dist/server/test/**/*.js', { read: false }).pipe(_gulpCoverage2.default.instrument({
+  _gulp2.default.src('server/test/**/*.js', { read: false }).pipe(_gulpCoverage2.default.instrument({
     pattern: ['server/controllers/**/*.js'],
     debugDirectory: 'debug'
   })).pipe((0, _gulpMocha2.default)()).pipe(_gulpCoverage2.default.gather()).pipe(_gulpCoverage2.default.format()).pipe(_gulp2.default.dest('reports'));

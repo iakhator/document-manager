@@ -54,7 +54,6 @@ function getRoles(req, res) {
  * @returns {object} - role found by id
  */
 function findRole(req, res) {
-<<<<<<< HEAD
   if (isNaN(req.params.id)) {
     return res.status(401).json({
       message: `invalid input syntax for integer: "${req.params.id}"`
@@ -71,18 +70,6 @@ function findRole(req, res) {
         res.status(200).json(role);
       }).catch(error => res.status(400).json(error));
   }
-=======
-  return Role
-    .findById(req.params.id)
-    .then((role) => {
-      if (!role) {
-        return res.status(404).json({
-          message: 'Role not found'
-        });
-      }
-      res.status(200).json(role);
-    }).catch(error => res.status(400).json(error));
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 }
 
 /**
@@ -136,14 +123,9 @@ function deleteRole(req, res) {
       }
       return role
         .destroy()
-        .then(() => res.status(204)
-<<<<<<< HEAD
-          .json({
-=======
-          .send({
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
-            message: 'Role deleted successfully'
-          }))
+        .then(() => res.status(204).send({
+          message: 'Role deleted successfully'
+        }))
           .catch(error => res.status(400).send(error));
     }).catch(error => res.json(error));
 }

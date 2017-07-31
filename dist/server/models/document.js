@@ -21,10 +21,6 @@ module.exports = function (sequelize, DataTypes) {
     }
   });
   Document.associate = function (models) {
-<<<<<<< HEAD
-    // associations can be defined here
-=======
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
     Document.belongsTo(models.User, {
       foreignKey: 'userId'
     });

@@ -71,43 +71,34 @@ describe('Search', function () {
       });
     });
   });
-  // describe('/SEARCH/documents/?q=', () => {
-  //   it('Should return an error if no querystring is provided', (done) => {
-  //     const query = '';
-  //     request(server)
-  //       .get(`/api/v1/search/documents/?q=${query}`)
-  //       .set({ authorization: userToken })
-  //       .end((err, res) => {
-  //         expect(res.status).to.equal(400);
-  //         expect(res.body.message).to.eql('Invalid search input');
-  //         done();
-  //       });
-  //   });
-  //   it('Should return a search list of the required search input', (done) => {
-  //     const query = 'John';
-  //     request(server)
-  //       .get(`/api/v1/search/documents/?q=${query}`)
-  //       .set({ authorization: userToken })
-  //       .end((err, res) => {
-  //         expect(res.status).to.equal(200);
-  //         expect(res.body).to.have.property('document');
-  //         expect(res.body.document[0].title).to.equal('John Doe');
-  //         expect(res.body.document[0].content).to.equal('eze goes to school');
-  //         expect(res.body).to.have.property('pagination');
-  //         expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);
-  //         done();
-  //       });
-  //   });
-  //   it('Should throw an error if the searched document is not found', (done) => {
-  //     const query = 'jk';
-  //     request(server)
-  //       .get(`/api/v1/search/documents/?q=${query}`)
-  //       .set({ authorization: userToken })
-  //       .end((err, res) => {
-  //         expect(res.status).to.equal(404);
-  //         expect(res.body.message).to.equal('Document not found');
-  //         done();
-  //       });
-  //   });
-  // });
+  describe('/SEARCH/documents/?q=', function () {
+    it('Should return an error if no querystring is provided', function (done) {
+      var query = '';
+      (0, _supertest2.default)(_index2.default).get('/api/v1/search/documents/?q=' + query).set({ authorization: userToken }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.message).to.eql('Invalid search input');
+        done();
+      });
+    });
+    it('Should return a search list of the required search input', function (done) {
+      var query = 'John';
+      (0, _supertest2.default)(_index2.default).get('/api/v1/search/documents/?q=' + query).set({ authorization: adminToken }).end(function (err, res) {
+        expect(res.status).to.equal(200);
+        expect(res.body).to.have.property('document');
+        expect(res.body.document[0].title).to.equal('John Doe');
+        expect(res.body.document[0].content).to.equal('eze goes to school');
+        expect(res.body).to.have.property('pagination');
+        expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);
+        done();
+      });
+    });
+    it('Should throw an error if the searched document is not found', function (done) {
+      var query = 'jk';
+      (0, _supertest2.default)(_index2.default).get('/api/v1/search/documents/?q=' + query).set({ authorization: userToken }).end(function (err, res) {
+        expect(res.status).to.equal(404);
+        expect(res.body.message).to.equal('Document not found');
+        done();
+      });
+    });
+  });
 });

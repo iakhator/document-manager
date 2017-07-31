@@ -27,7 +27,6 @@ require('dotenv').config();
 var jwtSecret = process.env.JWT_SECRET;
 var Document = _models2.default.Document;
 var User = _models2.default.User;
-var Document = _models2.default.Document;
 var metaData = _helper2.default.paginationMetaData;
 
 /**
@@ -253,16 +252,12 @@ function deleteUser(req, res) {
   });
 }
 
-<<<<<<< HEAD
 /**
- *
  * Get documents for specific user
  * @param {object} req - request object containing limit query and offset
  * @param {array} res - array of documents for the requested user
  * @return {array} - array of requested user's document
  */
-=======
->>>>>>> 4f5d186dbe87514d3eeabae2b55811aef05eb4c6
 function getUserDocuments(req, res) {
   var limit = req.query.limit;
   var offset = req.query.offset;
