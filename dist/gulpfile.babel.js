@@ -12,21 +12,17 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _gulpMocha = require('gulp-mocha');
-
-var _gulpMocha2 = _interopRequireDefault(_gulpMocha);
-
 var _gulpExit = require('gulp-exit');
 
 var _gulpExit2 = _interopRequireDefault(_gulpExit);
 
-var _gulpCoveralls = require('gulp-coveralls');
+var _gulpIstanbul = require('gulp-istanbul');
 
-var _gulpCoveralls2 = _interopRequireDefault(_gulpCoveralls);
+var _gulpIstanbul2 = _interopRequireDefault(_gulpIstanbul);
 
-var _gulpCoverage = require('gulp-coverage');
+var _gulpMocha = require('gulp-mocha');
 
-var _gulpCoverage2 = _interopRequireDefault(_gulpCoverage);
+var _gulpMocha2 = _interopRequireDefault(_gulpMocha);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,15 +43,22 @@ _gulp2.default.task('babel', function () {
   return _gulp2.default.src(paths.js, { base: '.' }).pipe(plugins.babel()).pipe(_gulp2.default.dest('dist'));
 });
 
-_gulp2.default.task('coverage', function () {
-  _gulp2.default.src('server/test/**/*.js', { read: false }).pipe(_gulpCoverage2.default.instrument({
-    pattern: ['server/controllers/**/*.js'],
-    debugDirectory: 'debug'
-  })).pipe((0, _gulpMocha2.default)()).pipe(_gulpCoverage2.default.gather()).pipe(_gulpCoverage2.default.format()).pipe(_gulp2.default.dest('reports'));
+_gulp2.default.task('pre-test', function () {
+  return _gulp2.default.src(['server/**/*.js', '!server/test/', '!gulpfile.js'])
+  // Covering files
+  .pipe((0, _gulpIstanbul2.default)({ includeUntested: true })).pipe(_gulpIstanbul2.default.hookRequire());
 });
 
-_gulp2.default.task('coveralls', function () {
-  return _gulp2.default.src('./coverage/lcov').pipe((0, _gulpCoveralls2.default)());
+_gulp2.default.task('test', ['pre-test'], function () {
+  return _gulp2.default.src(['test/**/*spec.js']).pipe((0, _gulpMocha2.default)({
+    reporter: 'mochawesome'
+  }))
+  // Creating the reports after tests ran
+  .pipe(_gulpIstanbul2.default.writeReports({
+    dir: './server/unit-test-coverage',
+    reporters: ['html'],
+    reportOpts: { dir: './unit-test-coverage' }
+  })).pipe(_gulpIstanbul2.default.enforceThresholds({ thresholds: { global: 90 } }));
 });
 
 // Restart server with on every changes made to file

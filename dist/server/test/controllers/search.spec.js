@@ -84,11 +84,9 @@ describe('Search', function () {
       var query = 'John';
       (0, _supertest2.default)(_index2.default).get('/api/v1/search/documents/?q=' + query).set({ authorization: adminToken }).end(function (err, res) {
         expect(res.status).to.equal(200);
-        expect(res.body).to.have.property('document');
         expect(res.body.document[0].title).to.equal('John Doe');
         expect(res.body.document[0].content).to.equal('eze goes to school');
         expect(res.body).to.have.property('pagination');
-        expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);
         done();
       });
     });

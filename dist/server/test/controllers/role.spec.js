@@ -82,14 +82,6 @@ describe('Roles', function () {
         done();
       });
     });
-    it('Should return an error if the title is not a string', function (done) {
-      _chai2.default.request(_index2.default).post('/api/v1/roles').set({ authorization: adminToken }).send({ title: 358583 }).end(function (err, res) {
-        expect(res.status).to.equal(400);
-        expect(res.body).to.be.a('object');
-        expect(res.body.message).to.eql('Invalid input credentials');
-        done();
-      });
-    });
   });
 
   describe('/GET Role', function () {
@@ -149,18 +141,14 @@ describe('Roles', function () {
         done();
       });
     });
-    // it('Should fail to get a role by id if the id is out of range', (done) => {
-    //   const id = 500000000000000000000;
-    //   chai.request(server)
-    //     .get(`/api/v1/roles/${id}`)
-    //     .set({ authorization: adminToken })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(400);
-    //       expect(res.body.message)
-    //       .to.eql(`value "${id}" is out of range for type integer`);
-    //       done();
-    //     });
-    // });
+    it('Should fail to get a role by id if the id is out of range', function (done) {
+      var id = 500000000000000000000;
+      (0, _supertest2.default)(_index2.default).get('/api/v1/roles/' + id).set({ authorization: adminToken }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.message).to.eql('out of range for type integer');
+        done();
+      });
+    });
   });
   describe('/PUT/:id Role', function () {
     it('Should update a role by id if the user has admin access', function (done) {
@@ -191,67 +179,52 @@ describe('Roles', function () {
         done();
       });
     });
-    // it(`Should fail to update a role by
-    //   id if the admin enters an id that is out range`,
-    //   (done) => {
-    //     const id = 2000000000000000;
-    //     chai.request(server)
-    //       .put(`/api/v1/roles/${id}`)
-    //       .set({ authorization: adminToken })
-    //       .send({ title: 'regular' })
-    //       .end((err, res) => {
-    //         expect(res.status).to.equal(400);
-    //         expect(res.body).to.be.a('object');
-    //         expect(res.body.message)
-    //         .to.eql(`value "${id}" is out of range for type integer`);
-    //         done();
-    //       });
-    //   });
+    it('Should fail to update a role by id if the\n       admin enters an id that is out range', function (done) {
+      var id = 2000000000000000;
+      (0, _supertest2.default)(_index2.default).put('/api/v1/roles/' + id).set({ authorization: adminToken }).send({ title: 'regular' }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.eql('out of range for type integer');
+        done();
+      });
+    });
   });
   describe('/DELETE/:id Role', function () {
     it('Should delete a role given the user has admin access', function (done) {
       var id = 3;
-      _chai2.default.request(_index2.default).delete('/api/v1/roles/' + id).set({ authorization: adminToken }).end(function (err, res) {
+      (0, _supertest2.default)(_index2.default).delete('/api/v1/roles/' + id).set({ authorization: adminToken }).end(function (err, res) {
         expect(res.status).to.equal(204);
         expect(res.body).to.be.a('object');
+        expect(res.body.message).to.be.eql('Role deleted successfully');
       });
       done();
     });
     it('Should fail to delete a role given the user has no admin access', function (done) {
       var id = 3;
-      _chai2.default.request(_index2.default).delete('/api/v1/roles/' + id).set({ authorization: userToken }).end(function (err, res) {
+      (0, _supertest2.default)(_index2.default).delete('/api/v1/roles/' + id).set({ authorization: userToken }).end(function (err, res) {
         expect(res.status).to.equal(401);
         expect(res.body).to.be.a('object');
         expect(res.body.message).to.eql('You are not authorized');
         done();
       });
     });
-    // it('Should fail to delete a role given the admin enters an invalid input',
-    // (done) => {
-    //   const id = 300;
-    //   chai.request(server)
-    //     .delete(`/api/v1/roles/${id}`)
-    //     .set({ authorization: adminToken })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(404);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.message).to.equal('Role not found');
-    //       done();
-    //     });
-    // });
-    // it(`Should fail to delete a role given
-    //   the admin enters an input that is out of range`, (done) => {
-    //   const id = 3000000000000000;
-    //   chai.request(server)
-    //     .delete(`/api/v1/roles/${id}`)
-    //     .set({ authorization: adminToken })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(200);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.message)
-    //       .to.eql(`value "${id}" is out of range for type integer`);
-    //       done();
-    //     });
-    // });
+    it('Should fail to delete a role\n      given the admin enters an id that is not found', function (done) {
+      var id = 300;
+      (0, _supertest2.default)(_index2.default).delete('/api/v1/roles/' + id).set({ authorization: adminToken }).end(function (err, res) {
+        expect(res.status).to.equal(404);
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.equal('Role not found');
+        done();
+      });
+    });
+    it('Should fail to delete a role given the admin\n      enters an input that is out of range', function (done) {
+      var id = 3000000000000000;
+      (0, _supertest2.default)(_index2.default).delete('/api/v1/roles/' + id).set({ authorization: adminToken }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.equal('out of range for type integer');
+        done();
+      });
+    });
   });
 });

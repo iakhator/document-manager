@@ -63,7 +63,7 @@ function getRoles(req, res) {
  */
 function findRole(req, res) {
   if (isNaN(req.params.id)) {
-    return res.status(401).json({
+    res.status(401).json({
       message: 'invalid input syntax for integer: "' + req.params.id + '"'
     });
   } else {
@@ -74,8 +74,10 @@ function findRole(req, res) {
         });
       }
       res.status(200).json(role);
-    }).catch(function (error) {
-      return res.status(400).json(error);
+    }).catch(function () {
+      return res.status(400).json({
+        message: 'out of range for type integer'
+      });
     });
   }
 }
@@ -88,7 +90,7 @@ function findRole(req, res) {
  */
 function updateRole(req, res) {
   if (req.decoded.roleId !== 1) {
-    return res.status(401).json({ message: 'You are not authorized to access the role' });
+    return res.status(401).json({ message: 'You are not authorized' });
   }
   return Role.findById(req.params.id).then(function (role) {
     if (!role) {
@@ -106,8 +108,10 @@ function updateRole(req, res) {
     }).catch(function (error) {
       return res.status(400).json(error);
     });
-  }).catch(function (error) {
-    return res.status(400).json(error);
+  }).catch(function () {
+    return res.status(400).json({
+      message: 'out of range for type integer'
+    });
   });
 }
 
@@ -119,7 +123,7 @@ function updateRole(req, res) {
  */
 function deleteRole(req, res) {
   if (req.decoded.roleId !== 1) {
-    return res.status(401).json({ message: 'You are not authorized to access the role' });
+    return res.status(401).json({ message: 'You are not authorized' });
   }
   return Role.findById(req.params.id).then(function (role) {
     if (!role) {
@@ -134,8 +138,10 @@ function deleteRole(req, res) {
     }).catch(function (error) {
       return res.status(400).send(error);
     });
-  }).catch(function (error) {
-    return res.json(error);
+  }).catch(function () {
+    return res.status(400).json({
+      message: 'out of range for type integer'
+    });
   });
 }
 

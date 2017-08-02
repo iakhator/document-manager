@@ -223,7 +223,7 @@ describe('Users', () => {
           .end((err, res) => {
             expect(res.status).to.equal(400);
             expect(res.body).to.have.property('message')
-            .to.equal(`value "${id}" is out of range for type integer`);
+            .to.equal('out of range');
             done();
           });
       });

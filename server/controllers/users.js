@@ -162,7 +162,9 @@ function findUser(req, res) {
       }
       res.status(200).send(user);
     })
-    .catch(error => res.status(400).send(error));
+    .catch(() => res.status(400).send({
+      message: 'out of range'
+    }));
 }
 
 /**

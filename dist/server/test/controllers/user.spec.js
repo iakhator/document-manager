@@ -189,7 +189,7 @@ describe('Users', function () {
         var id = 500000000000000000;
         (0, _supertest2.default)(_index2.default).get('/api/v1/users/' + id).set({ authorization: adminToken }).end(function (err, res) {
           expect(res.status).to.equal(400);
-          expect(res.body).to.have.property('message').to.equal('value "' + id + '" is out of range for type integer');
+          expect(res.body).to.have.property('message').to.equal('out of range');
           done();
         });
       });

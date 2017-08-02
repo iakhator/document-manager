@@ -6,10 +6,11 @@
   "scripts": {
     "start": "gulp production && node ./dist/index.js",
     "dev": "node node_modules/gulp/bin/gulp",
-    "test:db:migrate": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate",
-    "test:db:seed": "NODE_ENV=test sequelize db:seed:all",
-    "start:test:db": "npm run test:db:migrate && npm run test:db:seed",
-    "server-test": "npm run start:test:db && NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register ./server/test/**/*.js --timeout 90000"
+    "pretest": "npm run cleardb && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
+    "test": "NODE_ENV=test node node_modules/gulp/bin/gulp test",
+    "devtest": "NODE_ENV=test gulp test",
+    "eslint": "eslint index.js",
+    "cleardb": "NODE_ENV=test sequelize db:migrate:undo:all"
   },
   "repository": {
     "type": "git",

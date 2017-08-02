@@ -95,9 +95,9 @@ describe('Documents', function () {
         done();
       });
     });
-    it('should fail to add a new document if the value field is missing', function (done) {
+    it('should fail to add a new document if the access field is missing', function (done) {
       var document = {
-        title: 'kiba-team',
+        title: 'boromir-team',
         content: 'Andela is really awesome!!!',
         access: '',
         userId: 1
@@ -105,7 +105,35 @@ describe('Documents', function () {
       _chai2.default.request(_index2.default).post('/api/v1/documents').send(document).set({ authorization: userToken }).end(function (err, res) {
         expect(res.status).to.equal(400);
         expect(res.body).to.be.a('object');
-        expect(res.body.message).to.be.equal('accessType is required');
+        expect(res.body.errors[0].msg).to.be.equal('accessType is required');
+        done();
+      });
+    });
+    it('should fail to add a new document if the title field is missing', function (done) {
+      var document = {
+        title: '',
+        content: 'Andela is really awesome!!!',
+        value: 'public',
+        userId: 2
+      };
+      _chai2.default.request(_index2.default).post('/api/v1/documents').send(document).set({ authorization: userToken }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body.errors[0].msg).to.be.equal('Title is required');
+        done();
+      });
+    });
+    it('should fail to add a new document if the content field is missing', function (done) {
+      var document = {
+        title: 'boromir-team',
+        content: '',
+        value: 'public',
+        userId: 2
+      };
+      _chai2.default.request(_index2.default).post('/api/v1/documents').send(document).set({ authorization: userToken }).end(function (err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body).to.be.a('object');
+        expect(res.body.errors[0].msg).to.be.equal('Content is required');
         done();
       });
     });

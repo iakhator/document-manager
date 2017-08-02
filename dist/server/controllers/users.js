@@ -176,8 +176,10 @@ function findUser(req, res) {
       res.status(404).json({ message: 'User not found' });
     }
     res.status(200).send(user);
-  }).catch(function (error) {
-    return res.status(400).send(error);
+  }).catch(function () {
+    return res.status(400).send({
+      message: 'out of range'
+    });
   });
 }
 
