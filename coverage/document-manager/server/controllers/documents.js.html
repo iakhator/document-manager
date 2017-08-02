@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">79.71% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>55/69</span>
+        <span class='fraction'>52/65</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">85.71% </span>
@@ -35,13 +35,13 @@
         <span class='fraction'>15/25</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">79.71% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>55/69</span>
+        <span class='fraction'>52/65</span>
       </div>
     </div>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -269,8 +269,8 @@
 224
 225
 226
-227</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+227</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -375,7 +375,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -402,7 +402,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -531,12 +531,12 @@ function createDocument(req, res) {
           userId: req.body.userId
         })
       .then(documentResponse =&gt; res.status(200).send(documentResponse))
-      .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+      .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
       }
 <span class="cstat-no" title="statement not covered" >      return res.status(403).json({</span>
         message: 'Document already exists'
       });
-    }).catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+    }).catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
   }
 }
 &nbsp;
@@ -571,9 +571,9 @@ function updateDocument(req, res) {
           userId: req.body.userId || document.userId
         })
         .then(() =&gt; res.status(200).send(document))
-        .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+        .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
     })
-    .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+    .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
 }
 &nbsp;
 /**
@@ -601,13 +601,13 @@ function getAllDocument(req, res) {
         }
       ]
     })
-    .then(<span class="fstat-no" title="function not covered" >({ rows: document, count }) =&gt; <span class="cstat-no" title="statement not covered" ></span></span>{
+    .then(<span class="fstat-no" title="function not covered" >({</span> rows: document, count }) =&gt; {
 <span class="cstat-no" title="statement not covered" >      res.status(200).send({</span>
         document,
         pagination: metaData(count, limit, offset),
       });
     })
-    .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+    .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
   } else <span class="missing-if-branch" title="else path not taken" >E</span>if (req.decoded.roleId !== 1) {
     return Document.findAndCountAll({
       limit,
@@ -634,7 +634,7 @@ function getAllDocument(req, res) {
         pagination: metaData(count, limit, offset),
       });
     })
-    .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+    .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
   }
 }
 &nbsp;
@@ -677,7 +677,7 @@ function findDocument(req, res) {
             }
             return res.status(200).send(document);
           })
-          .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+          .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
       }
     })
     .catch(error =&gt; res.status(400).send(error));
@@ -710,9 +710,9 @@ function deleteDocument(req, res) {
         .then(() =&gt; res.status(204).send({
           message: 'Document successfully deleted'
         }))
-        .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+        .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
     })
-    .catch(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >error =&gt; res.status(400).send(error));</span></span>
+    .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).send(error))</span>;
 }
 &nbsp;
 export default {
@@ -727,7 +727,7 @@ export default {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Aug 01 2017 23:31:33 GMT+0100 (WAT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Aug 02 2017 15:07:37 GMT+0100 (WAT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

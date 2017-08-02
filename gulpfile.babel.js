@@ -1,21 +1,12 @@
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import path from 'path';
-import injectModules from 'gulp-inject-modules';
 import coveralls from 'gulp-coveralls';
-import istanbul from 'gulp-istanbul';
-import mocha from 'gulp-mocha';
-import exit from 'gulp-exit';
+import shell from 'gulp-shell';
 
 // Load the gulp plugins into the `plugins` variable
 const plugins = loadPlugins();
 
-gulp.task('mochaTest', () => {
-  gulp.src(['dist/server/test/**/*.js'])
-    .pipe(mocha({
-      reporter: 'spec',
-    }));
-});
 // Compile all Babel Javascript into ES5 and place in dist folder
 const paths = {
   js: ['./**/*.js', '!dist/**', '!node_modules/**']
@@ -28,21 +19,13 @@ gulp.task('babel', () =>
     .pipe(gulp.dest('dist'))
 );
 
-gulp.task('coverage', (cb) => {
-  gulp.src('dist/server/test/controllers/*.js')
-    .pipe(istanbul())
-    .pipe(istanbul.hookRequire())
-    .on('finish', () => {
-      gulp.src('dist/server/test/*.js')
-        .pipe(plugins.babel())
-        .pipe(injectModules())
-        .pipe(mocha())
-        .pipe(istanbul.writeReports())
-        .pipe(istanbul.enforceThresholds({ thresholds: { global: 30 } }))
-        .on('end', cb)
-        .pipe(exit());
-    });
-});
+gulp.task('migrate', shell.task([
+  'cross-env NODE_ENV=test sequelize db:migrate',
+]));
+
+gulp.task('coverage', shell.task([
+  'cross-env NODE_ENV=test nyc mocha ./server/test/**/*.js',
+]));
 
 gulp.task('coveralls', () => gulp.src('./coverage/lcov')
     .pipe(coveralls()));
@@ -58,6 +41,6 @@ gulp.task('nodemon', ['babel'], () =>
   })
 );
 
-gulp.task('test', ['mochaTest']);
+gulp.task('test', ['migrate', 'coverage']);
 gulp.task('default', ['nodemon']);
 gulp.task('production', ['babel']);
