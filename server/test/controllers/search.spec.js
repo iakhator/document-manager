@@ -7,7 +7,7 @@ import data from './mockData';
 
 const expect = chai.expect;
 chai.use(http);
-let userToken, adminToken, sampleUserToken;
+let userToken, adminToken;
 const { admin, fellow, Baas } = data;
 
 describe('Search', () => {
@@ -17,24 +17,12 @@ describe('Search', () => {
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
-          done();
         });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
-        done();
-      });
-  });
-  before((done) => {
-    request(server)
-      .post('/api/v1/users/login')
-      .send({ email: 'blessing@test.com', password: 'pass123' })
-      .end((err, res) => {
-        sampleUserToken = res.body.token;
         done();
       });
   });

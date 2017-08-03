@@ -16,19 +16,13 @@ describe('Users', () => {
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
-          done();
         });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
-        done();
       });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send({ email: 'blessing@test.com', password: 'pass123' })

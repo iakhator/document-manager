@@ -121,7 +121,7 @@ function deleteRole(req, res) {
   return Role.findById(req.params.id)
     .then((role) => {
       if (!role) {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'Role not found'
         });
       }
@@ -130,7 +130,7 @@ function deleteRole(req, res) {
         .then(() => res.status(204).send({
           message: 'Role deleted successfully'
         }))
-          .catch(error => res.status(400).send(error));
+        .catch(error => res.status(400).send(error));
     }).catch(() => res.status(400).json({
       message: 'out of range for type integer'
     }));
