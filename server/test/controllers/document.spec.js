@@ -16,19 +16,13 @@ describe('Documents', () => {
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
-          done();
         });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
-        done();
       });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send({ email: 'blessing@test.com', password: 'pass123' })
@@ -101,7 +95,7 @@ describe('Documents', () => {
         access: '',
         userId: 1,
       };
-      chai.request(server)
+      request(server)
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -120,7 +114,7 @@ describe('Documents', () => {
         value: 'public',
         userId: 2,
       };
-      chai.request(server)
+      request(server)
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -139,7 +133,7 @@ describe('Documents', () => {
         value: 'public',
         userId: 2,
       };
-      chai.request(server)
+      request(server)
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -387,7 +381,7 @@ describe('Documents', () => {
     it('Should fail to delete the document given the user is not the owner',
     (done) => {
       const id = 1;
-      chai.request(server)
+      request(server)
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
@@ -400,7 +394,7 @@ describe('Documents', () => {
     });
     it('Should fail to delete if the document does not exist', (done) => {
       const id = 234;
-      chai.request(server)
+      request(server)
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {

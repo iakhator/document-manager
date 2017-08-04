@@ -1,21 +1,11 @@
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import path from 'path';
-import mocha from 'gulp-mocha';
-import exit from 'gulp-exit';
 import coveralls from 'gulp-coveralls';
-import cover from 'gulp-coverage';
+import shell from 'gulp-shell';
 
 // Load the gulp plugins into the `plugins` variable
 const plugins = loadPlugins();
-
-gulp.task('tests', () => {
-  gulp.src('./server/tests/*.js')
-    .pipe(plugins.babel())
-    .pipe(mocha())
-    .pipe(exit());
-});
-
 
 // Compile all Babel Javascript into ES5 and place in dist folder
 const paths = {
@@ -29,17 +19,13 @@ gulp.task('babel', () =>
     .pipe(gulp.dest('dist'))
 );
 
-gulp.task('coverage', () => {
-  gulp.src('server/test/**/*.js', { read: false })
-    .pipe(cover.instrument({
-      pattern: ['server/controllers/**/*.js'],
-      debugDirectory: 'debug'
-    }))
-    .pipe(mocha())
-    .pipe(cover.gather())
-    .pipe(cover.format())
-    .pipe(gulp.dest('reports'));
-});
+gulp.task('migrate', shell.task([
+  'cross-env NODE_ENV=test sequelize db:migrate',
+]));
+
+gulp.task('coverage', shell.task([
+  'cross-env NODE_ENV=test nyc mocha ./server/test/**/*.js',
+]));
 
 gulp.task('coveralls', () => gulp.src('./coverage/lcov')
     .pipe(coveralls()));
@@ -55,6 +41,6 @@ gulp.task('nodemon', ['babel'], () =>
   })
 );
 
-gulp.task('test', ['tests']);
+gulp.task('test', ['migrate', 'coverage']);
 gulp.task('default', ['nodemon']);
 gulp.task('production', ['babel']);

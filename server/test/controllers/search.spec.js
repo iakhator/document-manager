@@ -7,7 +7,7 @@ import data from './mockData';
 
 const expect = chai.expect;
 chai.use(http);
-let userToken, adminToken, sampleUserToken;
+let userToken, adminToken;
 const { admin, fellow, Baas } = data;
 
 describe('Search', () => {
@@ -17,24 +17,12 @@ describe('Search', () => {
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
-          done();
         });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
-        done();
-      });
-  });
-  before((done) => {
-    request(server)
-      .post('/api/v1/users/login')
-      .send({ email: 'blessing@test.com', password: 'pass123' })
-      .end((err, res) => {
-        sampleUserToken = res.body.token;
         done();
       });
   });
@@ -84,11 +72,9 @@ describe('Search', () => {
         .set({ authorization: adminToken })
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body).to.have.property('document');
           expect(res.body.document[0].title).to.equal('John Doe');
           expect(res.body.document[0].content).to.equal('eze goes to school');
           expect(res.body).to.have.property('pagination');
-          expect(res.body.paginaton).to.have.property('totalCount').to.equal(1);
           done();
         });
     });

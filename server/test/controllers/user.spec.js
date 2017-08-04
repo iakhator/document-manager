@@ -16,19 +16,13 @@ describe('Users', () => {
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
-          done();
         });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
-        done();
       });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send({ email: 'blessing@test.com', password: 'pass123' })
@@ -223,7 +217,7 @@ describe('Users', () => {
           .end((err, res) => {
             expect(res.status).to.equal(400);
             expect(res.body).to.have.property('message')
-            .to.equal(`value "${id}" is out of range for type integer`);
+            .to.equal('out of range');
             done();
           });
       });

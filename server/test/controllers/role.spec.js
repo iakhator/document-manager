@@ -6,7 +6,7 @@ import data from './mockData';
 
 const expect = chai.expect;
 chai.use(http);
-let userToken, adminToken, sampleUserToken;
+let userToken, adminToken;
 const { admin, fellow } = data;
 
 describe('Roles', () => {
@@ -16,24 +16,12 @@ describe('Roles', () => {
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
-          done();
         });
-  });
-  before((done) => {
     request(server)
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
-        done();
-      });
-  });
-  before((done) => {
-    request(server)
-      .post('/api/v1/users/login')
-      .send({ email: 'blessing@test.com', password: 'pass123' })
-      .end((err, res) => {
-        sampleUserToken = res.body.token;
         done();
       });
   });
@@ -80,18 +68,6 @@ describe('Roles', () => {
         expect(res.body.message).to.eql('You are not authorized');
         done();
       });
-    });
-    it('Should return an error if the title is not a string', (done) => {
-      chai.request(server)
-        .post('/api/v1/roles')
-        .set({ authorization: adminToken })
-        .send({ title: 358583 })
-        .end((err, res) => {
-          expect(res.status).to.equal(400);
-          expect(res.body).to.be.a('object');
-          expect(res.body.message).to.eql('Invalid input credentials');
-          done();
-        });
     });
   });
 
@@ -174,18 +150,17 @@ describe('Roles', () => {
           done();
         });
     });
-    // it('Should fail to get a role by id if the id is out of range', (done) => {
-    //   const id = 500000000000000000000;
-    //   chai.request(server)
-    //     .get(`/api/v1/roles/${id}`)
-    //     .set({ authorization: adminToken })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(400);
-    //       expect(res.body.message)
-    //       .to.eql(`value "${id}" is out of range for type integer`);
-    //       done();
-    //     });
-    // });
+    it('Should fail to get a role by id if the id is out of range', (done) => {
+      const id = 500000000000000000000;
+      request(server)
+        .get(`/api/v1/roles/${id}`)
+        .set({ authorization: adminToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.eql('out of range for type integer');
+          done();
+        });
+    });
   });
   describe('/PUT/:id Role', () => {
     it('Should update a role by id if the user has admin access', (done) => {
@@ -208,7 +183,7 @@ describe('Roles', () => {
       chai.request(server)
           .put(`/api/v1/roles/${id}`)
          .set({ authorization: userToken })
-        .send({ title: 'kiba' })
+        .send({ title: 'boromir' })
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.body).to.be.a('object');
@@ -227,43 +202,30 @@ describe('Roles', () => {
         .end((err, res) => {
           expect(res.status).to.equal(404);
           expect(res.body).to.be.a('object');
-          expect(res.body.message).to.equal('Role not found');
+          expect(res.body.message).to.eql('Role not found');
           done();
         });
       });
-    // it(`Should fail to update a role by
-    //   id if the admin enters an id that is out range`,
-    //   (done) => {
-    //     const id = 2000000000000000;
-    //     chai.request(server)
-    //       .put(`/api/v1/roles/${id}`)
-    //       .set({ authorization: adminToken })
-    //       .send({ title: 'regular' })
-    //       .end((err, res) => {
-    //         expect(res.status).to.equal(400);
-    //         expect(res.body).to.be.a('object');
-    //         expect(res.body.message)
-    //         .to.eql(`value "${id}" is out of range for type integer`);
-    //         done();
-    //       });
-    //   });
+    it(`Should fail to update a role by id if the
+       admin enters an id that is out range`, (done) => {
+      const id = 2000000000000000;
+      request(server)
+        .put(`/api/v1/roles/${id}`)
+        .set({ authorization: adminToken })
+        .send({ title: 'regular' })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.eql('out of range for type integer');
+          done();
+        });
+    });
   });
   describe('/DELETE/:id Role', () => {
-    it('Should delete a role given the user has admin access', (done) => {
-      const id = 3;
-      chai.request(server)
-        .delete(`/api/v1/roles/${id}`)
-        .set({ authorization: adminToken })
-        .end((err, res) => {
-          expect(res.status).to.equal(204);
-          expect(res.body).to.be.a('object');
-        });
-      done();
-    });
     it('Should fail to delete a role given the user has no admin access',
     (done) => {
-      const id = 3;
-      chai.request(server)
+      const id = 2;
+      request(server)
         .delete(`/api/v1/roles/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -273,32 +235,44 @@ describe('Roles', () => {
           done();
         });
     });
-    // it('Should fail to delete a role given the admin enters an invalid input',
-    // (done) => {
-    //   const id = 300;
-    //   chai.request(server)
-    //     .delete(`/api/v1/roles/${id}`)
-    //     .set({ authorization: adminToken })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(404);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.message).to.equal('Role not found');
-    //       done();
-    //     });
-    // });
-    // it(`Should fail to delete a role given
-    //   the admin enters an input that is out of range`, (done) => {
-    //   const id = 3000000000000000;
-    //   chai.request(server)
-    //     .delete(`/api/v1/roles/${id}`)
-    //     .set({ authorization: adminToken })
-    //     .end((err, res) => {
-    //       expect(res.status).to.equal(200);
-    //       expect(res.body).to.be.a('object');
-    //       expect(res.body.message)
-    //       .to.eql(`value "${id}" is out of range for type integer`);
-    //       done();
-    //     });
-    // });
+    it('Should delete a role given the user has admin access', (done) => {
+      const id = 3;
+      request(server)
+        .delete(`/api/v1/roles/${id}`)
+        .set({ authorization: adminToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(204);
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.be.eql('Role deleted successfully');
+        });
+      done();
+    });
+    it(`Should fail to delete a role given the admin
+      enters an input that is out of range`, (done) => {
+      const id = 3000000000000000;
+      request(server)
+        .delete(`/api/v1/roles/${id}`)
+        .set({ authorization: adminToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.eql('out of range for type integer');
+          done();
+        });
+    });
+    it(`Should fail to delete a role
+      given the admin enters an id that is not found`,
+    (done) => {
+      const id = -3;
+      request(server)
+        .delete(`/api/v1/roles/${id}`)
+        .set({ authorization: adminToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.eql('Role not found');
+          done();
+        });
+    });
   });
 });

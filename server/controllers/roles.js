@@ -55,7 +55,7 @@ function getRoles(req, res) {
  */
 function findRole(req, res) {
   if (isNaN(req.params.id)) {
-    return res.status(401).json({
+    res.status(401).json({
       message: `invalid input syntax for integer: "${req.params.id}"`
     });
   } else {
@@ -68,7 +68,9 @@ function findRole(req, res) {
           });
         }
         res.status(200).json(role);
-      }).catch(error => res.status(400).json(error));
+      }).catch(() => res.status(400).json({
+        message: 'out of range for type integer'
+      }));
   }
 }
 
@@ -81,7 +83,7 @@ function findRole(req, res) {
 function updateRole(req, res) {
   if (req.decoded.roleId !== 1) {
     return res.status(401)
-      .json({ message: 'You are not authorized to access the role' });
+      .json({ message: 'You are not authorized' });
   }
   return Role
     .findById(req.params.id)
@@ -100,7 +102,9 @@ function updateRole(req, res) {
           role
         }))
         .catch(error => res.status(400).json(error));
-    }).catch(error => res.status(400).json(error));
+    }).catch(() => res.status(400).json({
+      message: 'out of range for type integer'
+    }));
 }
 
 /**
@@ -112,12 +116,12 @@ function updateRole(req, res) {
 function deleteRole(req, res) {
   if (req.decoded.roleId !== 1) {
     return res.status(401)
-      .json({ message: 'You are not authorized to access the role' });
+      .json({ message: 'You are not authorized' });
   }
   return Role.findById(req.params.id)
     .then((role) => {
       if (!role) {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'Role not found'
         });
       }
@@ -126,8 +130,10 @@ function deleteRole(req, res) {
         .then(() => res.status(204).send({
           message: 'Role deleted successfully'
         }))
-          .catch(error => res.status(400).send(error));
-    }).catch(error => res.json(error));
+        .catch(error => res.status(400).send(error));
+    }).catch(() => res.status(400).json({
+      message: 'out of range for type integer'
+    }));
 }
 
 export default { createRole, getRoles, findRole, updateRole, deleteRole };
