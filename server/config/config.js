@@ -10,7 +10,12 @@ module.exports = {
     dialect: 'postgres'
   },
   test: {
-    use_env_variable: 'TEST_DB'
+    username: 'andeladeveloper',
+    password: null,
+    database: 'docmanager-test',
+    host: '127.0.0.1',
+    port: 5432,
+    dialect: 'postgres'
   },
   production: {
     username: 'root',
