@@ -1,7 +1,6 @@
 import gulp from 'gulp';
 import loadPlugins from 'gulp-load-plugins';
 import path from 'path';
-import coveralls from 'gulp-coveralls';
 import shell from 'gulp-shell';
 
 // Load the gulp plugins into the `plugins` variable
@@ -26,10 +25,6 @@ gulp.task('migrate', shell.task([
 gulp.task('coverage', shell.task([
   'cross-env NODE_ENV=test nyc mocha ./server/test/**/*.js',
 ]));
-
-gulp.task('coveralls', () => gulp.src('./coverage/lcov')
-    .pipe(coveralls()));
-
 
 // Restart server with on every changes made to file
 gulp.task('nodemon', ['babel'], () =>
