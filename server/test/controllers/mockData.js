@@ -11,7 +11,7 @@ export default {
     email: 'john@test.com',
     password: process.env.TEST_FELLOW_PASSWORD
   },
-  faciliatator: {
+  facilitator: {
     email: 'blessing@test.com',
     password: process.env.TEST_FACILITATOR_PASSWORD
   },

@@ -1,23 +1,22 @@
 import chai from 'chai';
 import request from 'supertest';
-import http from 'chai-http';
 import server from '../../../index';
 import data from './mockData';
 
 const expect = chai.expect;
-chai.use(http);
+const superRequest = request(server);
 let userToken, adminToken;
 const { admin, fellow } = data;
 
 describe('Roles', () => {
   before((done) => {
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
         });
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
@@ -28,7 +27,7 @@ describe('Roles', () => {
 
   describe('/POST Role', () => {
     it('should add a new role if the user is an admin', (done) => {
-      request(server)
+      superRequest
       .post('/api/v1/roles')
       .send({ title: 'boromir' })
       .set({ authorization: adminToken })
@@ -42,7 +41,7 @@ describe('Roles', () => {
       done();
     });
     it('should add a new role if the user is an admin', (done) => {
-      request(server)
+      superRequest
       .post('/api/v1/roles')
       .send({ title: 'king' })
       .set({ authorization: adminToken })
@@ -58,7 +57,7 @@ describe('Roles', () => {
       const role = {
         title: 'boromir-team'
       };
-      request(server)
+      superRequest
         .post('/api/v1/roles/')
         .set({ authorization: userToken })
       .send(role)
@@ -73,7 +72,7 @@ describe('Roles', () => {
 
   describe('/GET Role', () => {
     it('Should get all the roles if the user is an admin', (done) => {
-      chai.request(server)
+      superRequest
         .get('/api/v1/roles')
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -88,7 +87,7 @@ describe('Roles', () => {
         });
     });
     it('Should fail to get the roles if the user is not admin', (done) => {
-      chai.request(server)
+      superRequest
         .get('/api/v1/roles')
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -103,7 +102,7 @@ describe('Roles', () => {
   describe('/GET/:id Role', () => {
     it('Should get a role by id if the user is an admin', (done) => {
       const id = 2;
-      chai.request(server)
+      superRequest
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -117,7 +116,7 @@ describe('Roles', () => {
     it('Should fail to get a role by id if the user is not an admin',
     (done) => {
       const id = 2;
-      chai.request(server)
+      superRequest
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -129,7 +128,7 @@ describe('Roles', () => {
     it('Should fail to get a role by id if the user enters an invalid input',
     (done) => {
       const id = 'fddjsdcdjn';
-      chai.request(server)
+      superRequest
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -141,7 +140,7 @@ describe('Roles', () => {
     });
     it('Should fail to get a role by id if the role does not exist', (done) => {
       const id = 250;
-      chai.request(server)
+      superRequest
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -152,7 +151,7 @@ describe('Roles', () => {
     });
     it('Should fail to get a role by id if the id is out of range', (done) => {
       const id = 500000000000000000000;
-      request(server)
+      superRequest
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -165,7 +164,7 @@ describe('Roles', () => {
   describe('/PUT/:id Role', () => {
     it('Should update a role by id if the user has admin access', (done) => {
       const id = 2;
-      chai.request(server)
+      superRequest
           .put(`/api/v1/roles/${id}`)
          .set({ authorization: adminToken })
         .send({ title: 'boromir-team' })
@@ -180,7 +179,7 @@ describe('Roles', () => {
     it('Should fail to update a role by id if the user has no admin access',
     (done) => {
       const id = 2;
-      chai.request(server)
+      superRequest
           .put(`/api/v1/roles/${id}`)
          .set({ authorization: userToken })
         .send({ title: 'boromir' })
@@ -195,7 +194,7 @@ describe('Roles', () => {
        role by id if the admin enters an invalid input`,
       (done) => {
         const id = 200;
-        chai.request(server)
+        superRequest
           .put(`/api/v1/roles/${id}`)
          .set({ authorization: adminToken })
         .send({ title: 'kiba' })
@@ -209,7 +208,7 @@ describe('Roles', () => {
     it(`Should fail to update a role by id if the
        admin enters an id that is out range`, (done) => {
       const id = 2000000000000000;
-      request(server)
+      superRequest
         .put(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .send({ title: 'regular' })
@@ -225,7 +224,7 @@ describe('Roles', () => {
     it('Should fail to delete a role given the user has no admin access',
     (done) => {
       const id = 2;
-      request(server)
+      superRequest
         .delete(`/api/v1/roles/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -237,7 +236,7 @@ describe('Roles', () => {
     });
     it('Should delete a role given the user has admin access', (done) => {
       const id = 3;
-      request(server)
+      superRequest
         .delete(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -250,7 +249,7 @@ describe('Roles', () => {
     it(`Should fail to delete a role given the admin
       enters an input that is out of range`, (done) => {
       const id = 3000000000000000;
-      request(server)
+      superRequest
         .delete(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -264,7 +263,7 @@ describe('Roles', () => {
       given the admin enters an id that is not found`,
     (done) => {
       const id = -3;
-      request(server)
+      superRequest
         .delete(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {

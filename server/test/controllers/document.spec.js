@@ -1,29 +1,28 @@
 import chai from 'chai';
 import request from 'supertest';
-import http from 'chai-http';
 import server from '../../../index';
 import data from './mockData';
 
 const expect = chai.expect;
-chai.use(http);
+const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
 const { admin, fellow } = data;
 
 describe('Documents', () => {
   before((done) => {
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
         });
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
       });
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send({ email: 'blessing@test.com', password: 'pass123' })
       .end((err, res) => {
@@ -40,7 +39,7 @@ describe('Documents', () => {
         access: 'public',
         userId: 2,
       };
-      request(server)
+      superRequest
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -61,7 +60,7 @@ describe('Documents', () => {
         content: 'eze goes to school',
         access: 'public',
       };
-      request(server)
+      superRequest
       .post('/api/v1/documents')
       .set({ authorization: userToken })
       .end((err, res) => {
@@ -77,7 +76,7 @@ describe('Documents', () => {
         value: 'private',
         userId: 2,
       };
-      request(server)
+      superRequest
       .post('/api/v1/documents')
       .send(document)
       .end((err, res) => {
@@ -95,7 +94,7 @@ describe('Documents', () => {
         access: '',
         userId: 1,
       };
-      request(server)
+      superRequest
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -114,7 +113,7 @@ describe('Documents', () => {
         value: 'public',
         userId: 2,
       };
-      request(server)
+      superRequest
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -133,7 +132,7 @@ describe('Documents', () => {
         value: 'public',
         userId: 2,
       };
-      request(server)
+      superRequest
       .post('/api/v1/documents')
       .send(document)
       .set({ authorization: userToken })
@@ -149,7 +148,7 @@ describe('Documents', () => {
   describe('/GET Documents', () => {
     it('Should get all documents for the user that is authenticated',
     (done) => {
-      request(server)
+      superRequest
       .get('/api/v1/documents')
       .set({ authorization: userToken })
       .end((err, res) => {
@@ -161,7 +160,7 @@ describe('Documents', () => {
     });
     it('should fail to get all documents if the user is not authenticated',
     (done) => {
-      request(server)
+      superRequest
       .get('/api/v1/documents/')
       .end((err, res) => {
         expect(res.status).to.equal(403);
@@ -173,7 +172,7 @@ describe('Documents', () => {
     });
     it('Should get all documents with correct limit as a query', (done) => {
       const limit = 1;
-      request(server)
+      superRequest
         .get(`/api/v1/documents?limit=${limit}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -184,7 +183,7 @@ describe('Documents', () => {
     });
     it('Should get all documents with correct offset as a query', (done) => {
       const offset = 0;
-      request(server)
+      superRequest
         .get(`/api/v1/documents?limit=${offset}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -198,7 +197,7 @@ describe('Documents', () => {
   describe('/GET/:id Document', () => {
     it('Should fail to get document if it doesn`t exist', (done) => {
       const documentId = 8;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -210,7 +209,7 @@ describe('Documents', () => {
     });
     it('Should get all public regardless of id', (done) => {
       const documentId = 4;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -225,7 +224,7 @@ describe('Documents', () => {
     it('Should fail to get a private document if the requester does not own it',
     (done) => {
       const documentId = 2;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
@@ -239,7 +238,7 @@ describe('Documents', () => {
     it('Should get a private document the where the requester is the owner',
     (done) => {
       const documentId = 2;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -255,7 +254,7 @@ describe('Documents', () => {
     it('Should fail get a role document if the users are not on the same role',
     (done) => {
       const documentId = 3;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
@@ -269,7 +268,7 @@ describe('Documents', () => {
     it('Should get a role document if the users are on the same role',
     (done) => {
       const documentId = 3;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -283,7 +282,7 @@ describe('Documents', () => {
     });
     it('Should get a role document if the user is an admin', (done) => {
       const documentId = 3;
-      request(server)
+      superRequest
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -301,7 +300,7 @@ describe('Documents', () => {
     it('Should update a document by id if the user has the same id',
       (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .put(`/api/v1/documents/${id}`)
           .set({ authorization: userToken })
           .send({ title: 'wreck it ralph' })
@@ -317,7 +316,7 @@ describe('Documents', () => {
       id if the user does not have the same id`,
       (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .put(`/api/v1/documents/${id}`)
           .set({ authorization: sampleUserToken })
           .send({ title: 'spiderman Homecoming' })
@@ -332,7 +331,7 @@ describe('Documents', () => {
     it('Should not update a document by id if the user has admin access',
       (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .put(`/api/v1/documents/${id}`)
           .set({ authorization: adminToken })
           .send({ title: 'wreck it' })
@@ -344,7 +343,7 @@ describe('Documents', () => {
     it('Should fail to update a document by id if the document does not exist',
       (done) => {
         const id = 10;
-        request(server)
+        superRequest
         .put(`/api/v1/documents/${id}`)
         .set({ authorization: userToken })
         .send({ title: 'Deadpool' })
@@ -360,7 +359,7 @@ describe('Documents', () => {
   describe('DELETE/:id Document', () => {
     it('Should delete a document if the user has admin access', (done) => {
       const id = 3;
-      request(server)
+      superRequest
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -370,7 +369,7 @@ describe('Documents', () => {
     });
     it('Should delete a document if the user is the owner', (done) => {
       const id = 2;
-      request(server)
+      superRequest
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -381,7 +380,7 @@ describe('Documents', () => {
     it('Should fail to delete the document given the user is not the owner',
     (done) => {
       const id = 1;
-      request(server)
+      superRequest
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
@@ -394,7 +393,7 @@ describe('Documents', () => {
     });
     it('Should fail to delete if the document does not exist', (done) => {
       const id = 234;
-      request(server)
+      superRequest
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {

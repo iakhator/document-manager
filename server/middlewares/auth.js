@@ -2,7 +2,14 @@ import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.JWT_SECRET;
 
-
+/**
+ * verifyToken verify the user upon login
+ * @method verifyToken
+ * @param  {string}    req  authorization header
+ * @param  {string}    res  token generated
+ * @param  {Function}  next move to the next function
+ * @return {void}
+ */
 function verifyToken(req, res, next) {
   const token = req.headers.authorization || req.headers['x-access-token'];
   if (token) {
@@ -22,6 +29,14 @@ function verifyToken(req, res, next) {
   }
 }
 
+/**
+ * checking for admin access
+ * @method adminAccess
+ * @param  {string}    req  authorization header
+ * @param  {string}    res  token generated
+ * @param  {Function}  next move to the next function
+ * @return {void}
+ */
 function adminAccess(req, res, next) {
   if (req.decoded.roleId === 1) {
     next();

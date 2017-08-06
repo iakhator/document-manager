@@ -1,24 +1,23 @@
 import chai from 'chai';
 import request from 'supertest';
-import http from 'chai-http';
 import server from '../../../index';
 import data from './mockData';
 
 
 const expect = chai.expect;
-chai.use(http);
+const superRequest = request(server);
 let userToken, adminToken;
 const { admin, fellow, Baas } = data;
 
 describe('Search', () => {
   before((done) => {
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
         });
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
@@ -30,7 +29,7 @@ describe('Search', () => {
   describe('/SEARCH/users/?q={name}', () => {
     it('Should return an error if no querystring is provided', (done) => {
       const query = '';
-      request(server)
+      superRequest
         .get(`/api/v1/search/users/?q=${query}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -42,7 +41,7 @@ describe('Search', () => {
     it('Should return a search list response of the required search input',
     (done) => {
       const query = Baas.userName;
-      request(server)
+      superRequest
       .get(`/api/v1/search/users/?q=${query}`)
       .set({ authorization: adminToken })
       .end((err, res) => {
@@ -56,7 +55,7 @@ describe('Search', () => {
   describe('/SEARCH/documents/?q=', () => {
     it('Should return an error if no querystring is provided', (done) => {
       const query = '';
-      request(server)
+      superRequest
         .get(`/api/v1/search/documents/?q=${query}`)
         .set({ authorization: userToken })
         .end((err, res) => {
@@ -67,7 +66,7 @@ describe('Search', () => {
     });
     it('Should return a search list of the required search input', (done) => {
       const query = 'John';
-      request(server)
+      superRequest
         .get(`/api/v1/search/documents/?q=${query}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
@@ -81,7 +80,7 @@ describe('Search', () => {
     it('Should throw an error if the searched document is not found',
       (done) => {
         const query = 'jk';
-        request(server)
+        superRequest
           .get(`/api/v1/search/documents/?q=${query}`)
           .set({ authorization: userToken })
           .end((err, res) => {

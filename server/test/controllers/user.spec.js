@@ -1,29 +1,28 @@
 import chai from 'chai';
 import request from 'supertest';
-import http from 'chai-http';
 import server from '../../../index';
 import data from './mockData';
 
 const expect = chai.expect;
-chai.use(http);
+const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
 const { admin, fakeBass, fellow, user1, user2 } = data;
 
 describe('Users', () => {
   before((done) => {
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(admin)
         .end((err, res) => {
           adminToken = res.body.token;
         });
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send(fellow)
       .end((err, res) => {
         userToken = res.body.token;
       });
-    request(server)
+    superRequest
       .post('/api/v1/users/login')
       .send({ email: 'blessing@test.com', password: 'pass123' })
       .end((err, res) => {
@@ -35,7 +34,7 @@ describe('Users', () => {
   describe('/POST User login', () => {
     it('Should fail if the user enters incorrect crendentials upon login',
     (done) => {
-      request(server)
+      superRequest
         .post('/api/v1/users/login')
         .send(user1)
         .end((err, res) => {
@@ -49,7 +48,7 @@ describe('Users', () => {
     });
 
     it('Should fail if the user provide a wrong password', (done) => {
-      request(server)
+      superRequest
         .post('/api/v1/users/login')
         .send(user2)
         .end((err, res) => {
@@ -63,7 +62,7 @@ describe('Users', () => {
     });
 
     it('should log in a user and return a token', (done) => {
-      request(server)
+      superRequest
         .post('/api/v1/users/login').send(admin).end((err, res) => {
           expect(res.status).to.equal(201);
           expect(res.body).to.have.keys(['success', 'token']);
@@ -74,7 +73,7 @@ describe('Users', () => {
 
     describe('/POST User Signup', () => {
       it('should create a new user', (done) => {
-        request(server)
+        superRequest
           .post('/api/v1/users/').send(fakeBass).end((err, res) => {
             expect(res.status).to.equal(200);
             expect(res.body)
@@ -89,7 +88,7 @@ describe('Users', () => {
 
     describe('#GET Users', () => {
       it('Should get all users if the user is an admin ', (done) => {
-        request(server)
+        superRequest
           .get('/api/v1/users')
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -101,7 +100,7 @@ describe('Users', () => {
       });
       it('Should fail to get all users if the user has no admin access ',
       (done) => {
-        request(server)
+        superRequest
           .get('/api/v1/users')
           .set({ authorization: userToken })
           .end((err, res) => {
@@ -112,7 +111,7 @@ describe('Users', () => {
           });
       });
       it('Should fail to get all users if no token was provided', (done) => {
-        request(server)
+        superRequest
           .get('/api/v1/users')
           .end((err, res) => {
             expect(res.status).to.equal(403);
@@ -123,7 +122,7 @@ describe('Users', () => {
       });
       it('Should get all users with correct limit as a query', (done) => {
         const limit = 1;
-        chai.request(server)
+        superRequest
           .get(`/api/v1/users?limit=${limit}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -138,7 +137,7 @@ describe('Users', () => {
     describe('#GET User by Id', () => {
       it('Should get a user if the user is an admin', (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${id}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -155,7 +154,7 @@ describe('Users', () => {
       it('Should get the user if the requested user is the current user',
       (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${id}`)
           .set({ authorization: userToken })
           .end((err, res) => {
@@ -172,7 +171,7 @@ describe('Users', () => {
       it('Should fail to get a user if an invalid input is entered',
       (done) => {
         const id = 'fddjsdcdjn';
-        request(server)
+        superRequest
           .get(`/api/v1/users/${id}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -185,7 +184,7 @@ describe('Users', () => {
       it('should fail to get the user if the requester is not the owner',
       (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .get(`api/users/${id}`)
           .set({ authorization: sampleUserToken })
           .end((err, res) => {
@@ -198,7 +197,7 @@ describe('Users', () => {
       it('Should fail to get a user if the user does not exist',
       (done) => {
         const id = 250;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${id}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -211,7 +210,7 @@ describe('Users', () => {
       it('Should fail to get a user if the id is out of range',
       (done) => {
         const id = 500000000000000000;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${id}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -226,7 +225,7 @@ describe('Users', () => {
       it('Should update a user`s full name if the user has the same id',
         (done) => {
           const id = 2;
-          request(server)
+          superRequest
             .put(`/api/v1/users/${id}`)
             .set({ authorization: userToken })
             .send({ fullName: 'jake doe' })
@@ -240,7 +239,7 @@ describe('Users', () => {
         });
       it('Should update a user`s email if the user has the same id', (done) => {
         const id = 2;
-        request(server)
+        superRequest
           .put(`/api/v1/users/${id}`)
           .set({ authorization: userToken })
           .send({ email: 'jakedoe@andela.com' })
@@ -255,7 +254,7 @@ describe('Users', () => {
       it('Should update a user`s username if the user has the same id',
         (done) => {
           const id = 2;
-          request(server)
+          superRequest
             .put(`/api/v1/users/${id}`)
             .set({ authorization: userToken })
             .send({ userName: 'jakedoe12' })
@@ -271,7 +270,7 @@ describe('Users', () => {
       details if the user does not have the same user id`,
       (done) => {
         const id = 3;
-        request(server)
+        superRequest
           .put(`/api/v1/users/${id}`)
           .set({ authorization: userToken })
           .send({ email: 'jakedoe@andela.com' })
@@ -287,7 +286,7 @@ describe('Users', () => {
         details if the user enters an invalid user id`,
       (done) => {
         const id = 2302;
-        request(server)
+        superRequest
           .put(`/api/v1/users/${id}`)
           .set({ authorization: userToken })
           .send({ email: 'jakedoe@andela.com' })
@@ -303,7 +302,7 @@ describe('Users', () => {
     describe('#DELETE /:id Users', () => {
       it('Should delete a user given the user has admin access', (done) => {
         const id = 3;
-        request(server)
+        superRequest
           .delete(`/api/v1/users/${id}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -314,7 +313,7 @@ describe('Users', () => {
       it('Should fail to delete a user if the user has no admin access',
       (done) => {
         const id = 3;
-        request(server)
+        superRequest
           .delete(`/api/v1/users/${id}`)
           .set({ authorization: userToken })
           .end((err, res) => {
@@ -326,7 +325,7 @@ describe('Users', () => {
       });
       it('Should give a User not found if user don\'t exist', (done) => {
         const id = 23;
-        request(server)
+        superRequest
           .delete(`/api/v1/users/${id}`)
           .set({ authorization: adminToken })
           .end((err, res) => {
@@ -340,7 +339,7 @@ describe('Users', () => {
     describe('/GET/users/:id/documents Documents', () => {
       it('Should fail to get documents if the user does not exist', (done) => {
         const userId = 9;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${userId}/documents`)
           .set({ authorization: userToken })
           .end((err, res) => {
@@ -353,7 +352,7 @@ describe('Users', () => {
       it('Should fail to get documents if there is no token present',
       (done) => {
         const userId = 2;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${userId}/documents`)
           .end((err, res) => {
             expect(res.status).to.equal(403);
@@ -365,7 +364,7 @@ describe('Users', () => {
       });
       it('Should get documents for the user with its unique userId', (done) => {
         const userId = 2;
-        request(server)
+        superRequest
           .get(`/api/v1/users/${userId}/documents`)
           .set({ authorization: userToken })
           .end((err, res) => {
