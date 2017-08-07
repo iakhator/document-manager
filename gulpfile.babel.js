@@ -23,7 +23,7 @@ gulp.task('migrate', shell.task([
 ]));
 
 gulp.task('coverage', shell.task([
-  'cross-env NODE_ENV=test nyc mocha ./server/test/**/*.js',
+  'cross-env NODE_ENV=test nyc mocha ./server/tests/**/*.js',
 ]));
 
 // Restart server with on every changes made to file
