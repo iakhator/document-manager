@@ -1,16 +1,53 @@
 import express from 'express';
+import path from 'path';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import expressValidator from 'express-validator';
+import swaggerJSDoc from 'swagger-jsdoc';
 import routes from '../routes';
 
 const app = express();
+// swagger definition
+const swaggerDefinition = {
+  info: {
+    title: 'Doc API',
+    version: '1.0.0',
+    description: 'Doc API is the API for a document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published. Users are categorized by roles. Each user must have a role defined for them.',
+    contact: {
+      email: 'baasbank.akinmuleya@andela.com',
+    },
+    license: {
+      name: 'MIT',
+      url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
+    }
+  },
+  host: 'localhost:3000',
+  basePath: '/',
+};
+
+// options for the swagger docs
+const options = {
+  // import swaggerDefinitions
+  swaggerDefinition,
+  // path to the API docs
+  apis: [path.join(__dirname, 'server/routes/*.js')],
+};
+const swaggerSpec = swaggerJSDoc(options);
 
 app.use(logger('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
+
+// initialize swagger-jsdoc
+app.use(express.static('public/api-doc'));
+
+// serve swagger
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 app.use((req, res, next) => {
   const send = res.send;
