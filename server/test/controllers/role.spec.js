@@ -82,7 +82,7 @@ describe('Roles', () => {
           expect(res.body[0].id).to.eql(1);
           expect(res.body[0].title).to.eql('admin');
           expect(res.body[1].id).to.eql(2);
-          expect(res.body[1].title).to.eql('facilitator');
+          expect(res.body[1].title).to.eql('fellow');
           done();
         });
     });
@@ -108,7 +108,7 @@ describe('Roles', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).be.a('object');
-          expect(res.body.title).to.eql('facilitator');
+          expect(res.body.title).to.eql('fellow');
           expect(res.body.id).to.equal(2);
           done();
         });
