@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/iakhator/document-manager.svg?branch=staging)](https://travis-ci.org/iakhator/document-manager)
 [![Coverage Status](https://coveralls.io/repos/github/iakhator/document-manager/badge.svg?branch=staging)](https://coveralls.io/github/iakhator/document-manager?branch=staging)
-[![Code Climate](https://codeclimate.com/github/iakhator/document-manager/badges/gpa.svg)](https://codeclimate.com/github/iakhator/document-manager)
+[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
 
 # document-manager
 Document manager provides REST API endpoints for a document management system. It allows create, retrieve, update and delete actions to be carried out.
@@ -63,7 +63,7 @@ GET | [/users](#get-all-users) | Get all users
 GET | [/users/:id](#get-user) | Get details of a specific user
 GET | [/users/login](#login) | To log a user in
 GET | [/users/?limit={integer}&offset={integer}](#pagination) | Pagination for users
-GET | [/search/users/?query=new](#search-user) | To search for a user
+GET | [/search/users/?q={username}](#search-user) | To search for a user
 GET | [/users/:id/documents](#user-documents) | Retrieve all documents created by a user
 PUT | [/users/:id](#edit-user) | Edit user details
 DELETE | [/users/:id](#delete-user) | Delete a user from database
@@ -86,7 +86,7 @@ POST | [/documents](#create-document) | Create a new document
 GET | [/documents](#get-all-documents) | Retrieve all documents
 GET | [/documents/:id](#get-document) | Retrieve a specific document
 GET | [/documents/?limit={integer}&offset={integer}](#pagination) | Pagination for documents
-GET | [/search/documents/?query=new](#search-document) | Search documents using key terms
+GET | [/search/documents/?q={title}](#search-document) | Search documents using key terms
 PUT | [/documents/:id](#edit-document) | Update a specific document
 DELETE | [/documents/:id](#delete-document) | Remove a specific document from storage
 
@@ -112,14 +112,32 @@ Document Management System API is built with the following technologies;
 - Clone the forked repository
 - Create your feature branch
 - Commit your changes
+We recommend that commit messages have a Header, Body and Footer.
+
+```
+feature(): This feature addresses some particular issue(s)
+- implements functionality A.
+- implements functionality B.
+[Delivers #STORY_ID]
+
+```
 - Push to the remote branch
 - Open a Pull Request
+We recommend that pull requests follow this convention:
+
+```
+- Describe what this PR does
+- How should this be manually tested?
+- Any background context you want to provide?
+- Screenshots (if appropriate)
+- Questions:
+
+```
 
 ## Limitations
 The limitations of the API are:
-- Users cannot delete themselves using the API
-- Documents are not unique (A user can create a document with the same title)
-- User cannot login on two different platform
+- The application cannot accommodate millions of users
+- Users cannot share documents with other users through social sharing
 
 ## LICENSE
  This project is authored by [Itua Akhator](https://github.com/iakhator) it is licensed under the MIT license.
