@@ -5,11 +5,11 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
-      title: 'facilitator',
+      title: 'fellow',
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
-      title: 'fellow',
+      title: 'facilitator',
       createdAt: new Date(),
       updatedAt: new Date(),
     }], {}),
