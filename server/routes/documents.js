@@ -30,6 +30,10 @@ const router = express.Router();
  *         example: 1
  *       access:
  *         type: string
+ *         enum:
+ *           - "public"
+ *           - "private"
+ *           - "role"
  *         example: public
  *       createdAt:
  *         type: string

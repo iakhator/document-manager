@@ -10,18 +10,18 @@ const app = express();
 // swagger definition
 const swaggerDefinition = {
   info: {
-    title: 'Doc API',
+    title: 'Doksmanager API',
     version: '1.0.0',
-    description: 'Doc API is the API for a document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published. Users are categorized by roles. Each user must have a role defined for them.',
+    description: 'Doksmanager API is the API for a document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published. Users are categorized by roles. Each user must have a role defined for them.',
     contact: {
-      email: 'baasbank.akinmuleya@andela.com',
+      email: 'itua.akhator@andela.com',
     },
     license: {
       name: 'MIT',
       url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
     }
   },
-  host: 'doksmanager.herokuapp.com',
+  host: 'localhost:3000',
   basePath: '/',
 };
 

@@ -83,6 +83,50 @@ const router = express.Router();
  *     in: header
  *     name: Authorization
  */
+router.route('/login')
+   /** POST /api/users/login - Login users */
+
+   /**
+  * @swagger
+  * paths:
+  *   /api/v1/users/login:
+  *     post:
+  *       tags:
+  *         - User
+  *       summary: Login a user
+  *       operationId: login
+  *       description: Logs in a user and provides them with a jwt token to access other routes
+  *       consumes:
+  *         - application/x-www-form-urlencoded
+  *       produces:
+  *         - application/json
+  *       parameters:
+  *       - name: email
+  *         in: formData
+  *         description: The user's email address
+  *         required: true
+  *         type: string
+  *       - name: password
+  *         in: formData
+  *         description: The password for login in clear text
+  *         required: true
+  *         type: string
+  *       responses:
+  *         201:
+  *           description: User logged in successfully with token returned.
+  *           schema:
+  *             type: string
+  *           headers:
+  *             Authorization:
+  *               type: string
+  *               format: int32
+  *               description: stores user jwt token
+  *         400:
+  *           description: Error.
+  *         401:
+  *           description: Authentication failed. Wong password.
+  */
+   .post(userController.login);
 
 router.route('/')
   /** GET /api/users - Get list of users */
@@ -91,6 +135,42 @@ router.route('/')
  * @swagger
  * paths:
  *   /api/v1/users/:
+ *     post:
+ *       tags:
+ *         - User
+ *       summary: Create a new user
+ *       operationId: createNewUser
+ *       description: Adds a new user to the Users collection
+ *       consumes:
+ *         - application/x-www-form-urlencoded
+ *       produces:
+ *         - application/json
+ *       parameters:
+ *         - in: formData
+ *           name: userName
+ *           description: User's username/nickname
+ *           required: true
+ *         - in: formData
+ *           name: fullName
+ *           description: User's full name
+ *           required: true
+ *         - in: formData
+ *           name: email
+ *           description: User's email address
+ *           required: true
+ *         - in: formData
+ *           name: password
+ *           description: User's password
+ *           required: true
+ *           schema:
+ *             type: array
+ *             items:
+ *               $ref: '#/definitions/User'
+ *       responses:
+ *         200:
+ *           description: You have successfully registered.
+ *         400:
+ *           description: Error.
  *     get:
  *       tags:
  *         - User
@@ -124,88 +204,11 @@ router.route('/')
  *           description: Bad request.
  *       security:
  *       - Authorization: []
- *     post:
- *       tags:
- *         - User
- *       summary: Create a new user
- *       operationId: createNewUser
- *       description: Adds a new user to the Users collection
- *       consumes:
- *         - application/x-www-form-urlencoded
- *       produces:
- *         - application/json
- *       parameters:
- *         - in: formData
- *           name: userName
- *           description: User's username/nickname
- *           required: true
- *         - in: formData
- *           name: fullName
- *           description: User's full name
- *           required: true
- *         - in: formData
- *           name: email
- *           description: User's email address
- *           required: true
- *         - in: formData
- *           name: password
- *           description: User's password
- *           required: true
- *       responses:
- *         200:
- *           description: You have successfully registered.
- *         400:
- *           description: Error.
  */
   .get(auth.verifyToken, auth.adminAccess, userController.getUsers)
 
   /** POST /api/users - Create/Signup users */
   .post(userController.createUser);
-
-router.route('/login')
-  /** POST /api/users/login - Login users */
-
-  /**
- * @swagger
- * paths:
- *   /api/v1/users/login:
- *     post:
- *       tags:
- *         - User
- *       summary: Login a user
- *       operationId: login
- *       description: Logs in a user and provides them with a jwt token to access other routes
- *       consumes:
- *         - application/x-www-form-urlencoded
- *       produces:
- *         - application/json
- *       parameters:
- *       - name: email
- *         in: formData
- *         description: The user's email address
- *         required: true
- *         type: string
- *       - name: password
- *         in: formData
- *         description: The password for login in clear text
- *         required: true
- *         type: string
- *       responses:
- *         201:
- *           description: User logged in successfully with token returned.
- *           schema:
- *             type: string
- *           headers:
- *             Authorization:
- *               type: string
- *               format: int32
- *               description: stores user jwt token
- *         400:
- *           description: Error.
- *         401:
- *           description: Authentication failed. Wong password.
- */
-  .post(userController.login);
 
 router.route('/:id')
 
