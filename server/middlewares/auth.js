@@ -22,9 +22,9 @@ function verifyToken(req, res, next) {
       }
     });
   } else {
-    return res.status(403).send({
+    return res.status(401).send({
       success: false,
-      message: 'No token provided.'
+      message: 'Please register or login.'
     });
   }
 }
@@ -41,7 +41,7 @@ function adminAccess(req, res, next) {
   if (req.decoded.roleId === 1) {
     next();
   } else {
-    return res.status(401).json({
+    return res.status(403).json({
       message: 'You are not authorized',
     });
   }

@@ -38,7 +38,7 @@ describe('Authentication', () => {
       const response = httpMocks.createResponse();
       const nextCallBack = () => { };
       auth.verifyToken(httpRequest, response, nextCallBack);
-      expect(response._getData().message).to.equal('No token provided.');
+      expect(response._getData().message).to.equal('Please register or login.');
       done();
     });
     it('Should provide access if the token is provided and valid', (done) => {
@@ -81,7 +81,7 @@ describe('Authentication', () => {
       const nextCallBack = () => { };
       auth.adminAccess(httpRequest, response, nextCallBack);
       response.on('end', () => {
-        expect(response._getData().message).to.equal('You are not authorized');
+        expect(response._getData().message).to.equal('You are Forbidden');
       });
       done();
     });

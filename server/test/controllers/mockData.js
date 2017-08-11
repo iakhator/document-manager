@@ -19,6 +19,10 @@ export default {
     email: 'baas@test.com',
     password: 'test'
   },
+  blessing: {
+    email: 'blessing@test.com',
+    password: process.env.PASSWORD
+  },
   user1: {
     email: 'test@test123.com',
     password: 'test'
@@ -27,7 +31,7 @@ export default {
     fullName: 'Baasbank Adams',
     userName: 'tiaandela',
     email: 'name@example.com',
-    password: 'pass123',
+    password: process.env.PASSWORD,
     roleId: 1,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -36,7 +40,16 @@ export default {
     fullName: 'Baas Bank',
     userName: 'bank',
     email: 'baas@test.com',
-    password: 'pass123',
+    password: process.env.PASSWORD,
+    roleId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  JohnB: {
+    fullName: 'John Bosco',
+    userName: 'john',
+    email: 'john@test.com',
+    password: process.env.PASSWORD,
     roleId: 1,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -45,7 +58,7 @@ export default {
     fullName: 'Daniel Cfh',
     userName: 'cfh',
     email: 'cfh@example.com',
-    password: 'pass123',
+    password: process.env.PASSWORD,
     roleId: 2,
     createdAt: 'date',
     updatedAt: new Date()

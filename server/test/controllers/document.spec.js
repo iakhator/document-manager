@@ -80,9 +80,9 @@ describe('Documents', () => {
       .post('/api/v1/documents')
       .send(document)
       .end((err, res) => {
-        expect(res.status).to.equal(403);
+        expect(res.status).to.equal(401);
         expect(res.body).to.be.a('object');
-        expect(res.body.message).to.eql('No token provided.');
+        expect(res.body.message).to.eql('Please register or login.');
         done();
       });
     });
@@ -163,9 +163,9 @@ describe('Documents', () => {
       superRequest
       .get('/api/v1/documents/')
       .end((err, res) => {
-        expect(res.status).to.equal(403);
+        expect(res.status).to.equal(401);
         expect(res.body).to.be.a('object');
-        expect(res.body.message).be.eql('No token provided.');
+        expect(res.body.message).be.eql('Please register or login.');
         expect(res.body.success).to.eql(false);
         done();
       });

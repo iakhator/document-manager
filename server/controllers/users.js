@@ -140,12 +140,12 @@ function login(req, res) {
 function findUser(req, res) {
   const userQuery = Number(req.params.id);
   if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
-    return res.status(401).json({
-      message: 'Unauthorized Access'
+    return res.status(403).json({
+      message: 'Please register or login'
     });
   }
   if (isNaN(userQuery)) {
-    return res.status(401).json({
+    return res.status(400).json({
       message: `invalid input syntax for integer: "${req.params.id}"`
     });
   }
@@ -176,7 +176,7 @@ function findUser(req, res) {
 function updateUser(req, res) {
   if (Number(req.decoded.id) !== Number(req.params.id)) {
     return res.status(401).json({
-      message: 'You are not authorized to access this user'
+      message: 'You are not authorized to update this user'
     });
   }
   const userId = Number(req.params.id);

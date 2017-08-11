@@ -62,7 +62,7 @@ describe('Roles', () => {
         .set({ authorization: userToken })
       .send(role)
       .end((err, res) => {
-        expect(res.status).to.equal(401);
+        expect(res.status).to.equal(403);
         expect(res.body).to.be.a('object');
         expect(res.body.message).to.eql('You are not authorized');
         done();
@@ -91,7 +91,7 @@ describe('Roles', () => {
         .get('/api/v1/roles')
         .set({ authorization: userToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body.message)
           .to.eql('You are not authorized');
           done();
@@ -120,7 +120,7 @@ describe('Roles', () => {
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body.message).to.eql('You are not authorized');
           done();
         });
@@ -184,7 +184,7 @@ describe('Roles', () => {
          .set({ authorization: userToken })
         .send({ title: 'boromir' })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body).to.be.a('object');
           expect(res.body.message).to.eql('You are not authorized');
           done();
@@ -228,7 +228,7 @@ describe('Roles', () => {
         .delete(`/api/v1/roles/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body).to.be.a('object');
           expect(res.body.message).to.eql('You are not authorized');
           done();
