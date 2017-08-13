@@ -3,7 +3,7 @@ import models from '../models';
 
 const Document = models.Document;
 const User = models.User;
-const metaData = helper.paginationMetaData;
+const pagination = helper.paginationMetaData;
 
 /**
  * Search for user using a query string
@@ -36,7 +36,7 @@ function searchUser(req, res) {
     }
     res.status(200).send({
       user,
-      pagination: metaData(count, limit, offset)
+      pagination: pagination(count, limit, offset)
     });
   }).catch(error => res.status(400).send(error));
 }
@@ -84,7 +84,7 @@ function searchDocuments(req, res) {
       }
       res.status(200).send({
         document,
-        pagination: metaData(count, limit, offset),
+        pagination: pagination(count, limit, offset),
       });
     })
     .catch(error => res.status(400).send(error));
@@ -119,7 +119,7 @@ function searchDocuments(req, res) {
       }
       res.status(200).send({
         document,
-        pagination: metaData(count, limit, offset),
+        pagination: pagination(count, limit, offset),
       });
     })
     .catch(error => res.status(400).send(error));

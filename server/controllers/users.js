@@ -9,7 +9,7 @@ require('dotenv').config();
 const jwtSecret = process.env.JWT_SECRET;
 const Document = models.Document;
 const User = models.User;
-const metaData = helper.paginationMetaData;
+const pagination = helper.paginationMetaData;
 
 /**
  * Get all users
@@ -29,7 +29,7 @@ function getUsers(req, res) {
   .then(({ rows: user, count }) => {
     res.status(200).send({
       user,
-      pagination: metaData(count, limit, offset)
+      pagination: pagination(count, limit, offset)
     });
   })
   .catch(error => res.status(400).send(error));
@@ -66,8 +66,10 @@ function createUser(req, res) {
           roleId: req.body.roleId || 2
         }).then((userDetails) => {
           res.status(200).json({
-            userDetails,
-            success: true,
+            email: userDetails.email,
+            fullName: userDetails.fullName,
+            id: userDetails.id,
+            roleId: userDetails.roleId,
             message: 'You have successfully registered.'
           });
         }).catch((error) => {
@@ -141,7 +143,7 @@ function findUser(req, res) {
   const userQuery = Number(req.params.id);
   if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
     return res.status(403).json({
-      message: 'Please register or login'
+      message: 'Unauthorized Access'
     });
   }
   if (isNaN(userQuery)) {
@@ -266,7 +268,7 @@ function getUserDocuments(req, res) {
         .then(({ rows: document, count }) => {
           res.status(200).send({
             document,
-            pagination: metaData(count, limit, offset),
+            pagination: pagination(count, limit, offset),
           });
         })
         .catch(error => res.status(400).send(error));

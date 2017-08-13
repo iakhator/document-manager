@@ -93,9 +93,23 @@ function getAllDocument(req, res) {
       limit,
       offset,
       where: {
-        access: {
-          $ne: 'private'
-        }
+        $or: [
+          {
+            access: {
+              $eq: 'private'
+            }
+          },
+          {
+            access: {
+              $eq: 'public'
+            }
+          },
+          {
+            access: {
+              $eq: 'role'
+            }
+          }
+        ]
       },
       include: [
         {
@@ -161,7 +175,7 @@ function findDocument(req, res) {
       }
       if (document.access === 'private') {
         if (document.userId !== req.decoded.id) {
-          return res.status(401).json({
+          return res.status(403).json({
             message: 'You are not authorized to view this document'
           });
         }
@@ -174,7 +188,7 @@ function findDocument(req, res) {
             if (
               Number(documentOwner.roleId) !== Number(req.decoded.roleId)
             ) {
-              return res.status(401).json({
+              return res.status(403).json({
                 message: 'You are not authorized to view this document'
               });
             }

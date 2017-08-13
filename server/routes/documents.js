@@ -176,8 +176,8 @@ router.route('/:id')
  *             "$ref": "#/definitions/Document"
  *         400:
  *           description: Error.
- *         401:
- *           description: You do not have access to this document.
+ *         403:
+ *           description: You do not have permission to access this document.
  *         404:
  *           description: Document not found.
  *       security:

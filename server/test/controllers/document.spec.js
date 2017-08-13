@@ -6,7 +6,7 @@ import data from './mockData';
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
-const { admin, fellow } = data;
+const { admin, fellow, blessing } = data;
 
 describe('Documents', () => {
   before((done) => {
@@ -24,7 +24,7 @@ describe('Documents', () => {
       });
     superRequest
       .post('/api/v1/users/login')
-      .send({ email: 'blessing@test.com', password: 'pass123' })
+      .send(blessing)
       .end((err, res) => {
         sampleUserToken = res.body.token;
         done();
@@ -33,35 +33,25 @@ describe('Documents', () => {
 
   describe('/POST Document', () => {
     it('should add a new document if the user is authenticated', (done) => {
-      const document = {
-        title: 'hey yo!',
-        content: 'Andela is really fun!!',
-        access: 'public',
-        userId: 2,
-      };
       superRequest
       .post('/api/v1/documents')
-      .send(document)
+      .send(data.andelaDocument)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body).to.be.a('object');
         expect(res.body).to.have.property('id');
-        expect(res.body.title).to.eql('hey yo!');
-        expect(res.body.content).to.eql('Andela is really fun!!');
-        expect(res.body.access).to.equal('public');
+        expect(res.body.title).to.eql(data.andelaDocument.title);
+        expect(res.body.content).to.eql(data.andelaDocument.content);
+        expect(res.body.access).to.equal(data.andelaDocument.access);
         done();
       });
     });
 
     it('Should fail if document already exist', () => {
-      const document = {
-        title: 'John team',
-        content: 'eze goes to school',
-        access: 'public',
-      };
       superRequest
       .post('/api/v1/documents')
+      .send(data.andelaDocument)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(403);
@@ -70,15 +60,9 @@ describe('Documents', () => {
     });
     it('should fail to add a new document if the user is not authenticated',
     (done) => {
-      const document = {
-        title: 'boromir-team',
-        content: 'Andela is really awesome !!!',
-        value: 'private',
-        userId: 2,
-      };
       superRequest
       .post('/api/v1/documents')
-      .send(document)
+      .send(data.boromirOne)
       .end((err, res) => {
         expect(res.status).to.equal(401);
         expect(res.body).to.be.a('object');
@@ -88,15 +72,9 @@ describe('Documents', () => {
     });
     it('should fail to add a new document if the access field is missing',
     (done) => {
-      const document = {
-        title: 'boromir-team',
-        content: 'Andela is really awesome!!!',
-        access: '',
-        userId: 1,
-      };
       superRequest
       .post('/api/v1/documents')
-      .send(document)
+      .send(data.boromirAccess)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -107,15 +85,9 @@ describe('Documents', () => {
     });
     it('should fail to add a new document if the title field is missing',
     (done) => {
-      const document = {
-        title: '',
-        content: 'Andela is really awesome!!!',
-        value: 'public',
-        userId: 2,
-      };
       superRequest
       .post('/api/v1/documents')
-      .send(document)
+      .send(data.boromirTitle)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -126,15 +98,9 @@ describe('Documents', () => {
     });
     it('should fail to add a new document if the content field is missing',
     (done) => {
-      const document = {
-        title: 'boromir-team',
-        content: '',
-        value: 'public',
-        userId: 2,
-      };
       superRequest
       .post('/api/v1/documents')
-      .send(document)
+      .send(data.boromirContent)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -228,14 +194,14 @@ describe('Documents', () => {
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body).to.be.a('object');
           expect(res.body.message)
           .to.eql('You are not authorized to view this document');
           done();
         });
     });
-    it('Should get a private document the where the requester is the owner',
+    it('Should get a private document where the requester is the owner',
     (done) => {
       const documentId = 2;
       superRequest
@@ -244,8 +210,8 @@ describe('Documents', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.access).to.eql('private');
-          expect(res.body.title).to.eql('John naddddd');
+          expect(res.body.access).to.eql(data.naddDocument.access);
+          expect(res.body.title).to.eql(data.naddDocument.title);
           expect(res.body.id).to.eql(2);
           expect(res.body.userId).to.eql(2);
           done();
@@ -258,7 +224,7 @@ describe('Documents', () => {
         .get(`/api/v1/documents/${documentId}/`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body).to.be.a('object');
           expect(res.body.message)
           .to.eql('You are not authorized to view this document');
@@ -275,7 +241,7 @@ describe('Documents', () => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
           expect(res.body.id).to.eql(3);
-          expect(res.body.title).to.eql('James Hannn');
+          expect(res.body.title).to.eql(data.hannDocument.title);
           expect(res.body.access).to.eql('role');
           done();
         });
@@ -289,7 +255,7 @@ describe('Documents', () => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
           expect(res.body.id).to.eql(3);
-          expect(res.body.title).to.eql('James Hannn');
+          expect(res.body.title).to.eql(data.hannDocument.title);
           expect(res.body.access).to.eql('role');
         });
       done();

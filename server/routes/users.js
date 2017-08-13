@@ -36,11 +36,11 @@ const router = express.Router();
  *       createdAt:
  *         type: string
  *         format: int32
- *         example: 2016-08-29T09:12:33.001Z
+ *         example: 2016-08-29
  *       updatedAt:
  *         type: string
  *         format: int32
- *         example: 2016-08-29T09:12:33.001Z
+ *         example: 2016-08-29
  *   Document:
  *     type: object
  *     required:
@@ -67,11 +67,11 @@ const router = express.Router();
  *       createdAt:
  *         type: string
  *         format: int32
- *         example: 2016-08-29T09:12:33.001Z
+ *         example: 2016-08-29
  *       updatedAt:
  *         type: string
  *         format: int32
- *         example: 2016-08-29T09:12:33.001Z
+ *         example: 2016-08-29
  */
 // Security schema definition
 /**
@@ -95,7 +95,7 @@ router.route('/login')
   *         - User
   *       summary: Login a user
   *       operationId: login
-  *       description: Logs in a user and provides them with a jwt token to access other routes
+  *       description: Logs in a user and provides them with a jwt token
   *       consumes:
   *         - application/x-www-form-urlencoded
   *       produces:
@@ -134,7 +134,7 @@ router.route('/')
 /**
  * @swagger
  * paths:
- *   /api/v1/users/:
+ *   /api/v1/users:
  *     post:
  *       tags:
  *         - User
@@ -162,13 +162,11 @@ router.route('/')
  *           name: password
  *           description: User's password
  *           required: true
- *           schema:
- *             type: array
- *             items:
- *               $ref: '#/definitions/User'
  *       responses:
  *         200:
- *           description: You have successfully registered.
+ *           description: Succesfull Operation.
+ *           schema:
+ *             $ref: "#/definitions/User"
  *         400:
  *           description: Error.
  *     get:
@@ -177,7 +175,7 @@ router.route('/')
  *       summary: Get all users
  *       operationId: getUsers
  *       description:
- *         This route is only accessible to an admin to enable her get all users.
+ *         This route is only accessible to an admin.
  *       produces:
  *         - application/json
  *       parameters:
@@ -346,7 +344,7 @@ router.route('/:id/documents')
 /**
  * @swagger
  * paths:
- *   /api/v1/users/{id}/documents/ :
+ *   /api/v1/users/{id}/documents :
  *     get:
  *       tags:
  *         - User
