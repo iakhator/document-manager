@@ -52,44 +52,6 @@ Users are authenticated and validated using JSON web token (JWT).
 By generating a token on login, API endpoints and documents are protected from unauthorized access.
 Requests to protected routes are validated using the generated token.
 
-## Endpoints
-
-**Users**
-
-Request type | Endpoint | Action
------------- | -------- | ------
-POST | [/users](#create-user) | Create a new user
-GET | [/users](#get-all-users) | Get all users
-GET | [/users/:id](#get-user) | Get details of a specific user
-GET | [/users/login](#login) | To log a user in
-GET | [/users/?limit={integer}&offset={integer}](#pagination) | Pagination for users
-GET | [/search/users/?q={username}](#search-user) | To search for a user
-GET | [/users/:id/documents](#user-documents) | Retrieve all documents created by a user
-PUT | [/users/:id](#edit-user) | Edit user details
-DELETE | [/users/:id](#delete-user) | Delete a user from database
-
-**Roles**
-
-Request type | Endpoint | Action
------------- | -------- | ------
-POST | [/roles](#create-role) | Create a new role
-GET | [/roles](#get-all-roles) | Get all created roles
-GET | [/role/:id](#get-role) | Get a specific role
-PUT | [/role/:id](#edit-role) | Edit a specific role
-DELETE | [/role/:id](#delete-role) | Delete a specific role
-
-**Documents**
-
-Request type | Endpoint | Action
------------- | -------- | ------
-POST | [/documents](#create-document) | Create a new document
-GET | [/documents](#get-all-documents) | Retrieve all documents
-GET | [/documents/:id](#get-document) | Retrieve a specific document
-GET | [/documents/?limit={integer}&offset={integer}](#pagination) | Pagination for documents
-GET | [/search/documents/?q={title}](#search-document) | Search documents using key terms
-PUT | [/documents/:id](#edit-document) | Update a specific document
-DELETE | [/documents/:id](#delete-document) | Remove a specific document from storage
-
 ## Development
 Document Management System API is built with the following technologies;
 - EcmaScript6 (ES6)
