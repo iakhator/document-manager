@@ -3,7 +3,7 @@ import models from '../models';
 
 const User = models.User;
 const Document = models.Document;
-const metaData = helper.paginationMetaData;
+const pagination = helper.paginationMetaData;
 
 /**
  * Create documents for users
@@ -121,7 +121,7 @@ function getAllDocument(req, res) {
     .then(({ rows: document, count }) => {
       res.status(200).send({
         document,
-        pagination: metaData(count, limit, offset),
+        pagination: pagination(count, limit, offset),
       });
     })
     .catch(error => res.status(400).send(error));
@@ -148,7 +148,7 @@ function getAllDocument(req, res) {
     .then(({ rows: document, count }) => {
       res.status(200).send({
         document,
-        pagination: metaData(count, limit, offset),
+        pagination: pagination(count, limit, offset),
       });
     })
     .catch(error => res.status(400).send(error));

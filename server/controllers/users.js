@@ -141,14 +141,14 @@ function login(req, res) {
  */
 function findUser(req, res) {
   const userQuery = Number(req.params.id);
-  if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
-    return res.status(403).json({
-      message: 'Unauthorized Access'
-    });
-  }
   if (isNaN(userQuery)) {
     return res.status(400).json({
       message: `invalid input syntax for integer: "${req.params.id}"`
+    });
+  }
+  if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
+    return res.status(403).json({
+      message: 'Unauthorized Access'
     });
   }
   return User

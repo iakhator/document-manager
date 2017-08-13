@@ -77,8 +77,10 @@ describe('Users', () => {
         .post('/api/v1/users/').send(fakeBass).end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body)
-            .to.have.keys(['message', 'success', 'userDetails']);
-          expect(res.body.success).to.eql(true);
+            .to.have
+            .keys(['message', 'fullName', 'email', 'id', 'roleId']);
+          expect(res.body.fullName).to.eql(fakeBass.fullName);
+          expect(res.body.email).to.eql(fakeBass.email);
           expect(res.body.message)
           .to.eql('You have successfully registered.');
           done();
