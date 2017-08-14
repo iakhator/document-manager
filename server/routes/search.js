@@ -41,11 +41,39 @@ router.route('/users')
  *         type: string
  *       responses:
  *         200:
- *           description: User found.
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 users: [
+ *                    {
+ *                      id: 3,
+ *                      userName: "baas",
+ *                      fullName: "Baas Bank",
+ *                      email: "baas@test.com",
+ *                      roleId: "1"
+ *                    }
+ *                  ],
+ *                  pagination: {
+ *                    totalCount: 1,
+ *                    currentPage: 1,
+ *                    pageCount: 1,
+ *                    pageSize: 1
+ *                 }
+ *                }
  *           schema:
- *             "$ref": "#/definitions/User"
+ *             $ref: '#/definitions/User'
  *         400:
- *           description: Error.
+ *           description: Bad Request.
+ *         404:
+ *           description: Not Found.
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Search term does not match any user."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *       security:
  *       - Authorization: []
  */
@@ -79,13 +107,37 @@ router.route('/documents')
  *            type: string
  *        responses:
  *          200:
- *            description: Documents found.
+ *            description: OK
+ *            examples:
+ *              application/json:
+ *                {
+ *                   users: [
+ *                     {
+ *                        id: 1,
+ *                        title: "Successful",
+ *                        content: "Everyday in everyway, through the grace of God, I am",
+ *                        access: "public",
+ *                        userId: 5
+ *                       }
+ *                    ],
+ *                   pagination: {
+ *                     totalCount: 1,
+ *                     currentPage: 1,
+ *                     pageCount: 1,
+ *                     pageSize: 1
+ *                  }
+ *               }
  *            schema:
- *              "$ref": '#/definitions/Document'
+ *              $ref: '#/definitions/Document'
  *          404:
- *            description: Search term does not match any document
- *          401:
- *            description: Server Error.
+ *            description: Not Found
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Search term does not match any document."
+ *                }
+ *            schema:
+ *             $ref: "#/definitions/Document"
  *        security:
  *        - Authorization: []
  */

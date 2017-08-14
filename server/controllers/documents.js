@@ -62,7 +62,7 @@ function updateDocument(req, res) {
         });
       }
       if (Number(document.userId) !== Number(req.decoded.id)) {
-        return res.status(401).json({
+        return res.status(403).json({
           message: 'You are not authorized to edit this document'
         });
       }
@@ -118,9 +118,9 @@ function getAllDocument(req, res) {
         }
       ]
     })
-    .then(({ rows: document, count }) => {
+    .then(({ rows: documents, count }) => {
       res.status(200).send({
-        document,
+        documents,
         pagination: pagination(count, limit, offset),
       });
     })
@@ -218,7 +218,7 @@ function deleteDocument(req, res) {
         req.decoded.roleId !== 1 &&
         Number(document.userId) !== Number(req.decoded.id)
       ) {
-        return res.status(401).json({
+        return res.status(403).json({
           message: 'You are not authorized to delete this document'
         });
       }

@@ -89,11 +89,42 @@ router.route('/')
  *           required: false
  *       responses:
  *         200:
- *           description: Documents found.
+ *           200:
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 documents: [
+ *                   {
+ *                     title: "My first document",
+ *                     content: "lorem ipsum and the rest of it",
+ *                     access: "public",
+ *                     userId: 1
+ *                   },
+ *                   {
+ *                     title: "My second document",
+ *                     content: "second lorem ipsum and the rest of it",
+ *                     access: "private",
+ *                     userId: 2
+ *                   },
+ *                   {
+ *                     title: "My third document",
+ *                     content: "third lorem ipsum and the rest of it",
+ *                     access: "role",
+ *                     userId: 3
+ *                   },
+ *                   {
+ *                     title: "My fourth document",
+ *                     content: "fourth lorem ipsum and the rest of it",
+ *                     access: "public",
+ *                     userId: 2
+ *                   }
+ *                ]
+ *              }
  *           schema:
- *             "$ref": "#/definitions/Document"
+ *             $ref: "#/definitions/Document"
  *         400:
- *           description: An error occurred.
+ *           description: Bad Request.
  *       security:
  *       - Authorization: []
  *     post:
@@ -129,12 +160,32 @@ router.route('/')
  *         required: true
  *       responses:
  *         200:
- *           description: Document created.
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Document created.",
+ *                  document: {
+ *                    documentId: 4,
+ *                    title: "Lovey Dovey",
+ *                    content: "I will conquer my opponent. Defeat will not be in my creed",
+ *                    access: "public",
+ *                    userId: 5
+ *                   }
+ *               }
  *           schema:
- *             "$ref": '#/definitions/Document'
+ *             $ref: '#/definitions/Document'
  *         400:
- *           description: Error. Please try again.
- *         403: Forbidden
+ *           description: Bad Request.
+ *         403:
+ *           description: Forbidden
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Document already exist."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *       security:
  *       - Authorization: []
  */
@@ -171,15 +222,38 @@ router.route('/:id')
  *           type: integer
  *       responses:
  *         200:
- *           description: 'Document found'
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 documentId: document.id,
+ *                 title: document.title,
+ *                 content: document.content,
+ *                 access: document.accessType,
+ *                 userId: document.userId
+ *               }
  *           schema:
- *             "$ref": "#/definitions/Document"
+ *             $ref: "#/definitions/Document"
  *         400:
- *           description: Error.
+ *           description: Bad Request.
  *         403:
- *           description: You do not have permission to access this document.
+ *           description: Forbidden
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "You do not have permission to access this document."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *         404:
- *           description: Document not found.
+ *           description: Not Found
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Document not found."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *       security:
  *       - Authorization: []
  *     put:
@@ -216,15 +290,38 @@ router.route('/:id')
  *           required: false
  *       responses:
  *         200:
- *           description: 'document created'
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 id: updatedDocument.id,
+ *                 title: updatedDocument.title,
+ *                 content: updatedDocument.content,
+ *                 access: updatedDocument.accessType,
+ *                 userId: updatedDocument.userId
+ *               }
  *           schema:
- *             "$ref": "#/definitions/Document"
+ *             $ref: "#/definitions/Document"
  *         400:
- *           description: Invalid document id supplied.
- *         401:
- *           description: You don't have that privilege.
+ *           description: Bad Request.
+ *         403:
+ *           description: Forbidden
+ *           examples:
+ *             application/json:
+ *               {
+ *               message: "You are not authorized to edit this document."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *         404:
- *           description: Cannot find document.
+ *           description: Not Found
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Document Not Found."
+ *              }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *       security:
  *       - Authorization: []
  *     delete:
@@ -247,13 +344,34 @@ router.route('/:id')
  *           type: integer
  *       responses:
  *         204:
- *           description: ''
- *         401:
- *           description: You don't have that privilege.
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Document deleted successfully."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
+ *         403:
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "You are not authorized to delete this document."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *         400:
- *           description: Error.
+ *           description: Bad Request.
  *         404:
- *           description: Document does not exist.
+ *           description: Not Found
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Document does not exist."
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/Document"
  *       security:
  *       - Authorization: []
  */

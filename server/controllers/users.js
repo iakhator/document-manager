@@ -65,7 +65,7 @@ function createUser(req, res) {
           password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
           roleId: req.body.roleId || 2
         }).then((userDetails) => {
-          res.status(200).json({
+          res.status(201).json({
             email: userDetails.email,
             fullName: userDetails.fullName,
             id: userDetails.id,
@@ -118,7 +118,7 @@ function login(req, res) {
           const token = jwt.sign(payLoad, jwtSecret, {
             expiresIn: 60 * 60 * 24
           });
-          res.status(201).json({
+          res.status(200).json({
             success: true,
             token,
           });

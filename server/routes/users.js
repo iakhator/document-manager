@@ -112,19 +112,37 @@ router.route('/login')
   *         required: true
   *         type: string
   *       responses:
-  *         201:
-  *           description: User logged in successfully with token returned.
+  *         200:
+  *           description: OK.
+  *           examples:
+  *             application/json:
+  *               {
+  *                 success: "true",
+  *                 token: "ewukjlvnfeoielfkmn94jdnkfkdjfkdkpojfkjfklsdkkdjksdklsdkfldfj"
+  *               }
   *           schema:
-  *             type: string
+  *             $ref: '#/definitions/User'
   *           headers:
   *             Authorization:
   *               type: string
   *               format: int32
   *               description: stores user jwt token
   *         400:
-  *           description: Error.
+  *           description: Bad request.
+  *           examples:
+  *             application/json:
+  *               {
+  *                 success: "true",
+  *                 message: "Authentication failed. User not found."
+  *               }
   *         401:
-  *           description: Authentication failed. Wong password.
+  *           description: Unauthorized.
+  *           examples:
+  *             application/json:
+  *               {
+  *                 success: "true",
+  *                 message: "Authentication failed. Wrong password."
+  *               }
   */
    .post(userController.login);
 
@@ -163,12 +181,38 @@ router.route('/')
  *           description: User's password
  *           required: true
  *       responses:
- *         200:
- *           description: Succesfull Operation.
+ *         201:
+ *           description: Created.
+ *           examples:
+ *             application/json:
+ *               message: "signup successful"
+ *               user: {
+ *                 id: 5,
+ *                 userName: "framky",
+ *                 fullName: "Frank Ajaps",
+ *                 email: "ajaps@test.com",
+ *                 roleId: 2
+ *                }
  *           schema:
  *             $ref: "#/definitions/User"
  *         400:
- *           description: Error.
+ *           description: Bad request.
+ *           examples:
+ *             application/json:
+ *               {
+ *                "errors": [
+ *                  {
+ *                    "param": "userName",
+ *                    "msg": "userName is required"
+ *                  },
+ *                  {
+ *                    "param": "password",
+ *                    "msg": "Password is required"
+ *                  }
+ *                ]
+ *               }
+ *           schema:
+ *             $ref: "#/definitions/User"
  *     get:
  *       tags:
  *         - User
@@ -193,11 +237,41 @@ router.route('/')
  *           required: false
  *       responses:
  *         200:
- *           description: Users found.
+ *           examples:
+ *             application/json:
+ *               {
+ *                 users: [
+ *                   {
+ *                    id: 3,
+ *                    userName: "esty",
+ *                    fullName: "Esther Falayi",
+ *                    email: "fals@test.com",
+ *                    roleId: 2,
+ *                    "createdAt": "2017-08-14",
+ *                    "updatedAt": "2017-08-14"
+ *                   },
+ *                   {
+ *                    id: 2,
+ *                    userName: "beng",
+ *                    fullName: "Ben George",
+ *                    email: "beng@test.com",
+ *                    roleId: 1,
+ *                    "createdAt": "2017-08-14",
+ *                    "updatedAt": "2017-08-14"
+ *                   },
+ *                   {
+ *                    id: 2,
+ *                    userName: ayomat,
+ *                    fullName: "Ayodele Mattew",
+ *                    email: "fals@test.com",
+ *                    roleId: 3,
+ *                    "createdAt": "2017-08-14",
+ *                    "updatedAt": "2017-08-14"
+ *                   },
+ *                  ]
+ *               }
  *           schema:
- *             type: array
- *             items:
- *               $ref: '#/definitions/User'
+ *             $ref: '#/definitions/User'
  *         400:
  *           description: Bad request.
  *       security:
@@ -235,17 +309,38 @@ router.route('/:id')
  *         type: integer
  *       responses:
  *         200:
- *           description: User found.
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 id: 3,
+ *                 userName: adewill,
+ *                 fullName: "Ade Williams",
+ *                 email: "ade@test.com",
+ *                 roleId: 2
+ *               }
  *           schema:
- *             type: object
- *             items:
- *               $ref: '#/definitions/User'
+ *             $ref: '#/definitions/User'
  *         404:
- *           description: User not found.
+ *           description: Not Found.
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "User not found."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         400:
  *           description: Bad request.
- *         401:
+ *         403:
  *           description: forbidden.
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "Unauthorized access."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *       security:
  *       - Authorization: []
  *     put:
@@ -290,15 +385,34 @@ router.route('/:id')
  *         required: false
  *       responses:
  *         200:
- *           description: User updated.
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 user: {
+ *                    id: 4,
+ *                    userName: bassbank,
+ *                    fullName: Baas Awesome Bank,
+ *                    email: baas@test.com,
+ *                    roleId: 2,
+ *                    message: 'Details successfully updated.'
+ *                  }
+ *               }
  *           schema:
- *             "$ref": "#/definitions/User"
+ *             $ref: '#/definitions/User'
  *         400:
  *           description: Error.
  *         401:
  *           description: Unauthorized.
  *         404:
- *           description: Not found.
+ *           description: Not Found.
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "User not found."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *       security:
  *       - Authorization: []
  *     delete:
@@ -320,12 +434,35 @@ router.route('/:id')
  *         required: true
  *         type: integer
  *       responses:
+ *         401:
+ *           description: Unauthorized
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "You are not authorized to access this field."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         400:
  *           description: Bad request.
  *         404:
- *           description: User does not exist.
+ *           description: Not Found
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "User not found."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         204:
- *           description: User deleted successfully.
+ *           description: No Content.
+ *           examples:
+ *             application/json:
+ *               {
+ *                 message: "User has been deleted successfully."
+ *               }
+ *           schema:
+ *             $ref: '#/definitions/User'
  *       security:
  *       - Authorization: []
  */
@@ -366,11 +503,28 @@ router.route('/:id/documents')
  *         type: integer
  *       responses:
  *         200:
- *           description: User's documents found.
+ *           description: OK
+ *           examples:
+ *             application/json:
+ *               {
+ *                 documents: [
+ *                  {
+ *                    id: 1,
+ *                    title: My first document,
+ *                    content: lorem ipsum and the rest of it,
+ *                    access: public,
+ *                    userId: 1
+ *                  }
+ *                ],
+ *                  pagination: {
+ *                    totalCount: 1,
+ *                    currentPage: 1,
+ *                    pageCount: 1,
+ *                    pageSize: 1
+ *                }
+ *             }
  *           schema:
- *             type: object
- *             items:
- *               $ref: '#/definitions/Document'
+ *             $ref: '#/definitions/Document'
  *         400:
  *           description: Bad request.
  *       security:
