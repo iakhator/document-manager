@@ -23,7 +23,7 @@ const swaggerDefinition = {
       url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
     }
   },
-  host: 'doksmanager.herokuapp.com',
+  host: 'localhost:3000',
   basePath: '/',
 };
 

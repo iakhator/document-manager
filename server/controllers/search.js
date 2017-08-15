@@ -27,7 +27,7 @@ function searchUser(req, res) {
     attributes: { exclude: ['password'] },
     where: {
       userName: {
-        $like: `%${searchQuery}%`,
+        $iLike: `%${searchQuery}%`,
       }
     }
   }).then(({ rows: user, count }) => {
@@ -53,6 +53,7 @@ function searchDocuments(req, res) {
   const limit = req.query.limit,
     offset = req.query.offset,
     queryString = req.query.q;
+
   if (!queryString) {
     return res.status(400).json({
       message: 'Invalid search input'
@@ -63,11 +64,8 @@ function searchDocuments(req, res) {
       limit,
       offset,
       where: {
-        access: {
-          $ne: 'private'
-        },
         title: {
-          $like: `%${queryString}%`
+          $iLike: { $any: [`%${queryString}%`] }
         }
       },
       include: [
@@ -107,7 +105,7 @@ function searchDocuments(req, res) {
           $ne: 'private'
         },
         title: {
-          $like: `%${queryString}%`
+          $iLike: { $any: `%${queryString}%` }
         }
       },
 
