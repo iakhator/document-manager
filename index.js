@@ -23,7 +23,7 @@ const swaggerDefinition = {
       url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
     }
   },
-  host: 'localhost:3000',
+  host: 'doksmanager.herokuapp.com',
   basePath: '/',
 };
 
@@ -32,7 +32,7 @@ const options = {
   // import swaggerDefinitions
   swaggerDefinition,
   // path to the API docs
-  apis: [path.join(__dirname, '../routes/*.js')],
+  apis: [path.join(__dirname, './server/routes/*.js')],
 };
 const swaggerSpec = swaggerJSDoc(options);
 

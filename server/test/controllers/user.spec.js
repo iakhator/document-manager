@@ -64,7 +64,7 @@ describe('Users', () => {
     it('should log in a user and return a token', (done) => {
       superRequest
         .post('/api/v1/users/login').send(admin).end((err, res) => {
-          expect(res.status).to.equal(201);
+          expect(res.status).to.equal(200);
           expect(res.body).to.have.keys(['success', 'token']);
           expect(res.body.success).to.eql(true);
           done();
@@ -75,7 +75,7 @@ describe('Users', () => {
     it('should create a new user', (done) => {
       superRequest
         .post('/api/v1/users/').send(fakeBass).end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(201);
           expect(res.body)
             .to.have
             .keys(['message', 'fullName', 'email', 'id', 'roleId']);

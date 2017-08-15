@@ -21,11 +21,11 @@ const router = express.Router();
  *       createdAt:
  *         type: string
  *         format: int32
- *         example: 2016-08-29T09:12:33.001Z
+ *         example: 2016-08-29
  *       updatedAt:
  *         type: string
  *         format: int32
- *         example: 2016-08-29T09:12:33.001Z
+ *         example: 2016-08-29
  */
 
 // Security schema definition
@@ -61,11 +61,27 @@ router.route('/')
  *           required: true
  *       responses:
  *         200:
- *           description: Roles found.
- *           schema:
- *             type: array
- *             items:
- *               $ref: '#/definitions/Role'
+ *            description: OK
+ *            examples:
+ *              application/json:
+ *                {
+ *                  roles: [
+ *                    {
+ *                      id: 1,
+ *                      title: "admin",
+ *                      createdAt: "2017-07-26",
+ *                      updatedAt: "2017-07-26"
+ *                    },
+ *                    {
+ *                      id: 2,
+ *                      title: "fellow",
+ *                      createdAt: "2017-07-26",
+ *                      updatedAt: "2017-07-26"
+ *                    }
+ *                  ]
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *       security:
  *       - Authorization: []
  *     post:
@@ -89,11 +105,16 @@ router.route('/')
  *            required: true
  *        responses:
  *          201:
- *            description: Role inserted
+ *            description: Created
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Role created successfully."
+ *                }
  *            schema:
- *              "$ref": '#/definitions/Role'
+ *              $ref: '#/definitions/Role'
  *          400:
- *            description: Access Denied
+ *            description: Bad Request
  *        security:
  *        - Authorization: []
  */
@@ -131,16 +152,29 @@ router.route('/:id')
  *         type: integer
  *       responses:
  *         200:
- *           description: Role found.
- *           schema:
- *             type: object
- *             items:
- *               $ref: '#/definitions/Role'
+ *            description: OK
+ *            examples:
+ *              application/json:
+ *                {
+ *                   id: 1,
+ *                   title: "admin",
+ *                   createdAt: "2017-07-26",
+ *                   updatedAt: "2017-07-26"
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *         404:
- *           description: Role not found.
+ *            description: Not Found
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Role not found."
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *         400:
  *           description: Bad request.
- *         401:
+ *         403:
  *           description: forbidden.
  *       security:
  *       - Authorization: []
@@ -170,13 +204,25 @@ router.route('/:id')
  *         required: true
  *       responses:
  *         200:
- *           description: Role updated.
- *           schema:
- *             "$ref": "#/definitions/Role"
+ *            description: OK
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Role updated successfully."
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *         400:
- *           description: Error.
+ *           description: Bad Request.
  *         404:
- *           description: Not found.
+ *            description: Not Found
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Role not found."
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *       security:
  *       - Authorization: []
  *     delete:
@@ -201,9 +247,32 @@ router.route('/:id')
  *         400:
  *           description: Bad request.
  *         404:
- *           description: Role does not exist.
+ *            description: Created
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Role does not exist."
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *         204:
- *           description: Role deleted successfully.
+ *            description: No Content
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "Role deleted successfully."
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
+ *         401:
+ *            description: Unauthorized
+ *            examples:
+ *              application/json:
+ *                {
+ *                  message: "You are not authorized."
+ *                }
+ *            schema:
+ *              $ref: '#/definitions/Role'
  *       security:
  *       - Authorization: []
  */

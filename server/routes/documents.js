@@ -96,28 +96,56 @@ router.route('/')
  *               {
  *                 documents: [
  *                   {
+ *                     id: 1,
  *                     title: "My first document",
  *                     content: "lorem ipsum and the rest of it",
  *                     access: "public",
- *                     userId: 1
+ *                     userId: 1,
+ *                     "createdAt": "2017-07-23",
+ *                     "updatedAt": "2017-07-23",
+ *                     "User": {
+ *                       "userName": "Jdoe",
+ *                       "roleId": 1
+ *                      }
  *                   },
  *                   {
+ *                     id: 2,
  *                     title: "My second document",
  *                     content: "second lorem ipsum and the rest of it",
  *                     access: "private",
- *                     userId: 2
+ *                     userId: 2,
+ *                     "createdAt": "2017-07-23",
+ *                     "updatedAt": "2017-07-23",
+ *                     "User": {
+ *                       "userName": "james",
+ *                       "roleId": 2
+ *                      }
  *                   },
  *                   {
+ *                     id: 3,
  *                     title: "My third document",
  *                     content: "third lorem ipsum and the rest of it",
  *                     access: "role",
- *                     userId: 3
+ *                     userId: 3,
+ *                     "createdAt": "2017-07-23",
+ *                     "updatedAt": "2017-07-23",
+ *                     "User": {
+ *                       "userName": "esty",
+ *                       "roleId": 2
+ *                      }
  *                   },
  *                   {
+ *                     id: 4,
  *                     title: "My fourth document",
  *                     content: "fourth lorem ipsum and the rest of it",
  *                     access: "public",
- *                     userId: 2
+ *                     userId: 2,
+ *                     "createdAt": "2017-07-23",
+ *                     "updatedAt": "2017-07-23",
+ *                     "User": {
+ *                       "userName": "Jbosco",
+ *                       "roleId": 2
+ *                      }
  *                   }
  *                ]
  *              }
@@ -166,7 +194,7 @@ router.route('/')
  *               {
  *                 message: "Document created.",
  *                  document: {
- *                    documentId: 4,
+ *                    id: 5,
  *                    title: "Lovey Dovey",
  *                    content: "I will conquer my opponent. Defeat will not be in my creed",
  *                    access: "public",
@@ -226,11 +254,11 @@ router.route('/:id')
  *           examples:
  *             application/json:
  *               {
- *                 documentId: document.id,
- *                 title: document.title,
- *                 content: document.content,
- *                 access: document.accessType,
- *                 userId: document.userId
+ *                 id: 1,
+ *                 title: "Shopping",
+ *                 content: "I want to go shopping",
+ *                 access: "role",
+ *                 userId: 5
  *               }
  *           schema:
  *             $ref: "#/definitions/Document"
@@ -294,11 +322,11 @@ router.route('/:id')
  *           examples:
  *             application/json:
  *               {
- *                 id: updatedDocument.id,
- *                 title: updatedDocument.title,
- *                 content: updatedDocument.content,
- *                 access: updatedDocument.accessType,
- *                 userId: updatedDocument.userId
+ *                 id: 4,
+ *                 title: "Not happy mood",
+ *                 content: "I am not in the mood to shop",
+ *                 access: "public",
+ *                 userId: 2
  *               }
  *           schema:
  *             $ref: "#/definitions/Document"

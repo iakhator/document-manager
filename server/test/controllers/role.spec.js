@@ -77,12 +77,12 @@ describe('Roles', () => {
         .set({ authorization: adminToken })
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body).to.have.length(5);
-          expect(res.body).to.be.a('array');
-          expect(res.body[0].id).to.eql(1);
-          expect(res.body[0].title).to.eql('admin');
-          expect(res.body[1].id).to.eql(2);
-          expect(res.body[1].title).to.eql('fellow');
+          expect(res.body.roles).to.have.length(5);
+          expect(res.body.roles).to.be.a('array');
+          expect(res.body.roles[0].id).to.eql(1);
+          expect(res.body.roles[0].title).to.eql('admin');
+          expect(res.body.roles[1].id).to.eql(2);
+          expect(res.body.roles[1].title).to.eql('fellow');
           done();
         });
     });
@@ -132,7 +132,7 @@ describe('Roles', () => {
         .get(`/api/v1/roles/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body.message)
           .to.eql(`invalid input syntax for integer: "${id}"`);
           done();

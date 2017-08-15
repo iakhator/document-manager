@@ -287,7 +287,7 @@ describe('Documents', () => {
           .set({ authorization: sampleUserToken })
           .send({ title: 'spiderman Homecoming' })
           .end((err, res) => {
-            expect(res.status).to.equal(401);
+            expect(res.status).to.equal(403);
             expect(res.body).to.be.a('object');
             expect(res.body.message)
             .to.eql('You are not authorized to edit this document');
@@ -302,7 +302,7 @@ describe('Documents', () => {
           .set({ authorization: adminToken })
           .send({ title: 'wreck it' })
           .end((err, res) => {
-            expect(res.status).to.equal(401);
+            expect(res.status).to.equal(403);
             done();
           });
       });
@@ -350,7 +350,7 @@ describe('Documents', () => {
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: sampleUserToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body).to.be.a('object');
           expect(res.body.message)
           .to.eql('You are not authorized to delete this document');

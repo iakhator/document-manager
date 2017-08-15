@@ -43,7 +43,7 @@ function createRole(req, res) {
 function getRoles(req, res) {
   return Role
     .findAll()
-    .then(role => res.status(200).json(role))
+    .then(roles => res.status(200).json({ roles }))
     .catch(error => res.json(error));
 }
 
@@ -55,7 +55,7 @@ function getRoles(req, res) {
  */
 function findRole(req, res) {
   if (isNaN(req.params.id)) {
-    res.status(401).json({
+    res.status(403).json({
       message: `invalid input syntax for integer: "${req.params.id}"`
     });
   } else {
