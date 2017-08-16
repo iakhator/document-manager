@@ -196,15 +196,16 @@ function updateUser(req, res) {
             userName: req.body.userName || user.userName,
             email: req.body.email || user.email,
             password: hash || user.password,
-            roleId: req.body.roleId || user.roleId
           })
           .then((updatedUser) => {
             res.status(200).send({
-              id: updatedUser.id,
-              fullName: updatedUser.fullName,
-              userName: updatedUser.userName,
-              email: updatedUser.email,
-              roleId: updatedUser.roleId,
+              userUpdate: {
+                id: updatedUser.id,
+                fullName: updatedUser.fullName,
+                userName: updatedUser.userName,
+                email: updatedUser.email,
+                roleId: updatedUser.roleId
+              },
               message: 'Details successfully updated.'
             });
           })
@@ -222,24 +223,24 @@ function updateUser(req, res) {
  * @returns {object} - null
  */
 function deleteUser(req, res) {
-  if (req.decoded.roleId !== 1) {
-    return res.status(401).json({
-      message: 'You are not authorized to access this field'
-    });
+  if (req.decoded.roleId === 1 || req.decoded.id === Number(req.params.id)) {
+    return User
+    .findById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      return user
+        .destroy()
+        .then(() => res.status(200).json({
+          message: 'User has been deleted successfully' }))
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error));
   }
-  return User
-  .findById(req.params.id)
-  .then((user) => {
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    return user
-      .destroy()
-      .then(() => res.status(204).json({
-        message: 'User has been deleted successfully' }))
-      .catch(error => res.status(400).send(error));
-  })
-  .catch(error => res.status(400).send(error));
+  return res.status(401).json({
+    message: 'You are not authorized to perform this operation'
+  });
 }
 
 /**
@@ -249,8 +250,8 @@ function deleteUser(req, res) {
  * @return {array} - array of requested user's document
  */
 function getUserDocuments(req, res) {
-  const limit = req.query.limit;
-  const offset = req.query.offset;
+  const limit = req.query.limit || 6;
+  const offset = req.query.offset || 0;
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {

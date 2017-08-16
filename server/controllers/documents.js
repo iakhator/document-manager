@@ -86,8 +86,8 @@ function updateDocument(req, res) {
  * @returns {array} - array of documents
  */
 function getAllDocument(req, res) {
-  const limit = req.query.limit;
-  const offset = req.query.offset;
+  const limit = req.query.limit || 6;
+  const offset = req.query.offset || 0;
   if (req.decoded.roleId === 1) {
     return Document.findAndCountAll({
       limit,
