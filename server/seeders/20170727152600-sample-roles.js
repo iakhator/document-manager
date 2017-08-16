@@ -9,7 +9,7 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
-      title: 'facilitator',
+      title: 'superadmin',
       createdAt: new Date(),
       updatedAt: new Date(),
     }], {}),

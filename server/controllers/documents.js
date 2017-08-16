@@ -139,9 +139,9 @@ function getAllDocument(req, res) {
         },
       ],
       where: {
-        access: {
-          $ne: 'private'
-        }
+        // access: {
+        //   $ne: 'private'
+        // }
       },
 
     })

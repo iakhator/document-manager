@@ -65,7 +65,7 @@ function searchDocuments(req, res) {
       offset,
       where: {
         title: {
-          $iLike: { $any: [`%${queryString}%`] }
+          $iLike: `%${queryString}%`
         }
       },
       include: [
@@ -101,11 +101,11 @@ function searchDocuments(req, res) {
         },
       ],
       where: {
-        access: {
-          $ne: 'private'
-        },
+        // access: {
+        //   $ne: 'private'
+        // },
         title: {
-          $iLike: { $any: `%${queryString}%` }
+          $iLike: `%${queryString}%`
         }
       },
 
@@ -113,7 +113,7 @@ function searchDocuments(req, res) {
     .then(({ rows: document, count }) => {
       if (count === 0) {
         return res.status(404).json({
-          message: 'Document not found'
+          message: 'Search term does not match any document.'
         });
       }
       res.status(200).send({

@@ -20,9 +20,9 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
-      userName: 'blessing',
-      fullName: 'Blessing Philip',
-      email: 'blessing@test.com',
+      userName: 'iakhator',
+      fullName: 'Akhator Itua',
+      email: 'iakhator@test.com',
       password: bcrypt.hashSync(process.env.TEST_FACILITATOR_PASSWORD, bcrypt.genSaltSync(10)),
       roleId: 3,
       createdAt: new Date(),
