@@ -30,14 +30,17 @@ function createDocument(req, res) {
         return Document.create({
           title: req.body.title,
           content: req.body.content,
-          access: req.body.value,
-          userId: req.body.userId
+          userId: req.decoded.id,
+          access: req.body.access || 'public'
         })
-      .then(documentResponse => res.status(200).send(documentResponse))
+      .then(documentCreated => res.status(200).send({
+        documentCreated,
+        message: 'Document created successfully'
+      }))
       .catch(error => res.status(400).send(error));
       }
       return res.status(403).json({
-        message: 'Document already exists'
+        message: 'Document already exist with this title'
       });
     }).catch(error => res.status(400).send(error));
   }
@@ -70,10 +73,13 @@ function updateDocument(req, res) {
         .update({
           title: req.body.title || document.title,
           content: req.body.content || document.content,
-          access: req.body.value || document.access,
-          userId: req.body.userId || document.userId
+          access: req.body.access || document.access,
+          userId: document.userId
         })
-        .then(() => res.status(200).send(document))
+        .then(() => res.status(200).send({
+          document,
+          message: 'Document updated successfully'
+        }))
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
@@ -139,9 +145,9 @@ function getAllDocument(req, res) {
         },
       ],
       where: {
-        // access: {
-        //   $ne: 'private'
-        // }
+        access: {
+          $ne: 'private'
+        }
       },
 
     })
@@ -197,7 +203,9 @@ function findDocument(req, res) {
           .catch(error => res.status(400).send(error));
       }
     })
-    .catch(error => res.status(400).send(error));
+    .catch(() => res.status(400).send({
+      message: 'Invalid input specified.'
+    }));
 }
 
 /**
@@ -224,7 +232,7 @@ function deleteDocument(req, res) {
       }
       return document
         .destroy()
-        .then(() => res.status(204).send({
+        .then(() => res.status(200).send({
           message: 'Document successfully deleted'
         }))
         .catch(error => res.status(400).send(error));

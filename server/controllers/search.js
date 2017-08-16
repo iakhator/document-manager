@@ -13,8 +13,8 @@ const pagination = helper.paginationMetaData;
  */
 function searchUser(req, res) {
   const searchQuery = req.query.q,
-    limit = req.query.limit,
-    offset = req.query.offset;
+    limit = req.query.limit || 6,
+    offset = req.query.offset || 0;
   if (!searchQuery) {
     return res.status(400).json({
       message: 'Invalid search input'
@@ -50,8 +50,8 @@ function searchUser(req, res) {
    * @returns {array} - searched document
    */
 function searchDocuments(req, res) {
-  const limit = req.query.limit,
-    offset = req.query.offset,
+  const limit = req.query.limit || 6,
+    offset = req.query.offset || 0,
     queryString = req.query.q;
 
   if (!queryString) {
@@ -101,9 +101,9 @@ function searchDocuments(req, res) {
         },
       ],
       where: {
-        // access: {
-        //   $ne: 'private'
-        // },
+        access: {
+          $ne: 'private'
+        },
         title: {
           $iLike: `%${queryString}%`
         }

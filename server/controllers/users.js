@@ -103,7 +103,6 @@ function login(req, res) {
       const existingUser = user[0];
       if (!existingUser) {
         res.status(400).json({
-          success: false,
           message: 'Authentication failed. User not found.' });
       } else if (existingUser) {
         if (bcrypt.compareSync(req.body.password, existingUser.password)) {
@@ -119,12 +118,11 @@ function login(req, res) {
             expiresIn: 60 * 60 * 24
           });
           res.status(200).json({
-            success: true,
+            message: 'You have successfully logged in.',
             token,
           });
         } else {
           res.status(401).json({
-            success: false,
             message: 'Authentication failed. Wrong password.'
           });
         }

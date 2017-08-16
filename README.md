@@ -14,23 +14,23 @@ The API has predictable, resource-oriented URLs, and uses HTTP response codes to
 **Users**:
 A created user will have a role, either an admin or a fellow.
 - A Fellow User can:
-    - Create an account
-    - Search users
-    - Create a document
-    - Edit a document
-    - Retrieve a document
-    - Delete a document
+    - Create an account: User can create a new account.
+    - Search users: search for a specific user by Id.
+    - Create a document: User can create document and assign an access type to each document created.
+    - Edit a document: User can edit/update document by the document Id.
+    - Retrieve a document: User can retrieve document based on access type or roles
+    - Delete a document: User can delete document by Id if the Id matches the logged in id.
     - Limit access to a document by specifying an access group `i.e. public, private or role`.
-    - View public documents created by other users.
+    - View public documents created by other user
     - View documents created by his access group with access level set as `role`.
-    - Search documents.
-    - View `public` and `role` access level documents of other regular users.
+    - Search documents: User can search through document to get all document related to the search query.
+    - View `public` and `role` access level documents of other fellows.
 
 - An Admin User can:
-    - View all users
-    - View all created documents
-    - Delete any user
-    - Update any user's role
+    - View all users: An admin has the right to view all users
+    - View all created documents: An admin can view all documents
+    - Delete any user: An admin can delete any user by the user Id.
+    - Update any user's role: An admin can update user Role
     - Create a new role
     - View all created roles
     - Search for any user
@@ -98,7 +98,7 @@ We recommend that pull requests follow this convention:
 
 ## Limitations
 The limitations of the API are:
-- The application cannot accommodate millions of users
+- The application cannot accommodate millions of users for now because the database used only allow limited number of users since it is a free account.
 - Users cannot share documents with other users through social sharing
 
 ## LICENSE
