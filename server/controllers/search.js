@@ -52,8 +52,9 @@ function searchUser(req, res) {
 function searchDocuments(req, res) {
   const limit = req.query.limit || 6,
     offset = req.query.offset || 0,
-    queryString = req.query.q,
-    splitString = queryString.split(' ');
+    queryString = req.query.q.replace(/ +(?= )/g, ''),
+    splitString = queryString.trim().split(' ');
+
   const searchQuery = [];
   splitString.forEach((query) => {
     const output = { $iLike: `%${query}%` };
