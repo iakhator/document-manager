@@ -255,7 +255,7 @@ router.route('/:id')
  *                }
  *            schema:
  *              $ref: '#/definitions/Role'
- *         204:
+ *         200:
  *            description: No Content
  *            examples:
  *              application/json:

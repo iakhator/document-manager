@@ -127,7 +127,7 @@ function deleteRole(req, res) {
       }
       return role
         .destroy()
-        .then(() => res.status(204).send({
+        .then(() => res.status(200).send({
           message: 'Role deleted successfully'
         }))
         .catch(error => res.status(400).send(error));

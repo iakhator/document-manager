@@ -312,7 +312,7 @@ router.route('/:id')
  *           description: OK
  *           examples:
  *             application/json:
- *               {
+ *               user: {
  *                 id: 3,
  *                 userName: adewill,
  *                 fullName: "Ade Williams",

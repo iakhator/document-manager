@@ -66,11 +66,13 @@ function createUser(req, res) {
           roleId: req.body.roleId || 2
         }).then((userDetails) => {
           res.status(201).json({
-            email: userDetails.email,
-            fullName: userDetails.fullName,
-            id: userDetails.id,
-            roleId: userDetails.roleId,
-            message: 'You have successfully registered.'
+            message: 'You have successfully registered.',
+            createdUser: {
+              email: userDetails.email,
+              fullName: userDetails.fullName,
+              id: userDetails.id,
+              roleId: userDetails.roleId,
+            }
           });
         }).catch((error) => {
           res.status(400).json(error);
@@ -160,7 +162,7 @@ function findUser(req, res) {
       if (!user.length) {
         res.status(404).json({ message: 'User not found' });
       }
-      res.status(200).send(user);
+      res.status(200).send({ user });
     })
     .catch(() => res.status(400).send({
       message: 'out of range'

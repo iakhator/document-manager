@@ -113,7 +113,7 @@ function searchDocuments(req, res) {
           $ne: 'private'
         },
         title: {
-          $iLike: `%${queryString}%`
+          $or: searchQuery
         }
       },
 

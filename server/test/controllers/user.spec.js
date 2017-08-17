@@ -76,9 +76,9 @@ describe('Users', () => {
           expect(res.status).to.equal(201);
           expect(res.body)
             .to.have
-            .keys(['message', 'fullName', 'email', 'id', 'roleId']);
-          expect(res.body.fullName).to.eql(fakeBass.fullName);
-          expect(res.body.email).to.eql(fakeBass.email);
+            .keys(['message', 'createdUser']);
+          expect(res.body.createdUser.fullName).to.eql(fakeBass.fullName);
+          expect(res.body.createdUser.email).to.eql(fakeBass.email);
           expect(res.body.message)
           .to.eql('You have successfully registered.');
           done();
@@ -142,12 +142,12 @@ describe('Users', () => {
         .set({ authorization: adminToken })
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body).be.a('array');
-          expect(res.body[0].fullName).to.eql(JohnB.fullName);
-          expect(res.body[0].id).to.eql(2);
-          expect(res.body[0].userName).to.eql(JohnB.userName);
-          expect(res.body[0].email).to.eql(JohnB.email);
-          expect(res.body[0].roleId).to.eql(2);
+          expect(res.body).be.a('object');
+          expect(res.body.user[0].fullName).to.eql(JohnB.fullName);
+          expect(res.body.user[0].id).to.eql(2);
+          expect(res.body.user[0].userName).to.eql(JohnB.userName);
+          expect(res.body.user[0].email).to.eql(JohnB.email);
+          expect(res.body.user[0].roleId).to.eql(2);
           done();
         });
     });
@@ -159,12 +159,12 @@ describe('Users', () => {
         .set({ authorization: userToken })
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body).be.a('array');
-          expect(res.body[0].fullName).to.eql(JohnB.fullName);
-          expect(res.body[0].id).eql(2);
-          expect(res.body[0].userName).to.eql(JohnB.userName);
-          expect(res.body[0].email).to.eql(JohnB.email);
-          expect(res.body[0].roleId).to.eql(2);
+          expect(res.body).be.a('object');
+          expect(res.body.user[0].fullName).to.eql(JohnB.fullName);
+          expect(res.body.user[0].id).eql(2);
+          expect(res.body.user[0].userName).to.eql(JohnB.userName);
+          expect(res.body.user[0].email).to.eql(JohnB.email);
+          expect(res.body.user[0].roleId).to.eql(2);
           done();
         });
     });

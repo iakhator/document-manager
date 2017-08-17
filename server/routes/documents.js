@@ -371,7 +371,7 @@ router.route('/:id')
  *           required: true
  *           type: integer
  *       responses:
- *         204:
+ *         200:
  *           description: OK
  *           examples:
  *             application/json:
