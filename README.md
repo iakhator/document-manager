@@ -7,7 +7,7 @@ Document manager provides REST API endpoints for a document management system. I
 It also ensures that users are authorized.
 
 # API Documentation
-The API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API status and errors.
+The API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API status and errors. Go to documentation [doksmanager](http://doksmanager.herokuapp.com)
 
 ## Features
 
@@ -67,7 +67,11 @@ Document Management System API is built with the following technologies;
   - Install all required dependencies with `$ npm install`
   - Create a `.env` file in your root directory as described in `.env.sample` file
   - Start the app with `npm start`
-  - Run Test `npm test`
+
+## Testing
+  - Open a terminal and navigate to the project directory
+  - Add a test database url (DATABASE_URL) to the .env file.(optional)
+  - Run `npm test`
 
 ## Contributing
 - Fork this repository to your GitHub account
