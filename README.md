@@ -38,10 +38,10 @@ A created user will have a role, either an admin or a fellow.
 
 **Documents**:
 Documents can be created and must have:
-  - Published date
-  - Title
-  - Content
-  - Access (`private, public or role`)
+  - Published date: This is the created date and updated date of new document created
+  - Title: This is the required title field of the document to be created.
+  - Content: This is the body of the document created
+  - Access (`private, public or role`): This is the access type of the document created.
 
 **Roles**:
 Roles can also be created, the default roles are `admin` and `fellow`.

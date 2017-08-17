@@ -11,16 +11,16 @@ export default {
     email: 'john@test.com',
     password: process.env.TEST_FELLOW_PASSWORD
   },
-  facilitator: {
-    email: 'blessing@test.com',
+  superadmin: {
+    email: 'iakhator@test.com',
     password: process.env.TEST_FACILITATOR_PASSWORD
   },
   user2: {
     email: 'baas@test.com',
     password: 'test'
   },
-  blessing: {
-    email: 'blessing@test.com',
+  iakhator: {
+    email: 'iakhator@test.com',
     password: process.env.PASSWORD
   },
   user1: {

@@ -6,7 +6,7 @@ import data from './mockData';
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
-const { admin, fakeBass, fellow, user1, user2, blessing, Baas, JohnB } = data;
+const { admin, fakeBass, fellow, user1, user2, iakhator, Baas, JohnB } = data;
 
 describe('Users', () => {
   before((done) => {
@@ -24,7 +24,7 @@ describe('Users', () => {
       });
     superRequest
       .post('/api/v1/users/login')
-      .send(blessing)
+      .send(iakhator)
       .end((err, res) => {
         sampleUserToken = res.body.token;
         done();
@@ -39,10 +39,9 @@ describe('Users', () => {
         .send(user1)
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body).to.have.keys(['message', 'success']);
+          expect(res.body).to.have.keys(['message']);
           expect(res.body.message)
           .to.eql('Authentication failed. User not found.');
-          expect(res.body.success).to.eql(false);
           done();
         });
     });
@@ -53,10 +52,9 @@ describe('Users', () => {
         .send(user2)
         .end((err, res) => {
           expect(res.status).to.equal(401);
-          expect(res.body).to.have.keys(['message', 'success']);
+          expect(res.body).to.have.keys(['message']);
           expect(res.body.message)
           .to.eql('Authentication failed. Wrong password.');
-          expect(res.body.success).to.eql(false);
           done();
         });
     });
@@ -65,8 +63,8 @@ describe('Users', () => {
       superRequest
         .post('/api/v1/users/login').send(admin).end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body).to.have.keys(['success', 'token']);
-          expect(res.body.success).to.eql(true);
+          expect(res.body).to.have.keys(['message', 'token']);
+          expect(res.body.message).to.eql('You have successfully logged in.');
           done();
         });
     });
@@ -234,8 +232,10 @@ describe('Users', () => {
           .end((err, res) => {
             expect(res.status).to.equal(200);
             expect(res.body).to.be.a('object');
-            expect(res.body.id).to.eql(2);
-            expect(res.body.fullName).to.eql('jake doe');
+            expect(res.body.userUpdate.id).to.eql(2);
+            expect(res.body.userUpdate.fullName).to.eql('jake doe');
+            expect(res.body.message)
+            .to.eql('Details successfully updated.');
             done();
           });
       });
@@ -248,8 +248,8 @@ describe('Users', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.id).to.eql(2);
-          expect(res.body.email).to.eql('jakedoe@andela.com');
+          expect(res.body.userUpdate.id).to.eql(2);
+          expect(res.body.userUpdate.email).to.eql('jakedoe@andela.com');
           done();
         });
     });
@@ -263,8 +263,8 @@ describe('Users', () => {
           .end((err, res) => {
             expect(res.status).to.equal(200);
             expect(res.body).to.be.a('object');
-            expect(res.body.id).to.eql(2);
-            expect(res.body.userName).to.eql('jakedoe12');
+            expect(res.body.userUpdate.id).to.eql(2);
+            expect(res.body.userUpdate.userName).to.eql('jakedoe12');
             done();
           });
       });
@@ -292,7 +292,7 @@ describe('Users', () => {
         .delete(`/api/v1/users/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
-          expect(res.status).to.equal(204);
+          expect(res.status).to.equal(200);
           done();
         });
     });
@@ -305,7 +305,7 @@ describe('Users', () => {
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.body.message)
-          .to.eql('You are not authorized to access this field');
+          .to.eql('You are not authorized to perform this operation');
           done();
         });
     });

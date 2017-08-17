@@ -6,7 +6,7 @@ import data from './mockData';
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
-const { admin, fellow, blessing } = data;
+const { admin, fellow, iakhator } = data;
 
 describe('Documents', () => {
   before((done) => {
@@ -24,7 +24,7 @@ describe('Documents', () => {
       });
     superRequest
       .post('/api/v1/users/login')
-      .send(blessing)
+      .send(iakhator)
       .end((err, res) => {
         sampleUserToken = res.body.token;
         done();
@@ -40,10 +40,15 @@ describe('Documents', () => {
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('id');
-        expect(res.body.title).to.eql(data.andelaDocument.title);
-        expect(res.body.content).to.eql(data.andelaDocument.content);
-        expect(res.body.access).to.equal(data.andelaDocument.access);
+        expect(res.body.documentCreated).to.have.property('id');
+        expect(res.body.documentCreated.title)
+        .to.eql(data.andelaDocument.title);
+        expect(res.body.documentCreated.content)
+        .to.eql(data.andelaDocument.content);
+        expect(res.body.documentCreated.access)
+        .to.equal(data.andelaDocument.access);
+        expect(res.body.message)
+        .to.equal('Document created successfully');
         done();
       });
     });
@@ -273,8 +278,9 @@ describe('Documents', () => {
           .end((err, res) => {
             expect(res.status).to.equal(200);
             expect(res.body).to.be.a('object');
-            expect(res.body.id).to.eql(2);
-            expect(res.body.title).to.eql('wreck it ralph');
+            expect(res.body.document.id).to.eql(2);
+            expect(res.body.document.title).to.eql('wreck it ralph');
+            expect(res.body.message).to.eql('Document updated successfully');
             done();
           });
       });
@@ -329,7 +335,7 @@ describe('Documents', () => {
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: adminToken })
         .end((err, res) => {
-          expect(res.status).to.equal(204);
+          expect(res.status).to.equal(200);
           done();
         });
     });
@@ -339,7 +345,7 @@ describe('Documents', () => {
         .delete(`/api/v1/documents/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
-          expect(res.status).to.equal(204);
+          expect(res.status).to.equal(200);
           done();
         });
     });

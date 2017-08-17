@@ -85,7 +85,7 @@ describe('Search', () => {
           .set({ authorization: userToken })
           .end((err, res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.message).to.equal('Document not found');
+            expect(res.body.message).to.equal('Search term does not match any document.');
             done();
           });
       });

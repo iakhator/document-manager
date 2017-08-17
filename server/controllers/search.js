@@ -52,7 +52,14 @@ function searchUser(req, res) {
 function searchDocuments(req, res) {
   const limit = req.query.limit || 6,
     offset = req.query.offset || 0,
-    queryString = req.query.q;
+    queryString = req.query.q,
+    splitString = queryString.split(' ');
+  const searchQuery = [];
+  splitString.forEach((query) => {
+    const output = { $iLike: `%${query}%` };
+    searchQuery.push(output);
+  });
+
 
   if (!queryString) {
     return res.status(400).json({
@@ -65,7 +72,7 @@ function searchDocuments(req, res) {
       offset,
       where: {
         title: {
-          $iLike: `%${queryString}%`
+          $or: searchQuery
         }
       },
       include: [
