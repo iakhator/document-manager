@@ -31,7 +31,7 @@ A created user will have a role, either an admin or a fellow.
     - View all created documents: An admin can view all documents
     - Delete any user: An admin can delete any user by the user Id.
     - Update any user's role: An admin can update user Role
-    - Create a new role
+    - Create a new role if more roles are needed
     - View all created roles
     - Search for any user
     - Search for any document
@@ -104,6 +104,9 @@ We recommend that pull requests follow this convention:
 The limitations of the API are:
 - The application cannot accommodate millions of users for now because the database used only allow limited number of users since it is a free account.
 - Users cannot share documents with other users through social sharing
+
+## FAQ
+- If there is any question you want to ask, contact me via mail [itua.akhator@andela.com](mailto:itua.akhator@andela.com)
 
 ## LICENSE
  This project is authored by [Itua Akhator](https://github.com/iakhator) it is licensed under the MIT license.

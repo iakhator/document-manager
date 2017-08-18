@@ -104,7 +104,7 @@ function searchDocuments(req, res) {
           model: User,
           attributes: ['userName', 'roleId'],
           where: {
-            roleId: req.decoded.roleId
+            roleId: req.decoded.roleId,
           },
         },
       ],
