@@ -102,7 +102,7 @@ We recommend that pull requests follow this convention:
 
 ## Limitations
 The limitations of the API are:
-- The application cannot accommodate millions of users for now because the database used only allow limited number of users since it is a free account.
+- The application cannot accommodate millions of users for now because the database only allow limited number of users since it is a free account.
 - Users cannot share documents with other users through social sharing
 
 ## FAQ
