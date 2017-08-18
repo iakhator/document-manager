@@ -26,7 +26,7 @@ describe('Search', () => {
       });
   });
 
-  describe('/SEARCH/users/?q={name}', () => {
+  describe('Users', () => {
     it('Should return an error if no querystring is provided', (done) => {
       const query = '';
       superRequest
@@ -52,7 +52,7 @@ describe('Search', () => {
       });
     });
   });
-  describe('/SEARCH/documents/?q=', () => {
+  describe('Documents', () => {
     it('Should return an error if no querystring is provided', (done) => {
       const query = '';
       superRequest
@@ -82,10 +82,11 @@ describe('Search', () => {
         const query = 'jk';
         superRequest
           .get(`/api/v1/search/documents/?q=${query}`)
-          .set({ authorization: userToken })
+          .set({ authorization: adminToken })
           .end((err, res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.message).to.equal('Search term does not match any document.');
+            expect(res.body.message)
+            .to.equal('Search term does not match any document.');
             done();
           });
       });

@@ -25,7 +25,7 @@ describe('Roles', () => {
       });
   });
 
-  describe('/POST Role', () => {
+  describe('Create', () => {
     it('should add a new role if the user is an admin', (done) => {
       superRequest
       .post('/api/v1/roles')
@@ -70,7 +70,18 @@ describe('Roles', () => {
     });
   });
 
-  describe('/GET Role', () => {
+  describe('Retrieve', () => {
+    it('Should fail to get the roles if the user is not admin', (done) => {
+      superRequest
+        .get('/api/v1/roles')
+        .set({ authorization: userToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(403);
+          expect(res.body.message)
+          .to.eql('You are not authorized');
+          done();
+        });
+    });
     it('Should get all the roles if the user is an admin', (done) => {
       superRequest
         .get('/api/v1/roles')
@@ -86,20 +97,21 @@ describe('Roles', () => {
           done();
         });
     });
-    it('Should fail to get the roles if the user is not admin', (done) => {
+  });
+
+  describe('Find', () => {
+    it('Should fail to get a role by id if the user is not an admin',
+    (done) => {
+      const id = 2;
       superRequest
-        .get('/api/v1/roles')
+        .get(`/api/v1/roles/${id}`)
         .set({ authorization: userToken })
         .end((err, res) => {
           expect(res.status).to.equal(403);
-          expect(res.body.message)
-          .to.eql('You are not authorized');
+          expect(res.body.message).to.eql('You are not authorized');
           done();
         });
     });
-  });
-
-  describe('/GET/:id Role', () => {
     it('Should get a role by id if the user is an admin', (done) => {
       const id = 2;
       superRequest
@@ -110,18 +122,6 @@ describe('Roles', () => {
           expect(res.body).be.a('object');
           expect(res.body.title).to.eql('fellow');
           expect(res.body.id).to.equal(2);
-          done();
-        });
-    });
-    it('Should fail to get a role by id if the user is not an admin',
-    (done) => {
-      const id = 2;
-      superRequest
-        .get(`/api/v1/roles/${id}`)
-        .set({ authorization: userToken })
-        .end((err, res) => {
-          expect(res.status).to.equal(403);
-          expect(res.body.message).to.eql('You are not authorized');
           done();
         });
     });
@@ -161,21 +161,7 @@ describe('Roles', () => {
         });
     });
   });
-  describe('/PUT/:id Role', () => {
-    it('Should update a role by id if the user has admin access', (done) => {
-      const id = 2;
-      superRequest
-          .put(`/api/v1/roles/${id}`)
-         .set({ authorization: adminToken })
-        .send({ title: 'boromir-team' })
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          expect(res.body).to.be.a('object');
-          expect(res.body.message).to.eql('Role updated successfully');
-          expect(res.body).to.have.property('role');
-          done();
-        });
-    });
+  describe('update', () => {
     it('Should fail to update a role by id if the user has no admin access',
     (done) => {
       const id = 2;
@@ -187,6 +173,20 @@ describe('Roles', () => {
           expect(res.status).to.equal(403);
           expect(res.body).to.be.a('object');
           expect(res.body.message).to.eql('You are not authorized');
+          done();
+        });
+    });
+    it('Should update a role by id if the user has admin access', (done) => {
+      const id = 2;
+      superRequest
+          .put(`/api/v1/roles/${id}`)
+         .set({ authorization: adminToken })
+        .send({ title: 'boromir-team' })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body.message).to.eql('Role updated successfully');
+          expect(res.body).to.have.property('role');
           done();
         });
     });
@@ -220,7 +220,7 @@ describe('Roles', () => {
         });
     });
   });
-  describe('/DELETE/:id Role', () => {
+  describe('Delete', () => {
     it('Should fail to delete a role given the user has no admin access',
     (done) => {
       const id = 2;

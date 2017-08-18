@@ -31,50 +31,7 @@ describe('Documents', () => {
       });
   });
 
-  describe('/POST Document', () => {
-    it('should add a new document if the user is authenticated', (done) => {
-      superRequest
-      .post('/api/v1/documents')
-      .send(data.andelaDocument)
-      .set({ authorization: userToken })
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body).to.be.a('object');
-        expect(res.body.documentCreated).to.have.property('id');
-        expect(res.body.documentCreated.title)
-        .to.eql(data.andelaDocument.title);
-        expect(res.body.documentCreated.content)
-        .to.eql(data.andelaDocument.content);
-        expect(res.body.documentCreated.access)
-        .to.equal(data.andelaDocument.access);
-        expect(res.body.message)
-        .to.equal('Document created successfully');
-        done();
-      });
-    });
-
-    it('Should fail if document already exist', () => {
-      superRequest
-      .post('/api/v1/documents')
-      .send(data.andelaDocument)
-      .set({ authorization: userToken })
-      .end((err, res) => {
-        expect(res.status).to.equal(403);
-        expect(res.body.message).to.eql('Document already exists');
-      });
-    });
-    it('should fail to add a new document if the user is not authenticated',
-    (done) => {
-      superRequest
-      .post('/api/v1/documents')
-      .send(data.boromirOne)
-      .end((err, res) => {
-        expect(res.status).to.equal(401);
-        expect(res.body).to.be.a('object');
-        expect(res.body.message).to.eql('Please register or login.');
-        done();
-      });
-    });
+  describe('Create', () => {
     it('should fail to add a new document if the access field is missing',
     (done) => {
       superRequest
@@ -114,21 +71,52 @@ describe('Documents', () => {
         done();
       });
     });
-  });
-
-  describe('/GET Documents', () => {
-    it('Should get all documents for the user that is authenticated',
+    it('should fail to add a new document if the user is not authenticated',
     (done) => {
       superRequest
-      .get('/api/v1/documents')
+      .post('/api/v1/documents')
+      .send(data.boromirOne)
+      .end((err, res) => {
+        expect(res.status).to.equal(401);
+        expect(res.body).to.be.a('object');
+        expect(res.body.message).to.eql('Please register or login.');
+        done();
+      });
+    });
+    it('should add a new document if the user is authenticated', (done) => {
+      superRequest
+      .post('/api/v1/documents')
+      .send(data.andelaDocument)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.keys(['document', 'pagination']);
+        expect(res.body.documentCreated).to.have.property('id');
+        expect(res.body.documentCreated.title)
+        .to.eql(data.andelaDocument.title);
+        expect(res.body.documentCreated.content)
+        .to.eql(data.andelaDocument.content);
+        expect(res.body.documentCreated.access)
+        .to.equal(data.andelaDocument.access);
+        expect(res.body.message)
+        .to.equal('Document created successfully');
         done();
       });
     });
+    it('Should fail if document title already exist', () => {
+      superRequest
+      .post('/api/v1/documents')
+      .send(data.andelaDocument)
+      .set({ authorization: userToken })
+      .end((err, res) => {
+        expect(res.status).to.equal(403);
+        expect(res.body.message)
+        .to.eql('Document already exist with this title');
+      });
+    });
+  });
+
+  describe('Retrieve', () => {
     it('should fail to get all documents if the user is not authenticated',
     (done) => {
       superRequest
@@ -138,6 +126,18 @@ describe('Documents', () => {
         expect(res.body).to.be.a('object');
         expect(res.body.message).be.eql('Please register or login.');
         expect(res.body.success).to.eql(false);
+        done();
+      });
+    });
+    it('Should get all documents for the user that is authenticated',
+    (done) => {
+      superRequest
+      .get('/api/v1/documents')
+      .set({ authorization: userToken })
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.keys(['document', 'pagination']);
         done();
       });
     });
@@ -165,7 +165,7 @@ describe('Documents', () => {
     });
   });
 
-  describe('/GET/:id Document', () => {
+  describe('Find', () => {
     it('Should fail to get document if it doesn`t exist', (done) => {
       const documentId = 8;
       superRequest
@@ -186,9 +186,9 @@ describe('Documents', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.id).to.eql(4);
-          expect(res.body.title).to.equal('hey yo!');
-          expect(res.body.access).to.equal('public');
+          expect(res.body.document.id).to.eql(4);
+          expect(res.body.document.title).to.equal('hey yo!');
+          expect(res.body.document.access).to.equal('public');
           done();
         });
     });
@@ -215,10 +215,10 @@ describe('Documents', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.access).to.eql(data.naddDocument.access);
-          expect(res.body.title).to.eql(data.naddDocument.title);
-          expect(res.body.id).to.eql(2);
-          expect(res.body.userId).to.eql(2);
+          expect(res.body.document.access).to.eql(data.naddDocument.access);
+          expect(res.body.document.title).to.eql(data.naddDocument.title);
+          expect(res.body.document.id).to.eql(2);
+          expect(res.body.document.userId).to.eql(2);
           done();
         });
     });
@@ -245,9 +245,9 @@ describe('Documents', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.id).to.eql(3);
-          expect(res.body.title).to.eql(data.hannDocument.title);
-          expect(res.body.access).to.eql('role');
+          expect(res.body.document.id).to.eql(3);
+          expect(res.body.document.title).to.eql(data.hannDocument.title);
+          expect(res.body.document.access).to.eql('role');
           done();
         });
     });
@@ -259,15 +259,15 @@ describe('Documents', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.id).to.eql(3);
-          expect(res.body.title).to.eql(data.hannDocument.title);
-          expect(res.body.access).to.eql('role');
+          expect(res.body.document.id).to.eql(3);
+          expect(res.body.document.title).to.eql(data.hannDocument.title);
+          expect(res.body.document.access).to.eql('role');
         });
       done();
     });
   });
 
-  describe('/PUT/:id, Document', () => {
+  describe('Update', () => {
     it('Should update a document by id if the user has the same id',
       (done) => {
         const id = 2;
@@ -328,7 +328,7 @@ describe('Documents', () => {
       });
   });
 
-  describe('DELETE/:id Document', () => {
+  describe('Delete', () => {
     it('Should delete a document if the user has admin access', (done) => {
       const id = 3;
       superRequest
