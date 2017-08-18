@@ -94,9 +94,7 @@ const updateRole = (req, res) => {
         });
       }
       return role
-        .update({
-          title: req.body.title || role.title
-        })
+        .update(req.body)
         .then(() => res.status(200).json({
           message: 'Role updated successfully',
           role
