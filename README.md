@@ -106,7 +106,7 @@ The limitations of the API are:
 - Users cannot share documents with other users through social sharing
 
 ## FAQ
-- If there is any question you want to ask, contact me via mail [itua.akhator@andela.com](mailto:itua.akhator@andela.com)
+- If there are any question you want to ask, contact me via mail [itua.akhator@andela.com](mailto:itua.akhator@andela.com)
 
 ## LICENSE
  This project is authored by [Itua Akhator](https://github.com/iakhator) it is licensed under the MIT license.
