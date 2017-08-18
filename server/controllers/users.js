@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import helper from '../helpers/helper';
+import helper from '../helpers/pagination';
 import models from '../models';
 
 require('dotenv').config();
@@ -88,7 +88,6 @@ const createUser = (req, res) => {
  * @param {object} res - authenicated user details
  * @returns {object} - an object of the logged in user and a token
  */
-
 const login = (req, res) => {
   req.check('email', 'Email is required').notEmpty();
   req.check('email', 'Please put a valid email').isEmail();
@@ -144,7 +143,7 @@ const findUser = (req, res) => {
   const userQuery = Number(req.params.id);
   if (isNaN(userQuery)) {
     return res.status(400).json({
-      message: `invalid input syntax for integer: "${req.params.id}"`
+      message: `invalid input syntax for integer: ${req.params.id}`
     });
   }
   if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
@@ -278,7 +277,7 @@ const getUserDocuments = (req, res) => {
     .catch(error => res.status(400).send(error));
 };
 
-export default {
+module.exports = {
   getUsers,
   createUser,
   login,

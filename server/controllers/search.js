@@ -1,4 +1,4 @@
-import helper from '../helpers/helper';
+import helper from '../helpers/pagination';
 import models from '../models';
 
 const Document = models.Document;
@@ -40,7 +40,7 @@ const searchUser = (req, res) => {
       pagination: pagination(count, limit, offset)
     });
   }).catch(error => res.status(400).send(error));
-}
+};
 
 /**
    *
@@ -50,26 +50,25 @@ const searchUser = (req, res) => {
    * @returns {array} - searched document
    */
 const searchDocuments = (req, res) => {
-  const searchQuery = [];
   const limit = req.query.limit || 6,
     offset = req.query.offset || 0,
     queryString = req.query.q.replace(/ +(?= )/g, ''),
-    splitString = queryString.trim().split(' ');
+    searchQuery = [];
 
-  splitString.forEach((query) => {
-    const output = { $iLike: `%${query}%` };
-    searchQuery.push(output);
-  });
-
-  console.log(splitString);
-
-  if (!splitString) {
+  if (!queryString) {
     return res.status(400).json({
       message: 'Invalid search input'
     });
   }
 
   if (req.decoded.roleId === 1) {
+    const splitString = queryString.trim().split(' ');
+
+    splitString.forEach((query) => {
+      const output = { $iLike: `%${query}%` };
+      searchQuery.push(output);
+    });
+
     return Document.findAndCountAll({
       limit,
       offset,
@@ -135,4 +134,4 @@ const searchDocuments = (req, res) => {
   }
 };
 
-export default { searchUser, searchDocuments };
+module.exports = { searchUser, searchDocuments };

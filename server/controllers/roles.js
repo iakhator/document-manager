@@ -8,7 +8,7 @@ const Role = models.Role;
  * @param {object} res - new created role
  * @returns {object} - newly created role
  */
-function createRole(req, res) {
+const createRole = (req, res) => {
   req.check('title', 'Title is required').notEmpty();
 
   const errors = req.validationErrors();
@@ -32,7 +32,7 @@ function createRole(req, res) {
       }
     }).catch(error => res.json(error));
   }
-}
+};
 
 /**
  * Get all roles.
@@ -40,12 +40,12 @@ function createRole(req, res) {
  * @param {array} res - an array of roles and their id
  * @returns {array} array of roles
  */
-function getRoles(req, res) {
-  return Role
+const getRoles = (req, res) => {
+  Role
     .findAll()
     .then(roles => res.status(200).json({ roles }))
     .catch(error => res.json(error));
-}
+};
 
 /**
  * Find roles by Id.
@@ -53,7 +53,7 @@ function getRoles(req, res) {
  * @param {object} res - role found by id
  * @returns {object} - role found by id
  */
-function findRole(req, res) {
+const findRole = (req, res) => {
   if (isNaN(req.params.id)) {
     res.status(403).json({
       message: `invalid input syntax for integer: "${req.params.id}"`
@@ -72,7 +72,7 @@ function findRole(req, res) {
         message: 'out of range for type integer'
       }));
   }
-}
+};
 
 /**
  * Update role.
@@ -80,7 +80,7 @@ function findRole(req, res) {
  * @param {object} res - updated role
  * @returns {object} - updated role status
  */
-function updateRole(req, res) {
+const updateRole = (req, res) => {
   if (req.decoded.roleId !== 1) {
     return res.status(401)
       .json({ message: 'You are not authorized' });
@@ -105,7 +105,7 @@ function updateRole(req, res) {
     }).catch(() => res.status(400).json({
       message: 'out of range for type integer'
     }));
-}
+};
 
 /**
  * Delete roles by Id.
@@ -113,7 +113,7 @@ function updateRole(req, res) {
  * @param {object} res - deleted role
  * @returns {object} - message
  */
-function deleteRole(req, res) {
+const deleteRole = (req, res) => {
   if (req.decoded.roleId !== 1) {
     return res.status(401)
       .json({ message: 'You are not authorized' });
@@ -134,6 +134,6 @@ function deleteRole(req, res) {
     }).catch(() => res.status(400).json({
       message: 'out of range for type integer'
     }));
-}
+};
 
-export default { createRole, getRoles, findRole, updateRole, deleteRole };
+module.exports = { createRole, getRoles, findRole, updateRole, deleteRole };

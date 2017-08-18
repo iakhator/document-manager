@@ -47,4 +47,4 @@ const adminAccess = (req, res, next) => {
   }
 };
 
-export default { verifyToken, adminAccess };
+module.exports = { verifyToken, adminAccess };

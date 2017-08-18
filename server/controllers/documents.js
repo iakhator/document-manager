@@ -1,4 +1,4 @@
-import helper from '../helpers/helper';
+import helper from '../helpers/pagination';
 import models from '../models';
 
 const User = models.User;
@@ -174,10 +174,10 @@ const findDocument = (req, res) => {
         res.status(404).json({ message: 'Document not found' });
       }
       if (req.decoded.roleId === 1) {
-        return document;
+        return res.status(200).send({ document });
       }
       if (document.access === 'public') {
-        return res.status(200).send(document);
+        return res.status(200).send({ document });
       }
       if (document.access === 'private') {
         if (document.userId !== req.decoded.id) {
@@ -185,10 +185,10 @@ const findDocument = (req, res) => {
             message: 'You are not authorized to view this document'
           });
         }
-        return res.status(200).send(document);
+        return res.status(200).send({ document });
       }
       if (document.access === 'role') {
-        return models.User
+        return User
           .findById(document.userId)
           .then((documentOwner) => {
             if (
@@ -198,7 +198,7 @@ const findDocument = (req, res) => {
                 message: 'You are not authorized to view this document'
               });
             }
-            return res.status(200).send(document);
+            return res.status(200).send({ document });
           })
           .catch(error => res.status(400).send(error));
       }
@@ -240,7 +240,7 @@ const deleteDocument = (req, res) => {
     .catch(error => res.status(400).send(error));
 };
 
-export default {
+module.exports = {
   createDocument,
   updateDocument,
   getAllDocument,
