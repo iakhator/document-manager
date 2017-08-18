@@ -70,12 +70,7 @@ const updateDocument = (req, res) => {
         });
       }
       return document
-        .update({
-          title: req.body.title || document.title,
-          content: req.body.content || document.content,
-          access: req.body.access || document.access,
-          userId: document.userId
-        })
+        .update(req.body)
         .then(() => res.status(200).send({
           document,
           message: 'Document updated successfully'
