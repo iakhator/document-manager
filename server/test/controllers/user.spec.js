@@ -31,7 +31,7 @@ describe('Users', () => {
       });
   });
 
-  describe('/POST User login', () => {
+  describe('Login', () => {
     it('Should fail if the user enters incorrect crendentials upon login',
     (done) => {
       superRequest
@@ -69,7 +69,7 @@ describe('Users', () => {
         });
     });
   });
-  describe('/POST User Signup', () => {
+  describe('Signup', () => {
     it('should create a new user', (done) => {
       superRequest
         .post('/api/v1/users/').send(fakeBass).end((err, res) => {
@@ -86,15 +86,14 @@ describe('Users', () => {
     });
   });
 
-  describe('#GET Users', () => {
-    it('Should get all users if the user is an admin ', (done) => {
+  describe('Retrieve', () => {
+    it('Should fail to get all users if not logged in', (done) => {
       superRequest
         .get('/api/v1/users')
-        .set({ authorization: adminToken })
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(401);
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.keys(['user', 'pagination']);
+          expect(res.body.message).to.eql('Please register or login.');
           done();
         });
     });
@@ -110,13 +109,14 @@ describe('Users', () => {
           done();
         });
     });
-    it('Should fail to get all users if not logged in', (done) => {
+    it('Should get all users if the user is an admin ', (done) => {
       superRequest
         .get('/api/v1/users')
+        .set({ authorization: adminToken })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.message).to.eql('Please register or login.');
+          expect(res.body).to.have.keys(['user', 'pagination']);
           done();
         });
     });
@@ -134,7 +134,7 @@ describe('Users', () => {
         });
     });
   });
-  describe('#GET User by Id', () => {
+  describe('Find', () => {
     it('Should get a user if the user is an admin', (done) => {
       const id = 2;
       superRequest
@@ -177,7 +177,7 @@ describe('Users', () => {
         .end((err, res) => {
           expect(res.status).to.equal(400);
           expect(res.body).to.have.property('message')
-          .to.eql(`invalid input syntax for integer: "${id}"`);
+          .to.eql(`invalid input syntax for integer: ${id}`);
           done();
         });
     });
@@ -221,7 +221,7 @@ describe('Users', () => {
         });
     });
   });
-  describe('#PUT Update user by Id', () => {
+  describe('Update', () => {
     it('Should update a user`s full name if the user has the same id',
       (done) => {
         const id = 2;
@@ -285,17 +285,7 @@ describe('Users', () => {
         });
     });
   });
-  describe('#DELETE /:id Users', () => {
-    it('Should delete a user given the user has admin access', (done) => {
-      const id = 3;
-      superRequest
-        .delete(`/api/v1/users/${id}`)
-        .set({ authorization: adminToken })
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-          done();
-        });
-    });
+  describe('Delete', () => {
     it('Should fail to delete a user if the user has no admin access',
     (done) => {
       const id = 3;
@@ -306,6 +296,16 @@ describe('Users', () => {
           expect(res.status).to.equal(401);
           expect(res.body.message)
           .to.eql('You are not authorized to perform this operation');
+          done();
+        });
+    });
+    it('Should delete a user given the user has admin access', (done) => {
+      const id = 3;
+      superRequest
+        .delete(`/api/v1/users/${id}`)
+        .set({ authorization: adminToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
           done();
         });
     });
@@ -322,19 +322,7 @@ describe('Users', () => {
         });
     });
   });
-  describe('/GET/users/:id/documents Documents', () => {
-    it('Should fail to get documents if the user does not exist', (done) => {
-      const userId = 9;
-      superRequest
-        .get(`/api/v1/users/${userId}/documents`)
-        .set({ authorization: userToken })
-        .end((err, res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body).be.a('object');
-          expect(res.body.message).to.eql('User not found');
-          done();
-        });
-    });
+  describe('Find Document', () => {
     it('Should fail to get documents if there is no token present',
     (done) => {
       const userId = 2;
@@ -345,6 +333,18 @@ describe('Users', () => {
           expect(res.body).be.a('object');
           expect(res.body.message).to.eql('Please register or login.');
           expect(res.body.success).to.eql(false);
+          done();
+        });
+    });
+    it('Should fail to get documents if the user does not exist', (done) => {
+      const userId = 9;
+      superRequest
+        .get(`/api/v1/users/${userId}/documents`)
+        .set({ authorization: userToken })
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body).be.a('object');
+          expect(res.body.message).to.eql('User not found');
           done();
         });
     });

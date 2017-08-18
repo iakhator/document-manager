@@ -10,7 +10,7 @@ const jwtSecret = process.env.JWT_SECRET;
  * @param  {Function}  next move to the next function
  * @return {void}
  */
-function verifyToken(req, res, next) {
+const verifyToken = (req, res, next) => {
   const token = req.headers.authorization || req.headers['x-access-token'];
   if (token) {
     jwt.verify(token, jwtSecret, (err, decoded) => {
@@ -27,7 +27,7 @@ function verifyToken(req, res, next) {
       message: 'Please register or login.'
     });
   }
-}
+};
 
 /**
  * checking for admin access
@@ -37,7 +37,7 @@ function verifyToken(req, res, next) {
  * @param  {Function}  next move to the next function
  * @return {void}
  */
-function adminAccess(req, res, next) {
+const adminAccess = (req, res, next) => {
   if (req.decoded.roleId === 1) {
     next();
   } else {
@@ -45,6 +45,6 @@ function adminAccess(req, res, next) {
       message: 'You are not authorized',
     });
   }
-}
+};
 
-export default { verifyToken, adminAccess };
+module.exports = { verifyToken, adminAccess };

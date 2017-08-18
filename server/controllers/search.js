@@ -1,4 +1,4 @@
-import helper from '../helpers/helper';
+import helper from '../helpers/pagination';
 import models from '../models';
 
 const Document = models.Document;
@@ -11,7 +11,7 @@ const pagination = helper.paginationMetaData;
  * @param {array} res - array of users
  * @returns {array} - array users searched
  */
-function searchUser(req, res) {
+const searchUser = (req, res) => {
   const searchQuery = req.query.q,
     limit = req.query.limit || 6,
     offset = req.query.offset || 0;
@@ -40,7 +40,7 @@ function searchUser(req, res) {
       pagination: pagination(count, limit, offset)
     });
   }).catch(error => res.status(400).send(error));
-}
+};
 
 /**
    *
@@ -49,18 +49,11 @@ function searchUser(req, res) {
    * @param {array} res - an array containing searched document
    * @returns {array} - searched document
    */
-function searchDocuments(req, res) {
+const searchDocuments = (req, res) => {
   const limit = req.query.limit || 6,
     offset = req.query.offset || 0,
     queryString = req.query.q.replace(/ +(?= )/g, ''),
-    splitString = queryString.trim().split(' ');
-
-  const searchQuery = [];
-  splitString.forEach((query) => {
-    const output = { $iLike: `%${query}%` };
-    searchQuery.push(output);
-  });
-
+    searchQuery = [];
 
   if (!queryString) {
     return res.status(400).json({
@@ -68,6 +61,13 @@ function searchDocuments(req, res) {
     });
   }
   if (req.decoded.roleId === 1) {
+    const splitString = queryString.trim().split(' ');
+
+    splitString.forEach((query) => {
+      const output = { $iLike: `%${query}%` };
+      searchQuery.push(output);
+    });
+
     return Document.findAndCountAll({
       limit,
       offset,
@@ -131,6 +131,6 @@ function searchDocuments(req, res) {
     })
     .catch(error => res.status(400).send(error));
   }
-}
+};
 
-export default { searchUser, searchDocuments };
+module.exports = { searchUser, searchDocuments };

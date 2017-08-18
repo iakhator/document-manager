@@ -1,4 +1,4 @@
-import helper from '../helpers/helper';
+import helper from '../helpers/pagination';
 import models from '../models';
 
 const User = models.User;
@@ -11,7 +11,7 @@ const pagination = helper.paginationMetaData;
  * @param {object} res - created document
  * @returns {object} - created document
  */
-function createDocument(req, res) {
+const createDocument = (req, res) => {
   req.check('title', 'Title is required').notEmpty();
   req.check('content', 'Content is required').notEmpty();
   req.check('access', 'accessType is required').notEmpty();
@@ -44,7 +44,7 @@ function createDocument(req, res) {
       });
     }).catch(error => res.status(400).send(error));
   }
-}
+};
 
 /**
  * Update user document.
@@ -52,7 +52,7 @@ function createDocument(req, res) {
  * @param {object} res - object of the updated document
  * @returns {object} - updated document
  */
-function updateDocument(req, res) {
+const updateDocument = (req, res) => {
   if (isNaN(req.params.id)) {
     return res.status(400);
   }
@@ -83,7 +83,7 @@ function updateDocument(req, res) {
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-}
+};
 
 /**
  *  Get all documents
@@ -91,7 +91,7 @@ function updateDocument(req, res) {
  * @param {array} res - array of documents with pagination
  * @returns {array} - array of documents
  */
-function getAllDocument(req, res) {
+const getAllDocument = (req, res) => {
   const limit = req.query.limit || 6;
   const offset = req.query.offset || 0;
   if (req.decoded.roleId === 1) {
@@ -159,7 +159,7 @@ function getAllDocument(req, res) {
     })
     .catch(error => res.status(400).send(error));
   }
-}
+};
 
 /**
    * Find a document by Id
@@ -167,17 +167,17 @@ function getAllDocument(req, res) {
    * @param {object} res - object containg the requested document
    * @returns {object} requested document
    */
-function findDocument(req, res) {
-  return Document.findById(req.params.id)
+const findDocument = (req, res) => {
+  Document.findById(req.params.id)
     .then((document) => {
       if (!document) {
         res.status(404).json({ message: 'Document not found' });
       }
       if (req.decoded.roleId === 1) {
-        return document;
+        return res.status(200).send({ document });
       }
       if (document.access === 'public') {
-        return res.status(200).send(document);
+        return res.status(200).send({ document });
       }
       if (document.access === 'private') {
         if (document.userId !== req.decoded.id) {
@@ -185,10 +185,10 @@ function findDocument(req, res) {
             message: 'You are not authorized to view this document'
           });
         }
-        return res.status(200).send(document);
+        return res.status(200).send({ document });
       }
       if (document.access === 'role') {
-        return models.User
+        return User
           .findById(document.userId)
           .then((documentOwner) => {
             if (
@@ -198,7 +198,7 @@ function findDocument(req, res) {
                 message: 'You are not authorized to view this document'
               });
             }
-            return res.status(200).send(document);
+            return res.status(200).send({ document });
           })
           .catch(error => res.status(400).send(error));
       }
@@ -206,7 +206,7 @@ function findDocument(req, res) {
     .catch(() => res.status(400).send({
       message: 'Invalid input specified.'
     }));
-}
+};
 
 /**
  * Delete a document by Id
@@ -214,8 +214,8 @@ function findDocument(req, res) {
  * @param {object} res - message
  * @returns {object} - message
  */
-function deleteDocument(req, res) {
-  return Document.findById(req.params.id)
+const deleteDocument = (req, res) => {
+  Document.findById(req.params.id)
     .then((document) => {
       if (!document) {
         return res.status(404).send({
@@ -238,9 +238,9 @@ function deleteDocument(req, res) {
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-}
+};
 
-export default {
+module.exports = {
   createDocument,
   updateDocument,
   getAllDocument,

@@ -45,6 +45,27 @@ export default {
     createdAt: new Date(),
     updatedAt: new Date()
   },
+  regularUser: {
+    fullName: 'Elo Elo',
+    userName: 'elome',
+    email: 'elo@email.com',
+    roleId: 2,
+    password: process.env.PASSWORD,
+  },
+  invalidEmailUser: {
+    userName: 'johnson',
+    fullName: 'Johnson James',
+    email: 'kkkkk',
+    roleId: 2,
+    password: process.env.PASSWORD
+  },
+  firstUser: {
+    userName: 'ola',
+    fullName: 'Ola dey',
+    email: 'ola@test.com',
+    roleId: 2,
+    password: process.env.PASSWORD
+  },
   JohnB: {
     fullName: 'John Bosco',
     userName: 'john',
@@ -90,7 +111,7 @@ export default {
   boromirOne: {
     title: 'boromir-team',
     content: 'Andela is really awesome !!!',
-    value: 'private',
+    access: 'private',
     userId: 6
   },
   boromirAccess: {
@@ -102,7 +123,7 @@ export default {
   boromirTitle: {
     title: '',
     content: 'Andela is really awesome!!!',
-    value: 'public',
+    access: 'public',
     userId: 2
   },
   boromirContent: {
@@ -110,5 +131,11 @@ export default {
     content: '',
     value: 'public',
     userId: 2,
-  }
+  },
+  publicDocument: {
+    title: 'Femi a regular',
+    content: 'Femi is a regular guy',
+    access: 'public',
+    userId: 2
+  },
 };

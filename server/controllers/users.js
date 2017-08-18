@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import helper from '../helpers/helper';
+import helper from '../helpers/pagination';
 import models from '../models';
 
 require('dotenv').config();
@@ -17,7 +17,7 @@ const pagination = helper.paginationMetaData;
  * @param {array} res - array of users or error
  * @returns {array} - an array of users
  */
-function getUsers(req, res) {
+const getUsers = (req, res) => {
   const limit = req.query.limit;
   const offset = req.query.offset;
   return User
@@ -33,7 +33,7 @@ function getUsers(req, res) {
     });
   })
   .catch(error => res.status(400).send(error));
-}
+};
 
 /**
  * Create a user
@@ -41,7 +41,7 @@ function getUsers(req, res) {
  * @param {object} res - newly created user or error
  * @returns {object} - an object of a created user
  */
-function createUser(req, res) {
+const createUser = (req, res) => {
   req.check('fullName', 'FullName is required').notEmpty();
   req.check('userName', 'userName is required').notEmpty();
   req.check('email', 'Email is required').notEmpty();
@@ -80,7 +80,7 @@ function createUser(req, res) {
       }
     });
   }
-}
+};
 
 /**
  * Log In user with JWT
@@ -88,7 +88,7 @@ function createUser(req, res) {
  * @param {object} res - authenicated user details
  * @returns {object} - an object of the logged in user and a token
  */
-function login(req, res) {
+const login = (req, res) => {
   req.check('email', 'Email is required').notEmpty();
   req.check('email', 'Please put a valid email').isEmail();
   req.check('password', 'Password is required').notEmpty();
@@ -131,7 +131,7 @@ function login(req, res) {
       }
     }).catch(error => res.status(400).send(error));
   }
-}
+};
 
 /**
  * Find a user by Id
@@ -139,11 +139,11 @@ function login(req, res) {
  * @param {object} res - an object of the user(s) found or error
  * @returns {object} - an object of found user
  */
-function findUser(req, res) {
+const findUser = (req, res) => {
   const userQuery = Number(req.params.id);
   if (isNaN(userQuery)) {
     return res.status(400).json({
-      message: `invalid input syntax for integer: "${req.params.id}"`
+      message: `invalid input syntax for integer: ${req.params.id}`
     });
   }
   if ((req.decoded.id !== userQuery) && (req.decoded.roleId !== 1)) {
@@ -167,7 +167,7 @@ function findUser(req, res) {
     .catch(() => res.status(400).send({
       message: 'out of range'
     }));
-}
+};
 
 /**
  *Update a user by Id
@@ -175,7 +175,7 @@ function findUser(req, res) {
  * @param {object} res - updated user object or error
  * @returns {object} - return an object of the updated user
  */
-function updateUser(req, res) {
+const updateUser = (req, res) => {
   if (Number(req.decoded.id) !== Number(req.params.id)) {
     return res.status(401).json({
       message: 'You are not authorized to update this user'
@@ -214,7 +214,7 @@ function updateUser(req, res) {
       .catch(error => res.status(400).send(error));
     });
   });
-}
+};
 
 /**
  * Delete a user by Id
@@ -222,7 +222,7 @@ function updateUser(req, res) {
  * @param {object} res - message
  * @returns {object} - null
  */
-function deleteUser(req, res) {
+const deleteUser = (req, res) => {
   if (req.decoded.roleId === 1 || req.decoded.id === Number(req.params.id)) {
     return User
     .findById(req.params.id)
@@ -241,7 +241,7 @@ function deleteUser(req, res) {
   return res.status(401).json({
     message: 'You are not authorized to perform this operation'
   });
-}
+};
 
 /**
  * Get documents for specific user
@@ -249,7 +249,7 @@ function deleteUser(req, res) {
  * @param {array} res - array of documents for the requested user
  * @return {array} - array of requested user's document
  */
-function getUserDocuments(req, res) {
+const getUserDocuments = (req, res) => {
   const limit = req.query.limit || 6;
   const offset = req.query.offset || 0;
   User.findById(req.params.id)
@@ -275,9 +275,9 @@ function getUserDocuments(req, res) {
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error));
-}
+};
 
-export default {
+module.exports = {
   getUsers,
   createUser,
   login,
