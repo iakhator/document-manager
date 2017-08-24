@@ -13,13 +13,11 @@ describe('User Model', () => {
   ];
   const uniqueFields = ['userName', 'email'];
   const defaultRoleId = 2;
-  let regularUser;
 
   describe('Create user', () => {
     it('should create a user', (done) => {
       db.User.create(helper.regularUser)
         .then((user) => {
-          regularUser = user.dataValues;
           expect(user.dataValues.firstName)
             .to.equal(helper.regularUser.firstName);
           expect(user.dataValues.userName)
