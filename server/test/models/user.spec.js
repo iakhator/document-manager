@@ -5,12 +5,6 @@ import helper from '../controllers/mockData';
 const expect = chai.expect;
 
 describe('User Model', () => {
-  const requiredFields = [
-    'userName',
-    'fullName',
-    'email',
-    'password'
-  ];
   const uniqueFields = ['userName', 'email'];
   const defaultRoleId = 2;
 

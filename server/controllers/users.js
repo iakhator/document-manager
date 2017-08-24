@@ -190,13 +190,12 @@ const updateUser = (req, res) => {
         if (!user) {
           return res.status(404).json({ message: 'User not found' });
         }
+
+        if (req.body.password) {
+          req.body.password = hash;
+        }
         return user
-          .update({
-            fullName: req.body.fullName || user.fullName,
-            userName: req.body.userName || user.userName,
-            email: req.body.email || user.email,
-            password: hash || user.password,
-          })
+          .update(req.body)
           .then((updatedUser) => {
             res.status(200).send({
               userUpdate: {
