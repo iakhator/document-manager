@@ -15,7 +15,7 @@ export default {
     email: 'iakhator@test.com',
     password: process.env.TEST_FACILITATOR_PASSWORD
   },
-  user2: {
+  wrongPassword: {
     email: 'baas@test.com',
     password: 'test'
   },
@@ -23,7 +23,7 @@ export default {
     email: 'iakhator@test.com',
     password: process.env.PASSWORD
   },
-  user1: {
+  incorrectCredentials: {
     email: 'test@test123.com',
     password: 'test'
   },
@@ -108,7 +108,7 @@ export default {
     access: 'public',
     userId: 2
   },
-  boromirOne: {
+  boromirOneDocument: {
     title: 'boromir-team',
     content: 'Andela is really awesome !!!',
     access: 'private',

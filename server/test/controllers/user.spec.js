@@ -1,12 +1,18 @@
 import chai from 'chai';
 import request from 'supertest';
 import server from '../../../index';
-import data from './mockData';
+import mockData from './mockData';
 
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
-const { admin, fakeBass, fellow, user1, user2, iakhator, Baas, JohnB } = data;
+const { admin,
+  fakeBass,
+  fellow,
+  incorrectCredentials,
+  wrongPassword, iakhator, Baas,
+  JohnB
+} = mockData;
 
 describe('Users', () => {
   before((done) => {
@@ -36,7 +42,7 @@ describe('Users', () => {
     (done) => {
       superRequest
         .post('/api/v1/users/login')
-        .send(user1)
+        .send(incorrectCredentials)
         .end((err, res) => {
           expect(res.status).to.equal(400);
           expect(res.body).to.have.keys(['message']);
@@ -49,7 +55,7 @@ describe('Users', () => {
     it('Should fail if the user provide a wrong password', (done) => {
       superRequest
         .post('/api/v1/users/login')
-        .send(user2)
+        .send(wrongPassword)
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.body).to.have.keys(['message']);

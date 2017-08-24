@@ -1,13 +1,13 @@
 import chai from 'chai';
 import request from 'supertest';
 import server from '../../../index';
-import data from './mockData';
+import mockData from './mockData';
 
 
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken;
-const { admin, fellow, Baas } = data;
+const { admin, fellow, Baas } = mockData;
 
 describe('Search', () => {
   before((done) => {
