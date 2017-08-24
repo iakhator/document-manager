@@ -7,7 +7,7 @@ Document manager provides REST API endpoints for a document management system. I
 It also ensures that users are authorized.
 
 # API Documentation
-The API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API status and errors. Go to documentation [doksmanager](http://doksmanager.herokuapp.com)
+The API has predictable, resource-oriented URLs, and uses HTTP response codes to indicate API status and errors. Go to [documentation](http://doksmanager.herokuapp.com)
 
 ## Features
 
@@ -106,7 +106,16 @@ The limitations of the API are:
 - Users cannot share documents with other users through social sharing
 
 ## FAQ
-- If there are any question you want to ask, contact me via mail [itua.akhator@andela.com](mailto:itua.akhator@andela.com)
+- Is there any monetary value attached before I can use the API ?
+  * No, its absolutely free.
+
+- How do I target APIs endpoints?
+  * You can target the API using ```http://doksmanager.herokuapp.com/api/v1/{route}```
+  you can go to the [documentation](http://doksmanager.herokuapp.com) for more on how to use it.
+
+- Is there any kind of authentication/protection before I can access the endpoints?
+  * Yes, All endpoints are protected except login and signup.
+  It is a ```token``` based authentication. A ```token``` is generated upon a user login.
 
 ## LICENSE
  This project is authored by [Itua Akhator](https://github.com/iakhator) it is licensed under the MIT license.
