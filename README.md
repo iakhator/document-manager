@@ -109,8 +109,7 @@ The limitations of the API are:
   * No, its absolutely free.
 
 - How do I target APIs endpoints?
-  * You can target the API using ```http://doksmanager.herokuapp.com/api/v1/{route}```
-  you can go to the [documentation](http://doksmanager.herokuapp.com) for more on how to use it.
+  * You can go to the [documentation](http://doksmanager.herokuapp.com) to see how to use it.
 
 - Is there any kind of authentication/protection before I can access the endpoints?
   * Yes, All endpoints are protected except login and signup.

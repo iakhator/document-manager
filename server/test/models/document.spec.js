@@ -9,8 +9,8 @@ describe('Document Model', () => {
   const requiredFields = ['title', 'content'];
   const emptyFields = ['title', 'content', 'access'];
 
-  describe('CREATE Document', () => {
-    it('should create a document', (done) => {
+  describe('CREATE', () => {
+    it('should add a new document', (done) => {
       db.Document.create(mockData.publicDocument)
         .then((doc) => {
           userDocument = doc.dataValues;
