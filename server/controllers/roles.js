@@ -113,7 +113,7 @@ const updateRole = (req, res) => {
  */
 const deleteRole = (req, res) => {
   if (req.decoded.roleId !== 1) {
-    return res.status(401)
+    return res.status(403)
       .json({ message: 'You are not authorized' });
   }
   return Role.findById(req.params.id)

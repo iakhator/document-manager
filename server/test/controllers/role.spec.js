@@ -1,12 +1,12 @@
 import chai from 'chai';
 import request from 'supertest';
 import server from '../../../index';
-import data from './mockData';
+import mockData from './mockData';
 
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken;
-const { admin, fellow } = data;
+const { admin, fellow } = mockData;
 
 describe('Roles', () => {
   before((done) => {

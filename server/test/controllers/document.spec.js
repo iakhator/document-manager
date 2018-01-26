@@ -1,12 +1,12 @@
 import chai from 'chai';
 import request from 'supertest';
 import server from '../../../index';
-import data from './mockData';
+import mockData from './mockData';
 
 const expect = chai.expect;
 const superRequest = request(server);
 let userToken, adminToken, sampleUserToken;
-const { admin, fellow, iakhator } = data;
+const { admin, fellow, iakhator } = mockData;
 
 describe('Documents', () => {
   before((done) => {
@@ -36,7 +36,7 @@ describe('Documents', () => {
     (done) => {
       superRequest
       .post('/api/v1/documents')
-      .send(data.boromirAccess)
+      .send(mockData.boromirAccess)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -49,7 +49,7 @@ describe('Documents', () => {
     (done) => {
       superRequest
       .post('/api/v1/documents')
-      .send(data.boromirTitle)
+      .send(mockData.boromirTitle)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -62,7 +62,7 @@ describe('Documents', () => {
     (done) => {
       superRequest
       .post('/api/v1/documents')
-      .send(data.boromirContent)
+      .send(mockData.boromirContent)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(400);
@@ -75,7 +75,7 @@ describe('Documents', () => {
     (done) => {
       superRequest
       .post('/api/v1/documents')
-      .send(data.boromirOne)
+      .send(mockData.boromirOneDocument)
       .end((err, res) => {
         expect(res.status).to.equal(401);
         expect(res.body).to.be.a('object');
@@ -86,18 +86,18 @@ describe('Documents', () => {
     it('should add a new document if the user is authenticated', (done) => {
       superRequest
       .post('/api/v1/documents')
-      .send(data.andelaDocument)
+      .send(mockData.andelaDocument)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body).to.be.a('object');
         expect(res.body.documentCreated).to.have.property('id');
         expect(res.body.documentCreated.title)
-        .to.eql(data.andelaDocument.title);
+        .to.eql(mockData.andelaDocument.title);
         expect(res.body.documentCreated.content)
-        .to.eql(data.andelaDocument.content);
+        .to.eql(mockData.andelaDocument.content);
         expect(res.body.documentCreated.access)
-        .to.equal(data.andelaDocument.access);
+        .to.equal(mockData.andelaDocument.access);
         expect(res.body.message)
         .to.equal('Document created successfully');
         done();
@@ -106,7 +106,7 @@ describe('Documents', () => {
     it('Should fail if document title already exist', () => {
       superRequest
       .post('/api/v1/documents')
-      .send(data.andelaDocument)
+      .send(mockData.andelaDocument)
       .set({ authorization: userToken })
       .end((err, res) => {
         expect(res.status).to.equal(403);
@@ -215,8 +215,8 @@ describe('Documents', () => {
         .end((err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
-          expect(res.body.document.access).to.eql(data.naddDocument.access);
-          expect(res.body.document.title).to.eql(data.naddDocument.title);
+          expect(res.body.document.access).to.eql(mockData.naddDocument.access);
+          expect(res.body.document.title).to.eql(mockData.naddDocument.title);
           expect(res.body.document.id).to.eql(2);
           expect(res.body.document.userId).to.eql(2);
           done();
@@ -246,7 +246,7 @@ describe('Documents', () => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
           expect(res.body.document.id).to.eql(3);
-          expect(res.body.document.title).to.eql(data.hannDocument.title);
+          expect(res.body.document.title).to.eql(mockData.hannDocument.title);
           expect(res.body.document.access).to.eql('role');
           done();
         });
@@ -260,7 +260,7 @@ describe('Documents', () => {
           expect(res.status).to.equal(200);
           expect(res.body).to.be.a('object');
           expect(res.body.document.id).to.eql(3);
-          expect(res.body.document.title).to.eql(data.hannDocument.title);
+          expect(res.body.document.title).to.eql(mockData.hannDocument.title);
           expect(res.body.document.access).to.eql('role');
         });
       done();
